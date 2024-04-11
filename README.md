@@ -1,8 +1,10 @@
-# React + Vite
+#instrucciones al clonar el repositorio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. instalar Node.JS v20.12.2 LTS
+2. iniciar la carpeta en VS Code
+3. en el terminal de powershell de VS Code instalar vite:
+npm install --global vite
+4. instalar todas las dependencias con:
+npm install
+5. iniciar el proyecto con:
+npm run dev
