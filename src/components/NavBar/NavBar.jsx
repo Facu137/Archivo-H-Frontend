@@ -1,12 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
+import './NavBar.css';
 
 export const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <Link className="navbar-brand">
-          Archivo Historico
-        </Link>
         <button
           className="navbar-toggler"
           type="button"
