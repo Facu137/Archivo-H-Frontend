@@ -1,0 +1,30 @@
+    .MenuV{
+        float: center;
+        width:40%;
+        overflow: hidden;
+    }
+    .MenuV a{
+    background-color: black;
+    color: white;
+    text-decoration:none ;
+    padding: 20px;
+    display: block;
+    }
+    .MenuV a:hover {
+        background-color: white;
+        color: black;
+        }
+    
+    .MenuH a{
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    float: left;
+    width: 40%;
+    text-align: center;
+    padding: 20px;
+    }
+    .MenuH a:hover {
+    background-color: white;
+    color: black;
+    }
