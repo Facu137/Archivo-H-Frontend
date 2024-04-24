@@ -1,43 +1,134 @@
 /* You can add global styles to this file, and also import other style files */
 * {
-    min-width: 0;/*Evita problemas con el desbordamiento en Flexbox y Grid.
+  min-width: 0; /*Evita problemas con el desbordamiento en Flexbox y Grid.
     Algunos navegadores, por defecto, no permiten que los elementos se encojan más allá de su contenido mínimo,
     lo que puede causar problemas de diseño inesperados.*/
 }
 
-*, *::before, *::after {
-    box-sizing: border-box;/*Hace que el ancho y alto de los elementos incluya el padding y el borde,
-    lo cual simplifica los cálculos de diseño, ya que el tamaño final del elemento es más predecible. */
-
-}
-
-img, video, svg {
-    display: block;/*Cambia estos elementos a bloque, ocuparán todo el ancho disponible de su contenedor,
+img,
+video,
+svg {
+  display: block; /*Cambia estos elementos a bloque, ocuparán todo el ancho disponible de su contenedor,
     lo cual es útil para evitar problemas de alineación.*/
-    height: auto; /*Asegura que la altura del elemento se escale proporcionalmente a su ancho,
+  height: auto; /*Asegura que la altura del elemento se escale proporcionalmente a su ancho,
     manteniendo la relación de aspecto original.*/
-    max-width: 100%;/*Impide que estos elementos se extiendan más allá del ancho de su contenedor,
+  max-width: 100%; /*Impide que estos elementos se extiendan más allá del ancho de su contenedor,
     lo cual es útil para diseños responsive.*/
 }
 
 body {
-    margin: 0;/*Elimina los márgenes predeterminados del navegador para el elemento body,
+  margin: 0; /*Elimina los márgenes predeterminados del navegador para el elemento body,
     lo cual es un punto de partida común para un diseño personalizado.*/
-    min-height: 100dvh;/*Establece la altura mínima del cuerpo a 100% del viewport height,
+  min-height: 100dvh; /*Establece la altura mínima del cuerpo a 100% del viewport height,
     asegurando que el cuerpo llene al menos toda la altura de la ventana del navegador.*/
-    width: 100%;
+  width: 100%;
 
-    color:antiquewhite;
-
-    display: flex;
-    flex-direction: column;
+  color: antiquewhite;
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
 }
 
-h1, h2, h3, h4, h5, h6 {
-    text-wrap: balance;/*Distribuye el texto de los encabezados de manera más equilibrada,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance; /*Distribuye el texto de los encabezados de manera más equilibrada,
     ajustando la longitud de las líneas para una mejor legibilidad y estética.*/
 }
 
 p {
-    text-wrap: pretty;/*Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea.*/
+  text-wrap: pretty; /*Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea.*/
+}
+
+#seccion-contenido {
+  padding-top: 126px;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  grid-template-rows: 32px 1fr 1fr;
+  grid-template-areas:
+    "navegacion fav"
+    "contenido contenido"
+    "contenido contenido";
+
+  align-items: center;
+}
+
+#navegacion {
+  grid-area: navegacion;
+}
+
+#fav {
+  grid-area: fav;
+}
+
+#contenido {
+  min-height: 80vh;
+  grid-area: contenido;
+}
+
+/* Pantallas de escritorio grandes (2K o superior): */
+@media (min-width: 1921px) {
+  .ajusteancho {
+    width: 1500px; /* Ancho personalizado para pantallas grandes */
+  }
+}
+
+/* Pantallas de escritorio (Full HD): */
+@media (min-width: 1601px) and (max-width: 1920px) {
+  .ajusteancho {
+    width: 1280px; /* Ancho personalizado para pantallas Full HD */
+  }
+}
+/* Pantallas de escritorio (HD+): */
+@media (min-width: 1281px) and (max-width: 1600px) {
+  .ajusteancho {
+    width: 960px; /* Ancho personalizado para pantallas HD */
+  }
+}
+
+/* Pantallas de escritorio (HD): */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .ajusteancho {
+    width: 820px; /* Ancho personalizado para pantallas HD */
+  }
+}
+
+/* Pantallas de escritorio (VGA): */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .ajusteancho {
+    width: 550px; /* Ancho personalizado para pantallas VGA */
+  }
+}
+
+/* Móviles grandes: */
+@media (min-width: 391px) and (max-width: 599px) {
+  .ajusteancho {
+    width: 100%; /* Ancho personalizado para móviles grandes */
+  }
+  #seccion-contenido {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 32px 32px 1fr;
+    grid-template-areas:
+      "navegacion navegacion"
+      "fav fav"
+      "contenido contenido";
+  }
+}
+
+/* Móviles pequeños: */
+@media (max-width: 390px) {
+  .ajusteancho {
+    width: 100%; /* Ancho limitado para móviles pequeños */
+  }
+  #seccion-contenido {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 32px 32px 1fr;
+    grid-template-areas:
+      "navegacion navegacion"
+      "fav fav"
+      "contenido contenido";
+  }
 }
