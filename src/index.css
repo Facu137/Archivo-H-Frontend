@@ -3,8 +3,6 @@
     min-width: 0;/*Evita problemas con el desbordamiento en Flexbox y Grid.
     Algunos navegadores, por defecto, no permiten que los elementos se encojan más allá de su contenido mínimo,
     lo que puede causar problemas de diseño inesperados.*/
-    font: inherit;/*Asegura que todos los elementos hereden las propiedades de fuente del elemento padre.
-    Esto contribuye a una consistencia en el estilo de texto en toda la página.*/
 }
 
 *, *::before, *::after {
@@ -27,6 +25,12 @@ body {
     lo cual es un punto de partida común para un diseño personalizado.*/
     min-height: 100dvh;/*Establece la altura mínima del cuerpo a 100% del viewport height,
     asegurando que el cuerpo llene al menos toda la altura de la ventana del navegador.*/
+    width: 100%;
+
+    color:antiquewhite;
+
+    display: flex;
+    flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -36,8 +40,4 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
     text-wrap: pretty;/*Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea.*/
-}
-
-div {
-    margin: 20px;
 }
