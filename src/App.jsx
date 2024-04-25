@@ -2,13 +2,15 @@ import { Route, Routes, Navigate } from "react-router-dom";
 
 import { NavBar } from "./components/NavBar/NavBar";
 import { BreadCrums } from "./components/BreadCrums/BreadCrums";
+import { Favoritos } from "./components/Favoritos/Favoritos";
+import { Footer } from "./components/Footer/Footer";
 
 import { Home } from "./routes/Home/Home";
 import { Login } from "./routes/Login/Login";
 import { MiCuenta } from "./routes/MiCuenta/MiCuenta";
 import { GestionArchivo } from "./routes/GestionArchivo/GestionArchivo";
 import { VerArchivo } from "./routes/VerArchivo/VerArchivo";
-import { Favoritos } from "./components/Favoritos/Favoritos";
+
 
 export const App = () => {
   return (
@@ -34,6 +36,7 @@ export const App = () => {
           </main>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };
