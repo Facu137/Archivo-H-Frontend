@@ -1,7 +1,7 @@
 ## Proyecto Archivo Historico SDE
 ### Instrucciones al clonar el repositorio:
 
-1. instalar Node.JS v20.12.2 LTS
+1. instalar Node.JS LTS
 2. iniciar la carpeta en VS Code
 3. instalar todas las dependencias con:
 `npm install`
