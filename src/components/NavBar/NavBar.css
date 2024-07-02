@@ -15,12 +15,12 @@ nav {
   align-items: center;
 }
 
-#seccion-principal {
+#seccion-principal-nav {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-#seccion-principal a {
+#seccion-principal-nav a {
   display: flex;
   justify-content: center;
   margin: 0;

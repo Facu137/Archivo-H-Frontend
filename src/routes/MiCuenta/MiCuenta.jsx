@@ -2,7 +2,7 @@ import './MiCuenta.css';
 export const MiCuenta = () => {
   return (
  
-        <nav class="MenuV">
+        <nav className="MenuV">
         <a href="">Favoritos/historial</a>
         <a href="">Gestionar mi Cuenta</a>
         <a href="">Crear/ Editar Archivos</a>

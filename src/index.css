@@ -41,6 +41,12 @@ p {
   text-wrap: pretty; /*Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea.*/
 }
 
+#seccion-principal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #seccion-contenido {
   padding-top: 126px;
   display: grid;
