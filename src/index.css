@@ -65,12 +65,6 @@ p {
 #contenido {
   min-height: 80vh;
   grid-area: contenido;
-
-  /*este dysplay flex seguramente tenga que quitarse para no causar problemas
-   a las otras rutas*/
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 /* Pantallas de escritorio grandes (2K o superior): */

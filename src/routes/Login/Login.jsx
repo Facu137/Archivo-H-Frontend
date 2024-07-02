@@ -1,76 +1,29 @@
 import './Login.css';
 
 export const Login = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const email = formData.get('email');
+    const password = formData.get('password');
+    console.log({ email, password });
+    // Aquí puedes agregar la lógica para enviar los datos al servidor
+  };
+
   return (
-<div class="wrapper">
-      <span class="icon-close">
-        <ion-icon name="close-outline">
-          X
-        </ion-icon></span>
-
-      <div class="form-box login">
-        <h2>Iniciar Sesion</h2>
-        <form action="#">
-          <div class="input-box">
-            <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" required />
-            <label>Correo</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="Contraseña" required />
-            <label>Contraseña</label>
-          </div>
-          <div class="remember-forgot">
-            <label
-              ><input type="checkbox" />
-              Recuerdame
-            </label>
-            <a href="#">Olvide mi contraseña</a>
-          </div>
-
-          <button type="submit" class="btn">ingresar</button>
-          <div class="login-register">
-            <p>
-              No tienes una cuenta?
-              <a href="#" class="register-link">Registrate</a>
-            </p>
-          </div>
-        </form>
-      </div>
-
-      <div class="form-box register">
-        <h2>Registrate</h2>
-        <form action="#">
-          <div class="input-box">
-            <span class="icon"><ion-icon name="person"></ion-icon></span>
-            <input type="text" required />
-            <label>Nombre de usuario</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" required />
-            <label>Correo</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="Contraseña" required />
-            <label>Contraseña</label>
-          </div>
-          <div class="remember-forgot">
-            <label
-              ><input type="checkbox" />
-              Acepto los terminos y condiciones
-            </label>
-          </div>
-          <button type="submit" class="btn">Registrarse</button>
-          <div class="login-register">
-            <p>
-              ya tienes una cuenta? <a href="#" class="login-link">ingresa</a>
-            </p>
-          </div>
-        </form>
-      </div>
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h2>Iniciar Sesión</h2>
+        <div className="form-group">
+          <label htmlFor="email">Correo Electrónico</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Contraseña</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Iniciar Sesión</button>
+      </form>
     </div>
   );
 };
