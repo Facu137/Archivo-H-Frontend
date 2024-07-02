@@ -23,4 +23,4 @@ Vínculo de VS Marketplace: [Simple React Snippets](https://marketplace.visualst
 Nombre: Prettier - Code formatter
 Vínculo de VS Marketplace: [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode "Prettier")
 
-## Crear Rama a partir del Desarrollo.Crear Rama a partir del Desarrollo.
+## Crear Rama a partir del Desarrollo.
