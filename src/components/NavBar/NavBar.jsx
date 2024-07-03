@@ -5,7 +5,7 @@ export const NavBar = () => {
   return (
     <header>
       <nav>
-        <div className="ajusteancho" id="seccion-principal">
+        <div className="ajusteancho" id="seccion-principal-nav">
           <NavLink to="/" aria-current="page">
             Inicio
           </NavLink>

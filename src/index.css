@@ -41,6 +41,12 @@ p {
   text-wrap: pretty; /*Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea.*/
 }
 
+#seccion-principal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #seccion-contenido {
   padding-top: 126px;
   display: grid;
@@ -65,12 +71,6 @@ p {
 #contenido {
   min-height: 80vh;
   grid-area: contenido;
-
-  /*este dysplay flex seguramente tenga que quitarse para no causar problemas
-   a las otras rutas*/
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 /* Pantallas de escritorio grandes (2K o superior): */

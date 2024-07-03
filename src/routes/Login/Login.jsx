@@ -1,76 +1,66 @@
+import React, { useState } from 'react';
 import './Login.css';
+import axios from 'axios'; // Si decides usar axios
 
 export const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        const token = response.data.token;
+        // Aquí puedes guardar el token en el localStorage o en un contexto de React
+        localStorage.setItem('token', token);
+        // Redirigir al usuario a la página principal o a donde necesites
+        window.location.href = '/cuenta';
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setError('Correo o contraseña incorrectos');
+      } else {
+        setError('Hubo un error al intentar iniciar sesión');
+      }
+    }
+  };
+
   return (
-<div class="wrapper">
-      <span class="icon-close">
-        <ion-icon name="close-outline">
-          X
-        </ion-icon></span>
-
-      <div class="form-box login">
-        <h2>Iniciar Sesion</h2>
-        <form action="#">
-          <div class="input-box">
-            <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" required />
-            <label>Correo</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="Contraseña" required />
-            <label>Contraseña</label>
-          </div>
-          <div class="remember-forgot">
-            <label
-              ><input type="checkbox" />
-              Recuerdame
-            </label>
-            <a href="#">Olvide mi contraseña</a>
-          </div>
-
-          <button type="submit" class="btn">ingresar</button>
-          <div class="login-register">
-            <p>
-              No tienes una cuenta?
-              <a href="#" class="register-link">Registrate</a>
-            </p>
-          </div>
-        </form>
-      </div>
-
-      <div class="form-box register">
-        <h2>Registrate</h2>
-        <form action="#">
-          <div class="input-box">
-            <span class="icon"><ion-icon name="person"></ion-icon></span>
-            <input type="text" required />
-            <label>Nombre de usuario</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" required />
-            <label>Correo</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="Contraseña" required />
-            <label>Contraseña</label>
-          </div>
-          <div class="remember-forgot">
-            <label
-              ><input type="checkbox" />
-              Acepto los terminos y condiciones
-            </label>
-          </div>
-          <button type="submit" class="btn">Registrarse</button>
-          <div class="login-register">
-            <p>
-              ya tienes una cuenta? <a href="#" class="login-link">ingresa</a>
-            </p>
-          </div>
-        </form>
-      </div>
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h2>Iniciar Sesión</h2>
+        {error && <div className="error-message">{error}</div>}
+        <div className="form-group">
+          <label htmlFor="email">Correo Electrónico</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit">Iniciar Sesión</button>
+      </form>
     </div>
   );
 };
