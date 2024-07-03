@@ -1,0 +1,96 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif; /* Choose a modern font */
+    color: #333; /* Dark text color */
+    background-color: #ffffff; /* Light background */
+  }
+  
+  h3 {
+    color: white; /* Change color of all <h3> headings */
+  }
+  
+  .container {
+    max-width: 1000px; /* Limit container width */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+  }
+  
+  /* Section styles */
+  .section {
+    padding: 20px;
+    margin-bottom: 40px; /* Spacing between sections */
+    border-bottom: 1px solid #eee; /* Subtle separator */
+  }
+  
+  .section h3 {
+    color: #2196F3; /* Blue heading color */
+    margin-bottom: 20px;
+  }
+  
+  .section p {
+    line-height: 1.6; /* Adjust line spacing for better readability */
+  }
+  
+  /* About section styles */
+  .about-section p {
+    margin-bottom: 10px;
+    color: white;
+
+  }
+  /* Evolution section styles */
+  .evolution-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: white;
+  }
+  
+  .evolution-section li {
+    margin-bottom: 10px; /* Add space between list items */
+    list-style-type: disc; /* Change bullet type (e.g., circle, square) */
+    list-style-position: outside; /* Position the bullet outside the text */
+    margin-bottom: 5px;
+  }
+  
+  
+  /* Building section styles */
+  .building-section p {
+    text-align: justify; /* Justify text for better alignment */
+    margin-bottom: 15px;
+    color: white;
+  }
+  
+  /* Location section styles */
+  .location-section {
+    text-align: center; /* Center the text in this section */
+    margin-bottom: 20px;
+  }
+  .location-section p {
+    color: white;
+  }
+
+  h2 {
+    font-size: 2.5rem; /* Adjust as needed */
+    font-weight: bold;
+        color: white; /* Set text color to white */
+    margin-bottom: 20px;
+  }
+  .section-header {
+    margin-bottom: 15px;
+  }
+
+  .section-content {
+    line-height: 1.6; /* Adjust for better readability */
+  }
+  .section-content p:first-child {
+    margin-top: 0; /* Remove default margin-top */
+  }
+  
+  
+  .section-header h3 {
+    border-bottom: 2px solid #222; /* Subtle border */
+    padding-bottom: 5px;
+  }
+  p {
+    color: white;
+  }
