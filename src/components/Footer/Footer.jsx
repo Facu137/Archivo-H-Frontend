@@ -1,14 +1,13 @@
 import React from 'react';
 import './Footer.css';
-import buildingImage from '../../assets/logo.png';
-import '@fortawesome/fontawesome-free/css/all.css';
+import logo from '../../assets/logo.png';
 
 export const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-logo">
-          <img src={buildingImage} alt="Logo" />
+          <img src={logo} alt="Logo" />
         </div>
 
         <div className="footer-cards">
