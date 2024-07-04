@@ -19,12 +19,6 @@ export const App = () => {
       <NavBar />
       <div id="seccion-principal">
         <div className="ajusteancho" id="seccion-contenido">
-          <div id="navegacion">
-            <BreadCrums />
-          </div>
-          <aside id="fav">
-            <Favoritos />
-          </aside>
           <main id="contenido">
             <Routes>
                 <Route path="/" element={<Home></Home>}></Route>
