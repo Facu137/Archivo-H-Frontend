@@ -1,0 +1,84 @@
+/* Registrar.css */
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+    /* Añadir padding en lugar de height: 100vh */
+}
+
+.register-form {
+    background-color: #1e1e1e;
+    /* Fondo del formulario oscuro */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    color: #ffffff;
+    /* Texto en blanco para contraste */
+}
+
+.register-form h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.register-form-group {
+    margin-bottom: 1rem;
+}
+
+.register-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.register-form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #444;
+    /* Borde oscuro */
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* Asegura que el padding y el border estén incluidos en el ancho */
+}
+
+.register-form-group input:focus {
+    border-color: #007bff;
+    /* Borde azul al enfocar */
+    outline: none;
+}
+
+.register-form button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007bff;
+    /* Botón azul */
+    color: #ffffff;
+    /* Texto en blanco para contraste */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.register-form button:hover {
+    background-color: #0056b3;
+    /* Botón azul más oscuro al pasar el mouse */
+}
+
+.register-login-link {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.register-login-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register-login-link a:hover {
+    text-decoration: underline;
+}
