@@ -14,7 +14,10 @@
     "bootstrap": "^5.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3"
+    "react-pdf": "^9.1.0",
+    "react-router-dom": "^6.22.3",
+    "react-viewer": "^3.2.2",
+    "tiff.js": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
