@@ -20,6 +20,7 @@ nav {
   align-items: center;
   justify-content: center;
 }
+
 #seccion-principal-nav a {
   display: flex;
   justify-content: center;
@@ -29,18 +30,22 @@ nav {
   color: #ffffff;
   flex: auto;
   text-overflow: ellipsis;
-  white-space: nowrap; /* Evitar saltos de línea */
+  white-space: nowrap;
+  /* Evitar saltos de línea */
 }
 
 #seccion-busqueda {
   display: flex;
   margin: 0px 10px;
 }
+
 #seccion-busqueda input {
   flex-grow: 1;
   padding: 8px;
   border-radius: 50px;
   margin: 8px 0px;
+  box-sizing: border-box;
+  /* Asegura que el padding y el border estén incluidos en el ancho */
 }
 
 #seccion-busqueda button {
@@ -59,6 +64,7 @@ input::placeholder {
   align-items: center;
   justify-content: center;
 }
+
 h1 {
   text-align: center;
   white-space: nowrap;
@@ -68,42 +74,50 @@ h1 {
 /* Pantallas de escritorio grandes (2K o superior): */
 @media (min-width: 1921px) {
   .ajusteancho {
-    width: 1500px; /* Ancho personalizado para pantallas grandes */
+    width: 1500px;
+    /* Ancho personalizado para pantallas grandes */
   }
 }
 
 /* Pantallas de escritorio (Full HD): */
 @media (min-width: 1601px) and (max-width: 1920px) {
   .ajusteancho {
-    width: 1280px; /* Ancho personalizado para pantallas Full HD */
+    width: 1280px;
+    /* Ancho personalizado para pantallas Full HD */
   }
 }
+
 /* Pantallas de escritorio (HD+): */
 @media (min-width: 1281px) and (max-width: 1600px) {
   .ajusteancho {
-    width: 960px; /* Ancho personalizado para pantallas HD */
+    width: 960px;
+    /* Ancho personalizado para pantallas HD */
   }
 }
 
 /* Pantallas de escritorio (HD): */
 @media (min-width: 1025px) and (max-width: 1280px) {
   .ajusteancho {
-    width: 820px; /* Ancho personalizado para pantallas HD */
+    width: 820px;
+    /* Ancho personalizado para pantallas HD */
   }
 }
 
 /* Pantallas de escritorio (VGA): */
 @media (min-width: 600px) and (max-width: 1024px) {
   .ajusteancho {
-    width: 550px; /* Ancho personalizado para pantallas VGA */
+    width: 550px;
+    /* Ancho personalizado para pantallas VGA */
   }
 }
 
 /* Móviles grandes: */
 @media (min-width: 391px) and (max-width: 599px) {
   .ajusteancho {
-    width: 90%; /* Ancho personalizado para móviles grandes */
+    width: 90%;
+    /* Ancho personalizado para móviles grandes */
   }
+
   #seccion-principal a {
     display: flex;
     justify-content: center;
@@ -114,8 +128,10 @@ h1 {
     max-width: 70px;
     flex: auto;
     text-overflow: ellipsis;
-    white-space: nowrap; /* Evitar saltos de línea */
+    white-space: nowrap;
+    /* Evitar saltos de línea */
   }
+
   #seccion-contenido {
     display: grid;
     grid-template-columns: 5fr 1fr;
@@ -139,8 +155,10 @@ h1 {
     max-width: 70px;
     flex: auto;
     text-overflow: ellipsis;
-    white-space: nowrap; /* Evitar saltos de línea */
+    white-space: nowrap;
+    /* Evitar saltos de línea */
   }
+
   #seccion-contenido {
     display: grid;
     grid-template-columns: 5fr 1fr;
