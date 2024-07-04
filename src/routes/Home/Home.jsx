@@ -1,11 +1,17 @@
 import './Home.css';
+import buildingImage from '../../assets/building.jpg'; // Asegúrate de que la ruta es correcta
 
 export const Home = () => {
   return (
-    <>
-        <h2>PATRIMONIO HISTÓRICO Y CULTURAL</h2>
+    <div className="home-container">
+      <div className="header-background" style={{ backgroundImage: `url(${buildingImage})` }}>
+        <div className="overlay">
+          <h2>PATRIMONIO HISTÓRICO Y CULTURAL</h2>
+        </div>
+      </div>
+      
 
-      <div className="about-section">
+      <div className="card">
         <h3>Sobre el Archivo Histórico</h3>
         <p>
           El Archivo Histórico de la provincia de Santiago del Estero fue creado el 5 de
@@ -14,17 +20,15 @@ export const Home = () => {
           1900. Su objetivo principal es ser una fuente de información para aquellos
           interesados en conocer la historia de Santiago del Estero.
         </p>
-        <p>Está ubicado en calle Mitre 127 de la ciudad capital.</p>
       </div>
 
-      <div className="evolution-section">
+      <div className="card">
         <h3>Evolución del Archivo</h3>
         <p>
           El Archivo Histórico se creó a partir de la Sección “Documentos históricos”
           del Archivo General de la provincia, que databa del año 1941, y conserva
           todos los documentos anteriores a 1900".
         </p>
-        <p>Está compuesto por:</p>
         <ul>
           <li>Expedientes judiciales civiles y criminales</li>
           <li>Protocolos notariales</li>
@@ -38,7 +42,7 @@ export const Home = () => {
         </ul>
       </div>
 
-      <div className="building-section">
+      <div className="card">
         <h3>Edificio</h3>
         <p>
           El Archivo Histórico, como parte del Archivo General, estuvo ubicado en
@@ -63,7 +67,7 @@ export const Home = () => {
         </p>
       </div>
 
-      <div className="location-section">
+      <div className="card">
         <h3>Ubicación actual</h3>
         <p>
           En el año 2014 el gobierno de la provincia adquirió la propiedad que fuera
@@ -73,6 +77,6 @@ export const Home = () => {
           2021.
         </p>
       </div>
-    </>
+    </div>
   );
 };
