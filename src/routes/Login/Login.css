@@ -4,7 +4,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  padding: 2rem 0;
+  /* Añadir padding en lugar de height: 100vh */
 }
 
 .login-form {
@@ -24,26 +25,27 @@
   text-align: center;
 }
 
-.form-group {
+.login-form-group {
   margin-bottom: 1rem;
 }
 
-.form-group label {
+.login-form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
 
-.form-group input {
-  width: 94%;
+.login-form-group input {
+  width: 100%;
   padding: 0.75rem;
   border: 1px solid #444;
   /* Borde oscuro */
   border-radius: 4px;
-
+  box-sizing: border-box;
+  /* Asegura que el padding y el border estén incluidos en el ancho */
 }
 
-.form-group input:focus {
+.login-form-group input:focus {
   border-color: #007bff;
   /* Borde azul al enfocar */
   outline: none;
@@ -65,4 +67,18 @@
 .login-form button:hover {
   background-color: #0056b3;
   /* Botón azul más oscuro al pasar el mouse */
+}
+
+.login-register-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.login-register-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-register-link a:hover {
+  text-decoration: underline;
 }

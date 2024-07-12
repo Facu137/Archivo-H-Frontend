@@ -1,19 +1,22 @@
-body{
+body {
   font-family: arial, sans-serif;
 }
 
-h1{
+h1 {
   text-align: center;
 }
 
-.contenedor-formulario{
-  width: 500px;
+.contenedor-formulario {
+  width: 100%;
+  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
+  /* Asegura que el padding y el border estén incluidos en el ancho */
 }
 
-label{
+label {
   display: block;
   margin-bottom: 5px;
 }
@@ -22,10 +25,11 @@ input[type="text"],
 input[type="number"],
 input[type="date"],
 input[type="file"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  /* Asegura que el padding y el border estén incluidos en el ancho */
 }
 
 .botones {

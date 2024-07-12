@@ -1,0 +1,67 @@
+/* Home.css */
+.home-container {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-background {
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  max-width: 800px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo transparente con opacidad */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Bordes poco visibles */
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.overlay h2 {
+  font-size: 32px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.card {
+  background-color: #333333;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.card p, .card ul {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.card ul li {
+  margin-bottom: 10px;
+}
