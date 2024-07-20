@@ -1,4 +1,5 @@
-import "./GestionArchivo.css";
+// src/routes/GestionArchivo/GestionArchivo.jsx
+import './GestionArchivo.css'
 export const GestionArchivo = () => {
   return (
     <>
@@ -6,7 +7,7 @@ export const GestionArchivo = () => {
 
       <div className="contenedor-formulario">
         <form id="formulario-archivo">
-          <label for="autor-iniciador">Autor/iniciador:</label>
+          <label htmlFor="autor-iniciador">Autor/iniciador:</label>
           <input
             type="text"
             id="autor-iniciador"
@@ -14,10 +15,10 @@ export const GestionArchivo = () => {
             required
           />
 
-          <label for="carautla">Caratula:</label>
+          <label htmlFor="carautla">Caratula:</label>
           <input type="text" id="caratula" name="caratula" required />
 
-          <label for="numero-folios">Numero de folios:</label>
+          <label htmlFor="numero-folios">Numero de folios:</label>
           <input
             type="number"
             id="numero-folios"
@@ -26,16 +27,16 @@ export const GestionArchivo = () => {
             required
           />
 
-          <label for="fecha">Fecha:</label>
+          <label htmlFor="fecha">Fecha:</label>
           <input type="date" id="fecha" name="fecha" required />
 
-          <label for="tema">Tema:</label>
+          <label htmlFor="tema">Tema:</label>
           <input type="text" id="tema" name="tema" required />
 
-          <label for="archivo">Seleccionar archivo:</label>
+          <label htmlFor="archivo">Seleccionar archivo:</label>
           <input type="file" id="archivo" name="archivo" required />
 
-          <div class="botones">
+          <div className="botones">
             <button type="button" id="btn-subir">
               Subir
             </button>
@@ -49,5 +50,5 @@ export const GestionArchivo = () => {
         </form>
       </div>
     </>
-  );
-};
+  )
+}

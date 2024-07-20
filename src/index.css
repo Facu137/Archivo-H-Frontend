@@ -1,4 +1,4 @@
-/* index.css */
+/* src/index.css */
 
 * {
   min-width: 0;
@@ -19,9 +19,7 @@ svg {
 body {
   margin: 0;
   /* Elimina los márgenes predeterminados del navegador para el elemento body. */
-  min-height: 100vh;
   /* Establece la altura mínima del cuerpo a 100% del viewport height. */
-  width: 100%;
   color: antiquewhite;
   background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
 }
@@ -42,18 +40,15 @@ p {
 }
 
 #seccion-principal {
-  display: flex;
   align-items: center;
   justify-content: center;
 }
 
 #seccion-contenido {
   padding-top: 126px;
-  display: grid;
   grid-template-columns: 5fr 1fr;
   grid-template-rows: 32px 1fr 1fr;
   grid-template-areas:
-    "navegacion fav"
     "contenido contenido"
     "contenido contenido";
   align-items: center;
@@ -68,14 +63,12 @@ p {
 }
 
 #contenido {
-  min-height: 80vh;
   grid-area: contenido;
 }
 
 /* Pantallas de escritorio grandes (2K o superior): */
 @media (min-width: 1921px) {
   .ajusteancho {
-    width: 1500px;
     /* Ancho personalizado para pantallas grandes */
   }
 }
@@ -83,7 +76,6 @@ p {
 /* Pantallas de escritorio (Full HD): */
 @media (min-width: 1601px) and (max-width: 1920px) {
   .ajusteancho {
-    width: 1280px;
     /* Ancho personalizado para pantallas Full HD */
   }
 }
@@ -91,7 +83,6 @@ p {
 /* Pantallas de escritorio (HD+): */
 @media (min-width: 1281px) and (max-width: 1600px) {
   .ajusteancho {
-    width: 960px;
     /* Ancho personalizado para pantallas HD */
   }
 }
@@ -99,7 +90,6 @@ p {
 /* Pantallas de escritorio (HD): */
 @media (min-width: 1025px) and (max-width: 1280px) {
   .ajusteancho {
-    width: 820px;
     /* Ancho personalizado para pantallas HD */
   }
 }
@@ -107,7 +97,6 @@ p {
 /* Pantallas de escritorio (VGA): */
 @media (min-width: 600px) and (max-width: 1024px) {
   .ajusteancho {
-    width: 550px;
     /* Ancho personalizado para pantallas VGA */
   }
 }
@@ -115,17 +104,13 @@ p {
 /* Móviles grandes: */
 @media (min-width: 391px) and (max-width: 599px) {
   .ajusteancho {
-    width: 100%;
     /* Ancho personalizado para móviles grandes */
   }
 
   #seccion-contenido {
-    display: grid;
     grid-template-columns: 5fr 1fr;
     grid-template-rows: 32px 32px 1fr;
     grid-template-areas:
-      "navegacion navegacion"
-      "fav fav"
       "contenido contenido";
   }
 }
@@ -138,12 +123,9 @@ p {
   }
 
   #seccion-contenido {
-    display: grid;
     grid-template-columns: 5fr 1fr;
     grid-template-rows: 32px 32px 1fr;
     grid-template-areas:
-      "navegacion navegacion"
-      "fav fav"
       "contenido contenido";
   }
 }

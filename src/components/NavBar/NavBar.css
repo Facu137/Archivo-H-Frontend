@@ -1,3 +1,5 @@
+/* src/components/NavBar/NavBar.css */
+
 header {
   background: linear-gradient(to top, #000000, #434343);
   width: 100%;
@@ -74,7 +76,6 @@ h1 {
 /* Pantallas de escritorio grandes (2K o superior): */
 @media (min-width: 1921px) {
   .ajusteancho {
-    width: 1500px;
     /* Ancho personalizado para pantallas grandes */
   }
 }
@@ -82,7 +83,6 @@ h1 {
 /* Pantallas de escritorio (Full HD): */
 @media (min-width: 1601px) and (max-width: 1920px) {
   .ajusteancho {
-    width: 1280px;
     /* Ancho personalizado para pantallas Full HD */
   }
 }
@@ -90,7 +90,6 @@ h1 {
 /* Pantallas de escritorio (HD+): */
 @media (min-width: 1281px) and (max-width: 1600px) {
   .ajusteancho {
-    width: 960px;
     /* Ancho personalizado para pantallas HD */
   }
 }
@@ -98,7 +97,6 @@ h1 {
 /* Pantallas de escritorio (HD): */
 @media (min-width: 1025px) and (max-width: 1280px) {
   .ajusteancho {
-    width: 820px;
     /* Ancho personalizado para pantallas HD */
   }
 }
@@ -106,7 +104,6 @@ h1 {
 /* Pantallas de escritorio (VGA): */
 @media (min-width: 600px) and (max-width: 1024px) {
   .ajusteancho {
-    width: 550px;
     /* Ancho personalizado para pantallas VGA */
   }
 }
@@ -114,7 +111,6 @@ h1 {
 /* Móviles grandes: */
 @media (min-width: 391px) and (max-width: 599px) {
   .ajusteancho {
-    width: 90%;
     /* Ancho personalizado para móviles grandes */
   }
 
@@ -137,8 +133,6 @@ h1 {
     grid-template-columns: 5fr 1fr;
     grid-template-rows: 32px 32px 1fr;
     grid-template-areas:
-      "navegacion navegacion"
-      "fav fav"
       "contenido contenido";
   }
 }
@@ -164,8 +158,6 @@ h1 {
     grid-template-columns: 5fr 1fr;
     grid-template-rows: 32px 32px 1fr;
     grid-template-areas:
-      "navegacion navegacion"
-      "fav fav"
       "contenido contenido";
   }
 }

@@ -1,10 +1,9 @@
-/* Footer.css */
+/* src/components/Footer/Footer.css */
 .footer {
   background-color: #1a1a1a;
   color: #ffffff;
   padding: 20px 0;
   font-family: 'Arial', sans-serif;
-  margin-top: 40px; /* Añadimos un margen superior para diferenciarlo del contenido principal */
 }
 
 .footer-container {
