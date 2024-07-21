@@ -1,4 +1,4 @@
-// src\routes\VerArchivo\VerArchivo.jsx
+// src/pages/VerArchivo/VerArchivo.jsx
 import './VerArchivo.css'
 
 export const VerArchivo = () => {

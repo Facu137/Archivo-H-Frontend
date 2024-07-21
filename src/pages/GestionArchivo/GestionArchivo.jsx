@@ -1,4 +1,4 @@
-// src/routes/GestionArchivo/GestionArchivo.jsx
+// src/pages/GestionArchivo/GestionArchivo.jsx
 import './GestionArchivo.css'
 export const GestionArchivo = () => {
   return (

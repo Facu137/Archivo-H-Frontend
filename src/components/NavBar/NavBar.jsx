@@ -1,8 +1,8 @@
-// src/components/NavBar/NavBar.jsx
 import { NavLink } from 'react-router-dom'
 import './NavBar.css'
+import PropTypes from 'prop-types'
 
-export const NavBar = () => {
+export const NavBar = ({ toggleSidebar }) => {
   return (
     <header>
       <nav>
@@ -12,6 +12,7 @@ export const NavBar = () => {
           </NavLink>
           <a href="#">Acerca de...</a>
           <NavLink to="/login">Cuenta</NavLink>
+          <button onClick={toggleSidebar}>Toggle Sidebar</button>
         </div>
         <div className="ajusteancho" id="seccion-busqueda">
           <input type="text" placeholder="Buscar" />
@@ -20,4 +21,7 @@ export const NavBar = () => {
       </nav>
     </header>
   )
+}
+NavBar.propTypes = {
+  toggleSidebar: PropTypes.func.isRequired
 }

@@ -1,4 +1,4 @@
-// src/routes/Registrar/Registrar.jsx
+// src/pages/Registrar/Registrar.jsx
 import React, { useState } from 'react'
 import './Registrar.css'
 import axios from 'axios'

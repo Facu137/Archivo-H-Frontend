@@ -1,36 +1,39 @@
-// src/App.jsx
 import { Route, Routes, Navigate } from 'react-router-dom'
-
+import { useState } from 'react'
+// components
 import { NavBar } from './components/NavBar/NavBar'
+import RightSidebar from './components/RightSidebar/RightSidebar'
 import { Footer } from './components/Footer/Footer'
-import { Home } from './routes/Home/Home'
-import { Login } from './routes/Login/Login'
-import { MiCuenta } from './routes/MiCuenta/MiCuenta'
-import { GestionArchivo } from './routes/GestionArchivo/GestionArchivo'
-import { VerArchivo } from './routes/VerArchivo/VerArchivo'
-import { Registrar } from './routes/Registrar/Registrar'
+// pages
+import { Home } from './pages/Home/Home'
+import { Login } from './pages/Login/Login'
+import { MiCuenta } from './pages/MiCuenta/MiCuenta'
+import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
+import { VerArchivo } from './pages/VerArchivo/VerArchivo'
+import { Registrar } from './pages/Registrar/Registrar'
 
 export const App = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen)
+  }
+
   return (
     <>
-      <NavBar />
+      <NavBar toggleSidebar={toggleSidebar} />
+      <RightSidebar isOpen={isSidebarOpen} />
       <div id="seccion-principal">
         <div className="ajusteancho" id="seccion-contenido">
           <main id="contenido">
             <Routes>
-              <Route path="/" element={<Home></Home>}></Route>
-              <Route path="/login" element={<Login></Login>}></Route>
-              <Route
-                path="/registrar"
-                element={<Registrar></Registrar>}
-              ></Route>
-              <Route path="/cuenta" element={<MiCuenta></MiCuenta>}></Route>
-              <Route
-                path="/gestion"
-                element={<GestionArchivo></GestionArchivo>}
-              ></Route>
-              <Route path="/visor" element={<VerArchivo></VerArchivo>}></Route>
-              <Route path="/*" element={<Navigate to="/" />}></Route>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registrar" element={<Registrar />} />
+              <Route path="/cuenta" element={<MiCuenta />} />
+              <Route path="/gestion" element={<GestionArchivo />} />
+              <Route path="/visor" element={<VerArchivo />} />
+              <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
           </main>
         </div>

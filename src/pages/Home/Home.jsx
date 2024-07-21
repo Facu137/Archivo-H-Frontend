@@ -1,4 +1,4 @@
-// src/routes/Home/Home.jsx
+// src/pages/Home/Home.jsx
 import './Home.css'
 import buildingImage from '../../assets/building.jpg' // Asegúrate de que la ruta es correcta
 

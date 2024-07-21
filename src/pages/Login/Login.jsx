@@ -1,12 +1,16 @@
-// src/routes/Login/Login.jsx
+// src/pages/Login/Login.jsx
 import React, { useState } from 'react'
 import './Login.css'
 import axios from 'axios'
+import { useAuth } from '../../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -18,11 +22,10 @@ export const Login = () => {
       })
 
       if (response.status === 200) {
-        const token = response.data.token
-        // Aquí puedes guardar el token en el localStorage o en un contexto de React
-        localStorage.setItem('token', token)
-        // Redirigir al usuario a la página principal o a donde necesites
-        window.location.href = '/cuenta'
+        const { accessToken } = response.data
+        const userData = { email } // Ajusta esto según la estructura de datos del usuario
+        login(userData, accessToken)
+        navigate('/cuenta')
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
