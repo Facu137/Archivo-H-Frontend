@@ -1,0 +1,20 @@
+/* src/components/RightSidebar/RightSidebar.css */
+
+.right-sidebar {
+    width: 300px;
+    background-color: #f4f4f4;
+    position: fixed;
+    right: -300px;
+    top: 60px;
+    /* Ajusta esto según la altura del NavBar */
+    bottom: 0;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    z-index: 90;
+    /* Asegura que el sidebar esté por encima del contenido pero debajo del navbar */
+}
+
+.right-sidebar.open {
+    right: 0;
+}

@@ -1,36 +1,40 @@
-import React, { useState } from "react";
-import "./Login.css";
-import axios from "axios";
+// src/pages/Login/Login.jsx
+import React, { useState } from 'react'
+import './Login.css'
+import axios from 'axios'
+import { useAuth } from '../../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
-      const response = await axios.post("http://localhost:3000/auth/login", {
+      const response = await axios.post('http://localhost:3000/auth/login', {
         email,
-        password,
-      });
+        password
+      })
 
       if (response.status === 200) {
-        const token = response.data.token;
-        // Aquí puedes guardar el token en el localStorage o en un contexto de React
-        localStorage.setItem("token", token);
-        // Redirigir al usuario a la página principal o a donde necesites
-        window.location.href = "/cuenta";
+        const { accessToken } = response.data
+        const userData = { email } // Ajusta esto según la estructura de datos del usuario
+        login(userData, accessToken)
+        navigate('/cuenta')
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        setError("Correo o contraseña incorrectos");
+        setError('Correo o contraseña incorrectos')
       } else {
-        setError("Hubo un error al intentar iniciar sesión");
+        setError('Hubo un error al intentar iniciar sesión')
       }
     }
-  };
+  }
 
   return (
     <div className="login-container">
@@ -46,6 +50,7 @@ export const Login = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
           />
         </div>
         <div className="login-form-group">
@@ -57,6 +62,7 @@ export const Login = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
           />
         </div>
         <button type="submit">Iniciar Sesión</button>
@@ -65,5 +71,5 @@ export const Login = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}

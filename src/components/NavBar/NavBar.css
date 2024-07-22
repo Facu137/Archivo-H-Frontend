@@ -1,171 +1,251 @@
+/* src/components/NavBar/NavBar.css */
 header {
-  background: linear-gradient(to top, #000000, #434343);
+  background: linear-gradient(to top, #585858, #000000);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: fixed;
-  z-index: 1000; /* Asegura que el navbar esté por encima del contenido */
+  z-index: 100;
+  transition: background 0.3s, color 0.3s;
+  padding: 10px 0;
+}
+
+.dark-mode header {
+  background: linear-gradient(to top, #121212, #333333);
+  color: #ffffff;
+}
+
+.light-mode header {
+  background: linear-gradient(to top, #ffffff, #e0e0e0);
+  color: #000000;
 }
 
 nav {
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#seccion-principal-nav {
+.navbar-container,
+.search-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 5%;
+  box-sizing: border-box;
+}
+
+.search-container {
   justify-content: center;
 }
 
-#seccion-principal-nav a {
+.nav-link,
+.nav-button {
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 10px 10px;
+  margin: 0 5px;
+  padding: 10px;
   text-decoration: none;
-  color: #ffffff;
-  flex: auto;
+  flex: none;
   text-overflow: ellipsis;
   white-space: nowrap;
-  /* Evitar saltos de línea */
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
-#seccion-busqueda {
-  display: flex;
-  margin: 0px 10px;
+.nav-link:hover,
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-#seccion-busqueda input {
+.logo img {
+  height: 36px;
+  margin-right: 10px;
+}
+
+.spacer {
   flex-grow: 1;
-  padding: 8px;
-  border-radius: 50px;
-  margin: 8px 0px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 8px 12px;
+  border-radius: 20px;
+  margin-right: 10px;
   box-sizing: border-box;
-  /* Asegura que el padding y el border estén incluidos en el ancho */
+  font-size: 14px;
+  border: 1px solid #ccc;
 }
 
-#seccion-busqueda button {
-  width: 20%;
-  min-width: 85px;
-  border-radius: 50px;
-  margin: 8px 0px 8px 8px;
+.search-button,
+.advanced-search-button {
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  margin-left: 5px;
 }
 
-input::placeholder {
-  padding: 0px 10px;
+.search-button:hover,
+.advanced-search-button:hover {
+  background-color: #e0e0e0;
 }
 
-#seccion-informacion {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.nav-text {
+  margin-left: 5px;
 }
 
-h1 {
-  text-align: center;
-  white-space: nowrap;
-  margin: 5px;
-}
+/* Responsive styles */
+@media (max-width: 1024px) {
 
-/* Pantallas de escritorio grandes (2K o superior): */
-@media (min-width: 1921px) {
-  .ajusteancho {
-    width: 1500px;
-    /* Ancho personalizado para pantallas grandes */
+  .navbar-container,
+  .search-container {
+    padding: 8px 4%;
+  }
+
+  .nav-link,
+  .nav-button {
+    padding: 8px;
+    font-size: 15px;
   }
 }
 
-/* Pantallas de escritorio (Full HD): */
-@media (min-width: 1601px) and (max-width: 1920px) {
-  .ajusteancho {
-    width: 1280px;
-    /* Ancho personalizado para pantallas Full HD */
+@media (max-width: 932px) {
+
+  .navbar-container,
+  .search-container {
+    padding: 6px 3%;
+  }
+
+  .navbar-container {
+    flex-wrap: wrap;
+  }
+
+  .nav-link,
+  .nav-button {
+    padding: 10px;
+    font-size: 14px;
+    margin: 4px;
+  }
+
+  .logo img {
+    height: 32px;
+  }
+
+  .search-input,
+  .search-button,
+  .advanced-search-button {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .search-container {
+    flex-wrap: nowrap;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .search-button,
+  .advanced-search-button {
+    flex: 0 0 auto;
+  }
+
+  .nav-link .fa-icon,
+  .nav-button .fa-icon {
+    font-size: 20px;
   }
 }
 
-/* Pantallas de escritorio (HD+): */
-@media (min-width: 1281px) and (max-width: 1600px) {
-  .ajusteancho {
-    width: 960px;
-    /* Ancho personalizado para pantallas HD */
+@media (max-width: 768px) {
+
+  .nav-link .fa-icon,
+  .nav-button .fa-icon {
+    font-size: 24px;
   }
 }
 
-/* Pantallas de escritorio (HD): */
-@media (min-width: 1025px) and (max-width: 1280px) {
-  .ajusteancho {
-    width: 820px;
-    /* Ancho personalizado para pantallas HD */
+@media (max-width: 480px) {
+
+  .navbar-container,
+  .search-container {
+    padding: 5px 2%;
+  }
+
+  .nav-link,
+  .nav-button {
+    padding: 12px;
+    font-size: 13px;
+    margin: 3px;
+  }
+
+  .logo img {
+    height: 28px;
+  }
+
+  .search-input,
+  .search-button,
+  .advanced-search-button {
+    font-size: 13px;
+    padding: 12px;
+  }
+
+  .nav-link .fa-icon,
+  .nav-button .fa-icon {
+    font-size: 28px;
   }
 }
 
-/* Pantallas de escritorio (VGA): */
-@media (min-width: 600px) and (max-width: 1024px) {
-  .ajusteancho {
-    width: 550px;
-    /* Ancho personalizado para pantallas VGA */
-  }
-}
+@media (max-width: 430px) {
 
-/* Móviles grandes: */
-@media (min-width: 391px) and (max-width: 599px) {
-  .ajusteancho {
-    width: 90%;
-    /* Ancho personalizado para móviles grandes */
+  .navbar-container,
+  .search-container {
+    padding: 4px 1.5%;
   }
 
-  #seccion-principal a {
-    display: flex;
+  .navbar-container {
     justify-content: center;
-    margin: 0;
-    padding: 7px 7px;
-    text-decoration: none;
-    color: #ffffff;
-    max-width: 70px;
-    flex: auto;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    /* Evitar saltos de línea */
   }
 
-  #seccion-contenido {
-    display: grid;
-    grid-template-columns: 5fr 1fr;
-    grid-template-rows: 32px 32px 1fr;
-    grid-template-areas:
-      "navegacion navegacion"
-      "fav fav"
-      "contenido contenido";
-  }
-}
-
-/* Móviles pequeños: */
-@media (max-width: 390px) {
-  #seccion-principal a {
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 7px 7px;
-    text-decoration: none;
-    color: #ffffff;
-    max-width: 70px;
-    flex: auto;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    /* Evitar saltos de línea */
+  .logo img {
+    height: 24px;
   }
 
-  #seccion-contenido {
-    display: grid;
-    grid-template-columns: 5fr 1fr;
-    grid-template-rows: 32px 32px 1fr;
-    grid-template-areas:
-      "navegacion navegacion"
-      "fav fav"
-      "contenido contenido";
+  .nav-link,
+  .nav-button {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .search-input,
+  .search-button,
+  .advanced-search-button {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .nav-text {
+    display: none;
+  }
+
+  .nav-link .fa-icon,
+  .nav-button .fa-icon {
+    font-size: 24px;
   }
 }

@@ -1,6 +1,7 @@
-import React from 'react';
-import './Footer.css';
-import logo from '../../assets/logo.png';
+// src/components/Footer/Footer.jsx
+import React from 'react'
+import './Footer.css'
+import logo from '../../assets/logo.png'
 
 export const Footer = () => {
   return (
@@ -28,5 +29,5 @@ export const Footer = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
