@@ -28,7 +28,7 @@
         "prettier/prettier": [
             "error",
             {
-                "endOfLine": "lf"
+                "endOfLine": "crlf"
             }
         ],
         "react/react-in-jsx-scope": "off"
