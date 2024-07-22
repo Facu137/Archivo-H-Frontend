@@ -1,4 +1,5 @@
-/* src/index.css */
+/* src/index.css
+Este este archivo se encarga de la configuración de los estilos globales.*/
 
 * {
   min-width: 0;
@@ -19,9 +20,8 @@ svg {
 body {
   margin: 0;
   /* Elimina los márgenes predeterminados del navegador para el elemento body. */
-  /* Establece la altura mínima del cuerpo a 100% del viewport height. */
-  color: antiquewhite;
-  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  transition: background-color 0.3s, color 0.3s;
+  /* Agrega una transición suave para el cambio de modo. */
 }
 
 h1,
@@ -39,93 +39,58 @@ p {
   /* Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea. */
 }
 
-#seccion-principal {
-  align-items: center;
-  justify-content: center;
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Estilos específicos para el modo oscuro */
+.dark-mode a {
+  color: inherit;
+  /* Heredar el color del texto */
+  text-decoration: none;
+  /* Quitar el subrayado */
+}
+
+.dark-mode a:hover {
+  color: #b3c7ff;
+}
+
+.dark-mode button {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.dark-mode button:hover {
+  background-color: #555555;
+}
+
+/* Estilos específicos para el modo claro */
+.light-mode a {
+  color: inherit;
+  /* Heredar el color del texto */
+  text-decoration: none;
+  /* Quitar el subrayado */
+}
+
+.light-mode a:hover {
+  color: #551a8b;
+}
+
+.light-mode button {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+.light-mode button:hover {
+  background-color: #d0d0d0;
 }
 
 #seccion-contenido {
-  padding-top: 126px;
-  grid-template-columns: 5fr 1fr;
-  grid-template-rows: 32px 1fr 1fr;
-  grid-template-areas:
-    "contenido contenido"
-    "contenido contenido";
-  align-items: center;
-}
-
-#navegacion {
-  grid-area: navegacion;
-}
-
-#fav {
-  grid-area: fav;
-}
-
-#contenido {
-  grid-area: contenido;
-}
-
-/* Pantallas de escritorio grandes (2K o superior): */
-@media (min-width: 1921px) {
-  .ajusteancho {
-    /* Ancho personalizado para pantallas grandes */
-  }
-}
-
-/* Pantallas de escritorio (Full HD): */
-@media (min-width: 1601px) and (max-width: 1920px) {
-  .ajusteancho {
-    /* Ancho personalizado para pantallas Full HD */
-  }
-}
-
-/* Pantallas de escritorio (HD+): */
-@media (min-width: 1281px) and (max-width: 1600px) {
-  .ajusteancho {
-    /* Ancho personalizado para pantallas HD */
-  }
-}
-
-/* Pantallas de escritorio (HD): */
-@media (min-width: 1025px) and (max-width: 1280px) {
-  .ajusteancho {
-    /* Ancho personalizado para pantallas HD */
-  }
-}
-
-/* Pantallas de escritorio (VGA): */
-@media (min-width: 600px) and (max-width: 1024px) {
-  .ajusteancho {
-    /* Ancho personalizado para pantallas VGA */
-  }
-}
-
-/* Móviles grandes: */
-@media (min-width: 391px) and (max-width: 599px) {
-  .ajusteancho {
-    /* Ancho personalizado para móviles grandes */
-  }
-
-  #seccion-contenido {
-    grid-template-columns: 5fr 1fr;
-    grid-template-rows: 32px 32px 1fr;
-    grid-template-areas:
-      "contenido contenido";
-  }
-}
-
-/* Móviles pequeños: */
-@media (max-width: 390px) {
-  .ajusteancho {
-    width: 100%;
-    /* Ancho limitado para móviles pequeños */
-  }
-
-  #seccion-contenido {
-    grid-template-columns: 5fr 1fr;
-    grid-template-rows: 32px 32px 1fr;
-    grid-template-areas:
-      "contenido contenido";
-  }
+  padding-top: 80px;
 }

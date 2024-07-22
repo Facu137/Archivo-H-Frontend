@@ -25,7 +25,12 @@
         "es2021": true
     },
     "rules": {
-        "prettier/prettier": "error",
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "lf"
+            }
+        ],
         "react/react-in-jsx-scope": "off"
     }
 }
