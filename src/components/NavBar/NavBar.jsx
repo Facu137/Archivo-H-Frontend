@@ -1,6 +1,5 @@
 // src/components/NavBar/NavBar.jsx
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 import './NavBar.css'
 import PropTypes from 'prop-types'
 import logo from '../../assets/logo.png'
