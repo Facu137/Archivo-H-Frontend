@@ -1,6 +1,7 @@
 // src/App.jsx
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useAuth } from './context/AuthContext' // Asegúrate de importar useAuth
 // components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
@@ -12,20 +13,25 @@ import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
-import './index.css' // Asegúrate de importar los estilos globales
+import './index.css'
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Obtener el modo almacenado en localStorage al iniciar la aplicación
     const savedMode = localStorage.getItem('mode')
     return savedMode ? savedMode === 'dark' : true
   })
+  const { user } = useAuth() // Obtén el estado de autenticación
+  const location = useLocation() // Obtén la ubicación actual
 
   useEffect(() => {
-    // Guardar el modo actual en localStorage cada vez que cambie
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
+
+  useEffect(() => {
+    // Cierra el sidebar cuando cambia la ruta
+    setIsSidebarOpen(false)
+  }, [location])
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
@@ -42,7 +48,12 @@ export const App = () => {
         toggleDarkMode={toggleDarkMode}
         isDarkMode={isDarkMode}
       />
-      <RightSidebar isOpen={isSidebarOpen} />
+      {user && ( // Solo renderiza el sidebar si hay un usuario autenticado
+        <RightSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      )}
       <div id="seccion-principal">
         <div className="ajusteancho" id="seccion-contenido">
           <main id="contenido">

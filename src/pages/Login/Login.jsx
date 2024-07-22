@@ -22,9 +22,8 @@ export const Login = () => {
       })
 
       if (response.status === 200) {
-        const { accessToken } = response.data
-        const userData = { email } // Ajusta esto según la estructura de datos del usuario
-        login(userData, accessToken)
+        const { accessToken, user } = response.data
+        login(user, accessToken)
         navigate('/cuenta')
       }
     } catch (error) {

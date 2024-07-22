@@ -1,5 +1,6 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 const AuthContext = createContext()
 
@@ -10,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null)
 
   useEffect(() => {
-    // Verificar si hay usuario almacenado en el localStorage y token
     const storedUser = localStorage.getItem('user')
     const storedToken = localStorage.getItem('token')
 
@@ -24,10 +24,6 @@ export const AuthProvider = ({ children }) => {
         setUser(null)
         setToken(null)
       }
-    } else {
-      console.warn('No user data found in localStorage')
-      setUser(null)
-      setToken(null)
     }
   }, [])
 
@@ -50,4 +46,8 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   )
+}
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 }
