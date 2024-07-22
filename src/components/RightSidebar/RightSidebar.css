@@ -5,16 +5,122 @@
     background-color: #f4f4f4;
     position: fixed;
     right: -300px;
-    top: 60px;
-    /* Ajusta esto según la altura del NavBar */
+    top: 0;
     bottom: 0;
     padding: 20px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease-in-out;
-    z-index: 90;
-    /* Asegura que el sidebar esté por encima del contenido pero debajo del navbar */
+    z-index: 1000;
+    overflow-y: auto;
 }
 
 .right-sidebar.open {
     right: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.user-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
+    /* Ajusta este valor según la altura de tu navbar */
+}
+
+.user-avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.user-avatar svg {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.user-card h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.user-info p {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.user-info p svg {
+    margin-right: 10px;
+}
+
+.logout-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+.logout-button svg {
+    margin-right: 10px;
+}
+
+/* Modo Oscuro */
+.dark-mode .right-sidebar {
+    background-color: #222;
+}
+
+.dark-mode .user-card {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .close-button {
+    color: #fff;
+}
+
+.dark-mode .user-card h3 {
+    color: #fff;
+}
+
+.dark-mode .logout-button {
+    background-color: #6c757d;
+}
+
+.dark-mode .logout-button:hover {
+    background-color: #5a6268;
 }
