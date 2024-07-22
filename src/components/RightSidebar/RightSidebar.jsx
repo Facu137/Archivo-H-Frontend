@@ -8,6 +8,11 @@ import './RightSidebar.css'
 const RightSidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth()
 
+  // Función para capitalizar la primera letra de una palabra
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+  }
+
   const handleLogout = () => {
     logout()
     onClose()
@@ -30,15 +35,9 @@ const RightSidebar = ({ isOpen, onClose }) => {
           </div>
           <h3>Detalles de la Cuenta</h3>
           <div className="user-info">
-            <p>
-              <strong>Rol:</strong> {user.role}
-            </p>
-            <p>
-              <strong>Nombre:</strong> {user.name}
-            </p>
-            <p>
-              <strong>Apellido:</strong> {user.lastName}
-            </p>
+            <p>Rol: {capitalizeFirstLetter(user.role)}</p>
+            <p>Nombre: {user.name}</p>
+            <p>Apellido: {user.lastName}</p>
             <p>
               <FaEnvelope /> {user.email}
             </p>
