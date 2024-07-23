@@ -1,0 +1,29 @@
+/* src/pages/VerArchivo/VerArchivo.css */
+
+.ver-archivo-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.ver-archivo-container img,
+.ver-archivo-container .react-pdf__Page {
+    max-width: 100%;
+    height: auto;
+}
+
+.watermark {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.warning {
+    margin-top: 20px;
+    color: #666;
+    font-size: 14px;
+}
