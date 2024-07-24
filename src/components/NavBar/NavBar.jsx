@@ -2,7 +2,7 @@
 import React from 'react'
 import './NavBar.css'
 import PropTypes from 'prop-types'
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faHome,
@@ -34,6 +34,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
           <div className="logo">
             <img src={logo} alt="Logo" />
           </div>
+          <h2 className="archivo-historico-text">ARCHIVO HISTORICO SANTIAGO DEL ESTERO</h2>
           <div className="spacer" />
           <button
             onClick={() => (window.location.href = '/')}
