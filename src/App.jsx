@@ -13,7 +13,9 @@ import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
+import { Institucional } from './pages/Institucional/Institucional'
 import './index.css'
+
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -64,6 +66,7 @@ export const App = () => {
               <Route path="/cuenta" element={<MiCuenta />} />
               <Route path="/gestion" element={<GestionArchivo />} />
               <Route path="/visor" element={<VerArchivo />} />
+              <Route path="/institucional" element={<Institucional />} />
               <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
           </main>
