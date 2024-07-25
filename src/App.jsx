@@ -16,7 +16,6 @@ import { Registrar } from './pages/Registrar/Registrar'
 import { Institucional } from './pages/Institucional/Institucional'
 import './index.css'
 
-
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -56,8 +55,8 @@ export const App = () => {
           onClose={() => setIsSidebarOpen(false)}
         />
       )}
-      <div id="seccion-principal">
-        <div className="ajusteancho" id="seccion-contenido">
+      <div className="main-container">
+        <div className="ajusteancho content" id="seccion-contenido">
           <main id="contenido">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -71,8 +70,8 @@ export const App = () => {
             </Routes>
           </main>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   )
 }

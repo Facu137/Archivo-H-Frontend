@@ -8,6 +8,7 @@
 
 .footer-container {
   display: flex;
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en varias filas */
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
@@ -17,47 +18,51 @@
 
 .footer-logo {
   flex: 0 0 auto;
+  margin-right: 20px; /* Añadir margen derecho para separar el logo de las tarjetas en modo PC */
 }
 
 .footer-logo img {
-  height: 60px; /* Aumentamos el tamaño del logo */
+  height: 60px;
 }
 
 .footer-cards {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Alinear las tarjetas a la izquierda en modo PC */
   align-items: center;
-  flex-wrap: nowrap;
+  width: 100%; /* Tomar todo el ancho en dispositivos pequeños */
 }
 
 .footer-card {
   background-color: #333333;
   border-radius: 8px;
-  padding: 10px; /* Reducimos el padding para que las tarjetas ocupen menos espacio */
-  margin: 0 5px;
+  padding: 10px;
+  margin: 10px; /* Ajustar el margen para separar las tarjetas vertical y horizontalmente */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
-  transition: background-color 0.3s ease; /* Añadimos una transición para el efecto hover */
-  min-width: 150px; /* Ajustamos el ancho mínimo de las tarjetas */
-  height: 60px; /* Ajustamos el alto de las tarjetas para que coincida con el alto del logo */
+  transition: background-color 0.3s ease;
+  min-width: 150px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1 1 200px; /* Flex-grow: 1, flex-shrink: 1, flex-basis: 200px */
 }
 
 .footer-card:hover {
-  background-color: #444444; /* Cambiamos el color de fondo al hacer hover */
+  background-color: #444444;
 }
 
 .footer-card h3 {
-  font-size: 14px; /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
-  margin-bottom: 0; /* Eliminamos el margen inferior para ajustar el contenido */
+  font-size: 14px;
+  margin-bottom: 0;
   color: #ffffff;
 }
 
-.footer-card p, .footer-card a {
-  font-size: 12px; /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
+.footer-card p,
+.footer-card a {
+  font-size: 12px;
   line-height: 1.4;
   color: #ffffff;
   text-decoration: none;
@@ -85,4 +90,27 @@
 
 .footer-copyright a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-logo {
+    margin-bottom: 20px;
+  }
+
+  .footer-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-card {
+    width: 90%; /* Aumentar el ancho de las tarjetas para que ocupen más espacio en dispositivos móviles */
+    max-width: 300px; /* Limitar el ancho máximo de las tarjetas */
+    margin: 10px 0; /* Ajustar el margen para separar las tarjetas verticalmente */
+    padding: 15px; /* Aumentar el padding para mejorar la apariencia interna */
+  }
 }

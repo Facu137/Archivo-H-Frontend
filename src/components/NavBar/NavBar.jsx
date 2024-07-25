@@ -1,4 +1,3 @@
-// src/components/NavBar/NavBar.jsx
 import React from 'react'
 import './NavBar.css'
 import PropTypes from 'prop-types'
@@ -29,13 +28,27 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
 
   return (
     <header className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-      <nav>
-        <div className="navbar-container">
+      <div className="top-section">
+        <div className="logo-title-container">
           <div className="logo">
             <img src={logo} alt="Logo" />
           </div>
           <h2 className="archivo-historico-text">ARCHIVO HISTORICO SANTIAGO DEL ESTERO</h2>
-          <div className="spacer" />
+        </div>
+      </div>
+      <div className="bottom-section">
+        <div className="search-container">
+          <input type="text" placeholder="Buscar" className="search-input" />
+          <button type="submit" className="search-button">
+            <FontAwesomeIcon icon={faSearch} />
+            <span className="nav-text"></span>
+          </button>
+          <button className="advanced-search-button">
+            <FontAwesomeIcon icon={faCog} />
+            <span className="nav-text"></span>
+          </button>
+        </div>
+        <div className="nav-buttons-container">
           <button
             onClick={() => (window.location.href = '/')}
             className="nav-button"
@@ -63,18 +76,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
             </span>
           </button>
         </div>
-        <div className="search-container">
-          <input type="text" placeholder="Buscar" className="search-input" />
-          <button type="submit" className="search-button">
-            <FontAwesomeIcon icon={faSearch} />
-            <span className="nav-text">Buscar</span>
-          </button>
-          <button className="advanced-search-button">
-            <FontAwesomeIcon icon={faCog} />
-            <span className="nav-text">Búsqueda Avanzada</span>
-          </button>
-        </div>
-      </nav>
+      </div>
     </header>
   )
 }

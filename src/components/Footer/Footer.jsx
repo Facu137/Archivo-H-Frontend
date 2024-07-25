@@ -10,7 +10,6 @@ export const Footer = () => {
         <div className="footer-logo">
           <img src={logo} alt="Logo" />
         </div>
-
         <div className="footer-cards">
           <div className="footer-card">
             <h3>Dirección</h3>
