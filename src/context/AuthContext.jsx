@@ -1,6 +1,7 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import axiosInstance from '../api/axiosConfig'
 
 const AuthContext = createContext()
 
@@ -14,16 +15,18 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('user')
     const storedToken = localStorage.getItem('token')
 
-    if (storedUser && storedToken) {
+    if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser)
         setUser(parsedUser)
-        setToken(storedToken)
       } catch (error) {
         console.error('Error parsing user data from localStorage', error)
         setUser(null)
-        setToken(null)
       }
+    }
+
+    if (storedToken) {
+      setToken(storedToken)
     }
   }, [])
 
@@ -41,8 +44,23 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token')
   }
 
+  const updateUser = async (userData) => {
+    try {
+      const response = await axiosInstance.put('/auth/edit-user', userData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const updatedUser = response.data.user
+      setUser(updatedUser)
+      localStorage.setItem('user', JSON.stringify(updatedUser))
+    } catch (error) {
+      console.error('Update user error:', error)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   )
