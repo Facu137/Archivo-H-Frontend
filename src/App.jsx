@@ -9,10 +9,10 @@ import { Footer } from './components/Footer/Footer'
 // pages
 import { Home } from './pages/Home/Home'
 import { Login } from './pages/Login/Login'
-import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
+import { EditUser } from './pages/EditUser/EditUser'
 import './index.css'
 
 export const App = () => {
@@ -24,6 +24,7 @@ export const App = () => {
   const { user } = useAuth() // Obtén el estado de autenticación
   const location = useLocation() // Obtén la ubicación actual
 
+  // Almacena el modo de tema en localStorage
   useEffect(() => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
@@ -61,7 +62,7 @@ export const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registrar" element={<Registrar />} />
-              <Route path="/cuenta" element={<MiCuenta />} />
+              <Route path="/editar-usuario" element={<EditUser />} />
               <Route path="/gestion" element={<GestionArchivo />} />
               <Route path="/visor" element={<VerArchivo />} />
               <Route path="/*" element={<Navigate to="/" />} />

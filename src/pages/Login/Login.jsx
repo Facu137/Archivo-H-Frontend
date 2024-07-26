@@ -24,7 +24,7 @@ export const Login = () => {
       if (response.status === 200) {
         const { accessToken, user } = response.data
         login(user, accessToken)
-        navigate('/cuenta')
+        navigate('/')
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {

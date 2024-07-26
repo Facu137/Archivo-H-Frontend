@@ -1,7 +1,7 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaEnvelope, FaSignOutAlt } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './RightSidebar.css'
 
@@ -42,6 +42,12 @@ const RightSidebar = ({ isOpen, onClose }) => {
               <FaEnvelope /> {user.email}
             </p>
           </div>
+          <button
+            onClick={() => (window.location.href = '/editar-usuario')}
+            className="edit-button"
+          >
+            <FaEdit /> Editar Detalles
+          </button>
           <button onClick={handleLogout} className="logout-button">
             <FaSignOutAlt /> Cerrar Sesión
           </button>

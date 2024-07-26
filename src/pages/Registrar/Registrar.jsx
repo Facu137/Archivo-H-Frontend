@@ -38,7 +38,7 @@ export const Registrar = () => {
         confirmPassword: formData.confirmPassword, // Asegúrate de incluir confirmPassword
         nombre: formData.nombre,
         apellido: formData.apellido,
-        rol: 'usuario' // Añadir el campo rol con el valor 'usuario'
+        rol: 'usuario'
       })
       if (response.status === 201) {
         console.log('Usuario registrado con éxito', response.data)

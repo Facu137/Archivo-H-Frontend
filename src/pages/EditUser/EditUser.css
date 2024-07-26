@@ -1,0 +1,164 @@
+/* src/pages/EditUser/EditUser.css */
+
+.edit-user-container {
+    max-width: 600px;
+    width: 90%;
+    /* Ajuste para mejorar la responsividad */
+    margin: 120px auto 40px;
+    padding: 30px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    /* Asegura que el padding no afecte el ancho total */
+}
+
+.edit-user-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: var(--heading-color);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--label-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: var(--input-bg-color);
+    color: var(--input-text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    /* Asegura que el padding no afecte el ancho total */
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--focus-color);
+    box-shadow: 0 0 0 2px var(--focus-shadow-color);
+}
+
+.submit-button {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+.error-message {
+    background-color: var(--error-bg-color);
+    color: var(--error-text-color);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilos para modo claro */
+.light-mode {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --heading-color: #1a1a1a;
+    --label-color: #4a4a4a;
+    --input-bg-color: #f9f9f9;
+    --input-text-color: #333333;
+    --border-color: #d1d1d1;
+    --focus-color: #3498db;
+    --focus-shadow-color: rgba(52, 152, 219, 0.2);
+    --button-bg-color: #3498db;
+    --button-text-color: #ffffff;
+    --button-hover-bg-color: #2980b9;
+    --error-bg-color: #ffebee;
+    --error-text-color: #c62828;
+}
+
+/* Estilos para modo oscuro */
+.dark-mode {
+    --bg-color: #1f1f1f;
+    --text-color: #e0e0e0;
+    --heading-color: #ffffff;
+    --label-color: #b3b3b3;
+    --input-bg-color: #2c2c2c;
+    --input-text-color: #e0e0e0;
+    --border-color: #444444;
+    --focus-color: #3498db;
+    --focus-shadow-color: rgba(52, 152, 219, 0.4);
+    --button-bg-color: #3498db;
+    --button-text-color: #ffffff;
+    --button-hover-bg-color: #2980b9;
+    --error-bg-color: #4a0f0f;
+    --error-text-color: #ff8a80;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .edit-user-container {
+        width: 95%;
+        /* Aumenta ligeramente el ancho en pantallas más pequeñas */
+        margin: 100px auto 30px;
+        padding: 20px;
+    }
+
+    .edit-user-container h2 {
+        font-size: 24px;
+    }
+
+    .form-group input,
+    .submit-button {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .edit-user-container {
+        width: 100%;
+        /* Ocupa todo el ancho en pantallas muy pequeñas */
+        margin: 80px auto 20px;
+        padding: 15px;
+        border-radius: 0;
+        /* Elimina el borde redondeado en pantallas muy pequeñas */
+    }
+
+    .edit-user-container h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .submit-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
