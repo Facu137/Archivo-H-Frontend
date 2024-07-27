@@ -3,6 +3,25 @@ import React, { useState } from 'react'
 import './ResetPassword.css'
 import axiosInstance from '../../api/axiosConfig'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+
+const resetPasswordSchema = z
+  .object({
+    token: z.string({ required_error: 'El token es requerido' }),
+    password: z
+      .string({ required_error: 'La contraseña es requerida' })
+      .min(6, { message: 'La contraseña debe tener al menos 6 caracteres' }),
+    confirmPassword: z
+      .string({ required_error: 'La confirmación de contraseña es requerida' })
+      .min(6, {
+        message:
+          'La confirmación de contraseña debe tener al menos 6 caracteres'
+      })
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirmPassword'] // Indica que el error es en la confirmación de contraseña
+  })
 
 export const ResetPassword = () => {
   const [password, setPassword] = useState('')
@@ -18,12 +37,9 @@ export const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden')
-      return
-    }
-
     try {
+      resetPasswordSchema.parse({ token, password, confirmPassword })
+
       const response = await axiosInstance.post('/auth/reset-password', {
         token,
         password
@@ -36,9 +52,13 @@ export const ResetPassword = () => {
         setTimeout(() => navigate('/login'), 3000)
       }
     } catch (error) {
-      setError(
-        'Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo.'
-      )
+      if (error.issues) {
+        setError(error.issues.map((issue) => issue.message).join(', '))
+      } else {
+        setError(
+          'Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo.'
+        )
+      }
       setSuccess('')
     }
   }
