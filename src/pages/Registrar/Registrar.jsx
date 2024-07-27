@@ -127,7 +127,13 @@ export const Registrar = () => {
         </div>
         <button type="submit">Registrar</button>
         <div className="register-login-link">
-          ¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a>
+          <button
+            type="button"
+            className="login-button"
+            onClick={() => (window.location.href = '/login')}
+          >
+            Iniciar sesión
+          </button>
         </div>
       </form>
     </div>

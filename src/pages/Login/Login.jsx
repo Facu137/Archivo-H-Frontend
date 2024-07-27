@@ -100,8 +100,21 @@ export const Login = () => {
           />
         </div>
         <button type="submit">Iniciar Sesión</button>
-        <div className="login-register-link">
-          ¿No tienes una cuenta? <a href="/registrar">Regístrate aquí</a>
+        <div className="login-links">
+          <button
+            type="button"
+            className="forgot-password-button"
+            onClick={() => navigate('/forgot-password')}
+          >
+            Recuperar Contraseña
+          </button>
+          <button
+            type="button"
+            className="register-button"
+            onClick={() => navigate('/registrar')}
+          >
+            Registrarse
+          </button>
         </div>
       </form>
     </div>
