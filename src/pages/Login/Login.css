@@ -92,3 +92,15 @@
   text-decoration: underline;
   color: #0056b3;
 }
+
+.success-message {
+  color: #28a745;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
