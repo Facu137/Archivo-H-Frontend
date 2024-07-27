@@ -13,6 +13,7 @@ export const Registrar = () => {
   })
 
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -41,8 +42,10 @@ export const Registrar = () => {
         rol: 'usuario'
       })
       if (response.status === 201) {
-        console.log('Usuario registrado con éxito', response.data)
-        window.location.href = '/login'
+        setSuccess(
+          'Usuario registrado con éxito. Por favor, verifica tu correo electrónico.'
+        )
+        setError('')
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -61,6 +64,7 @@ export const Registrar = () => {
       <form onSubmit={handleSubmit} className="register-form">
         <h2>Registrar Usuario</h2>
         {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
         <div className="register-form-group">
           <label htmlFor="email">Correo Electrónico</label>
           <input
@@ -123,7 +127,13 @@ export const Registrar = () => {
         </div>
         <button type="submit">Registrar</button>
         <div className="register-login-link">
-          ¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a>
+          <button
+            type="button"
+            className="login-button"
+            onClick={() => (window.location.href = '/login')}
+          >
+            Iniciar sesión
+          </button>
         </div>
       </form>
     </div>

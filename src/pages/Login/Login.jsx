@@ -1,16 +1,46 @@
 // src/pages/Login/Login.jsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Login.css'
 import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const { login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    if (searchParams.get('verified') === 'true') {
+      setSuccess('Correo verificado con éxito. Ahora puedes iniciar sesión.')
+    } else if (searchParams.get('error')) {
+      const errorType = searchParams.get('error')
+      switch (errorType) {
+        case 'no_token':
+          setError('Token de verificación no proporcionado.')
+          break
+        case 'user_not_found':
+          setError('Usuario no encontrado.')
+          break
+        case 'already_verified':
+          setError('El correo electrónico ya ha sido verificado.')
+          break
+        case 'invalid_token':
+          setError('Token inválido.')
+          break
+        case 'token_expired':
+          setError('Token expirado.')
+          break
+        default:
+          setError('Hubo un error al verificar el correo electrónico.')
+      }
+    }
+  }, [location])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -27,7 +57,11 @@ export const Login = () => {
         navigate('/')
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 403) {
+        setError(
+          'Por favor, verifica tu correo electrónico antes de iniciar sesión'
+        )
+      } else if (error.response && error.response.status === 401) {
         setError('Correo o contraseña incorrectos')
       } else {
         setError('Hubo un error al intentar iniciar sesión')
@@ -40,6 +74,7 @@ export const Login = () => {
       <form onSubmit={handleSubmit} className="login-form">
         <h2>Iniciar Sesión</h2>
         {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
         <div className="login-form-group">
           <label htmlFor="email">Correo Electrónico</label>
           <input
@@ -65,8 +100,21 @@ export const Login = () => {
           />
         </div>
         <button type="submit">Iniciar Sesión</button>
-        <div className="login-register-link">
-          ¿No tienes una cuenta? <a href="/registrar">Regístrate aquí</a>
+        <div className="login-links">
+          <button
+            type="button"
+            className="forgot-password-button"
+            onClick={() => navigate('/forgot-password')}
+          >
+            Recuperar Contraseña
+          </button>
+          <button
+            type="button"
+            className="register-button"
+            onClick={() => navigate('/registrar')}
+          >
+            Registrarse
+          </button>
         </div>
       </form>
     </div>

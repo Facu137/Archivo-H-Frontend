@@ -1,10 +1,11 @@
-/* src/routes/Login/Login.css */
-
+/* src/pages/Login/Login.css */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem 0;
+  margin-top: 80px;
+  /* Ajusta el margen superior para evitar que choque con el NavBar */
 }
 
 .login-form {
@@ -76,19 +77,43 @@
   transform: translateY(0);
 }
 
-.login-register-link {
+.login-links {
+  display: flex;
+  justify-content: space-between;
   margin-top: 1.5rem;
-  text-align: center;
-  color: #ddd;
 }
 
-.login-register-link a {
-  color: #007bff;
-  text-decoration: none;
-  transition: color 0.3s;
+.forgot-password-button,
+.register-button {
+  padding: 0.75rem 1rem;
+  background-color: #6c757d;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.login-register-link a:hover {
-  text-decoration: underline;
-  color: #0056b3;
+.forgot-password-button:hover,
+.register-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.forgot-password-button:active,
+.register-button:active {
+  transform: translateY(0);
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
 }
