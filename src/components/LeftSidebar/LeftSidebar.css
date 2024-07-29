@@ -1,0 +1,136 @@
+/* src/components/RightSidebar/RightSidebar.css */
+
+.left-sidebar {
+    width: 280px;
+    background-color: #f4f4f4; /* Light mode background */
+    position: fixed;
+    left: -320px;
+    top: 0;
+    bottom: 0;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.left-sidebar.open {
+    left: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Light mode overlay */
+    z-index: 999;
+}
+
+
+
+
+
+
+/* Modo Oscuro */
+.dark-mode .left-sidebar {
+    background-color: #222; /* Dark mode background */
+}
+
+.dark-mode .user-card {
+    background-color: #333; /* Dark mode card background */
+    color: #fff; /* Dark mode text color */
+}
+
+
+
+.sidebar-section {
+    margin-top: 20px;
+}
+
+.sidebar-section h3 {
+    margin-bottom: 10px;
+    color: #333; /* Light mode text color */
+    
+}
+
+.sidebar-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-section li {
+    margin-bottom: 10px;
+    border: 1px none #adadad; /* Light mode border color */
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s;
+    background-color: #dbdbdb;
+}
+
+.sidebar-section li:hover {
+    background-color: #bdbdbd; /* Light mode hover background */
+ 
+}
+
+.sidebar-section a {
+    text-decoration: none;
+    color: #929292; /* Light mode text color */
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sidebar-section a:hover {
+    text-decoration: none;
+    color: none;
+    background-color: none;
+    background: none;
+}
+
+.sidebar-section a svg {
+    margin-right: 10px;
+}
+
+/* Modo Oscuro */
+.dark-mode .sidebar-section h3 {
+    color: #fff; /* Dark mode text color */
+}
+
+.dark-mode .sidebar-section a {
+    color: #fff; /* Dark mode text color */
+}
+
+.dark-mode .sidebar-section li {
+    border-color: #555; /* Dark mode border color */
+    background-color: #333; /* Dark mode background */
+}
+
+.sidebar-section li:hover {
+    cursor: pointer;
+}
+
+.dark-mode .sidebar-section li:hover {
+    background-color: #444; /* Dark mode hover background */
+}
+
+/* Estilos para el botón de abrir sidebar */
+.open-sidebar-button {
+    background: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333; /* Light mode button color */
+    position: fixed;
+    top: 10px;
+    transition: background-color 0.2s;
+    left: 10px;
+    z-index: 1001; /* Asegura que el botón esté por encima del sidebar */
+}
+
+/* Modo Oscuro */
+.dark-mode .open-sidebar-button {
+    color: #fff; /* Dark mode button color */
+}

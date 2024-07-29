@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext' // Asegúrate de importar useAut
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import { Footer } from './components/Footer/Footer'
+import LeftSidebar  from './components/LeftSidebar/LeftSidebar'
 // pages
 import { Home } from './pages/Home/Home'
 import { Login } from './pages/Login/Login'
