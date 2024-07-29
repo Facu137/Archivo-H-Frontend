@@ -20,7 +20,7 @@ export const Home = () => {
 
       <div className="card">
         <p>
-          "Un archivo con fo|ndos no organizados y no descritos, es un archivo mudo, 
+          "Un archivo con fondos no organizados y no descritos, es un archivo mudo, 
           ciego, inservible, que oculta información y reduce, por no decir impide, 
           la investigación."
         </p>
