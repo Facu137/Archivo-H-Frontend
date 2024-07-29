@@ -35,7 +35,6 @@ export const App = () => {
     // Cierra el sidebar cuando cambia la ruta
     setIsSidebarOpen(false)
   }, [location])
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }

@@ -10,7 +10,7 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const { login } = useAuth()
+  const { login, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -39,8 +39,13 @@ export const Login = () => {
         default:
           setError('Hubo un error al verificar el correo electrónico.')
       }
+    } else if (searchParams.get('accountDeleted') === 'true') {
+      setSuccess('Tu cuenta ha sido eliminada con éxito.')
+      if (searchParams.get('logout') === 'true') {
+        logout()
+      }
     }
-  }, [location])
+  }, [location, logout])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
