@@ -179,8 +179,7 @@
 
 .sidebar-section li {
     margin-bottom: 10px;
-    
-    border: 1px solid #adadad; /* Light mode border color */
+    border: 1px none #adadad; /* Light mode border color */
     border-radius: 5px;
     padding: 10px;
     transition: background-color 0.3s;
@@ -231,4 +230,24 @@
 
 .dark-mode .sidebar-section li:hover {
     background-color: #444; /* Dark mode hover background */
+}
+
+/* Estilos para el botón de abrir sidebar */
+.open-sidebar-button {
+    background: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333; /* Light mode button color */
+    position: fixed;
+    top: 10px;
+    transition: background-color 0.2s;
+    left: 10px;
+    z-index: 1001; /* Asegura que el botón esté por encima del sidebar */
+}
+
+/* Modo Oscuro */
+.dark-mode .open-sidebar-button {
+    color: #fff; /* Dark mode button color */
 }

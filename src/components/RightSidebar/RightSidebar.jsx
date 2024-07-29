@@ -1,12 +1,13 @@
 // src/components/RightSidebar/RightSidebar.jsx
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit, FaFile, FaTrash, FaHistory, FaUserFriends, FaHome } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit, FaFile, FaTrash, FaHistory, FaUserFriends, FaHome, FaBars } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './RightSidebar.css'
 
-const RightSidebar = ({ isOpen, onClose }) => {
+const RightSidebar = () => {
   const { user, logout } = useAuth()
+  const [isOpen, setIsOpen] = useState(false)
 
   // Función para capitalizar la primera letra de una palabra
   const capitalizeFirstLetter = (string) => {
@@ -15,7 +16,11 @@ const RightSidebar = ({ isOpen, onClose }) => {
 
   const handleLogout = () => {
     logout()
-    onClose()
+    setIsOpen(false)
+  }
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen)
   }
 
   if (!user) {
@@ -24,11 +29,11 @@ const RightSidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {isOpen && <div className="sidebar-overlay" onClick={onClose}></div>}
+      <button className="open-sidebar-button" onClick={toggleSidebar}>
+        <FaBars />
+      </button>
+      {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
       <div className={`right-sidebar ${isOpen ? 'open' : ''}`}>
-        <button className="close-button" onClick={onClose}>
-          &times;
-        </button>
         <div className="user-card">
           <div className="user-avatar">
             <FaUser size={48} />
@@ -82,11 +87,6 @@ const RightSidebar = ({ isOpen, onClose }) => {
       </div>
     </>
   )
-}
-
-RightSidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default RightSidebar
