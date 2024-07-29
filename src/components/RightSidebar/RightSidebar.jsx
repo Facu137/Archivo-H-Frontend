@@ -1,7 +1,7 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit, FaFile, FaTrash, FaHistory, FaUserFriends, FaHome } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './RightSidebar.css'
 
@@ -38,9 +38,6 @@ const RightSidebar = ({ isOpen, onClose }) => {
             <p>Rol: {capitalizeFirstLetter(user.role)}</p>
             <p>Nombre: {user.name}</p>
             <p>Apellido: {user.lastName}</p>
-            <p>
-              <FaEnvelope /> {user.email}
-            </p>
           </div>
           <button
             onClick={() => (window.location.href = '/editar-usuario')}
@@ -52,6 +49,36 @@ const RightSidebar = ({ isOpen, onClose }) => {
             <FaSignOutAlt /> Cerrar Sesión
           </button>
         </div>
+        <div className="sidebar-section">
+          <h3>Archivos</h3>
+          <ul>
+            <li>
+              <FaFile /> <a href="/agregar-archivo">Agregar Archivo</a>
+            </li>
+            <li>
+              <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
+            </li>
+            <li>
+              <FaHistory /> <a href="/historial-archivos">Historial de Archivos Modificados</a>
+            </li>
+            <li>
+              <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
+            </li>
+          </ul>
+        </div>
+        {user.role === 'admin' && (
+          <div className="sidebar-section">
+            <h3>Administración</h3>
+            <ul>
+              <li>
+                <FaUserFriends /> <a href="/gestionar-empleados">Gestionar Empleados</a>
+              </li>
+              <li>
+                <FaHome /> <a href="/editar-portada">Editar Portada e Institucional</a>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </>
   )
