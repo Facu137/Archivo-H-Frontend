@@ -1,13 +1,23 @@
 /* src/components/Footer/Footer.css */
 .footer {
-  background-color: #1a1a1a;
-  color: #ffffff;
   padding: 20px 0;
   font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.footer.dark-mode {
+  background: linear-gradient(to top, #191929, #191929);
+  color: #ffffff;
+}
+
+.footer.light-mode {
+  background: linear-gradient(to top, #c8cdd0, #c8cdd0);
+  color: #000000;
 }
 
 .footer-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
@@ -17,54 +27,91 @@
 
 .footer-logo {
   flex: 0 0 auto;
+  margin-right: 20px;
 }
 
 .footer-logo img {
-  height: 60px; /* Aumentamos el tamaño del logo */
+  height: 60px;
 }
 
 .footer-cards {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start; /* Align items to the start to keep them at the same height */
+  width: 100%;
 }
 
 .footer-card {
-  background-color: #333333;
   border-radius: 8px;
-  padding: 10px; /* Reducimos el padding para que las tarjetas ocupen menos espacio */
-  margin: 0 5px;
+  padding: 10px;
+  margin: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
-  transition: background-color 0.3s ease; /* Añadimos una transición para el efecto hover */
-  min-width: 150px; /* Ajustamos el ancho mínimo de las tarjetas */
-  height: 60px; /* Ajustamos el alto de las tarjetas para que coincida con el alto del logo */
+  transition: background-color 0.3s ease;
+  min-width: 150px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1 1 200px;
+}
+
+.footer.dark-mode .footer-card {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.footer.light-mode .footer-card {
+  background-color: #ffffff;
+  color: #ffffff;
 }
 
 .footer-card:hover {
-  background-color: #444444; /* Cambiamos el color de fondo al hacer hover */
+  background-color: #444444;
+}
+
+.footer.dark-mode .footer-card:hover {
+  background-color: #555555;
+}
+
+.footer.light-mode .footer-card:hover {
+  background-color: #dddddd;
 }
 
 .footer-card h3 {
-  font-size: 14px; /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
-  margin-bottom: 0; /* Eliminamos el margen inferior para ajustar el contenido */
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.footer-card p,
+.footer-card a {
+  font-size: 12px;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.footer.dark-mode .footer-card p,
+.footer.dark-mode .footer-card a {
   color: #ffffff;
 }
 
-.footer-card p, .footer-card a {
-  font-size: 12px; /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
-  line-height: 1.4;
-  color: #ffffff;
-  text-decoration: none;
+.footer.light-mode .footer-card p,
+.footer.light-mode .footer-card a {
+  color: #000000;
 }
 
 .footer-card a:hover {
   color: #cccccc;
+}
+
+.footer.dark-mode .footer-card a:hover {
+  color: #ffffff;
+}
+
+.footer.light-mode .footer-card a:hover {
+  color: #000000;
 }
 
 .footer-card i {
@@ -75,14 +122,47 @@
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
-  color: #cccccc;
 }
 
 .footer-copyright a {
-  color: #ffffff;
   text-decoration: none;
 }
 
-.footer-copyright a:hover {
+.footer.dark-mode a {
+  color: #ffffff;
+}
+
+.footer.light-mode a {
+  color: #000000;
+}
+
+.footer.dark-mode a:hover {
   text-decoration: underline;
+}
+
+.footer.light-mode a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-logo {
+    margin-bottom: 20px;
+  }
+
+  .footer-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-card {
+    width: 90%;
+    max-width: 300px;
+    margin: 10px 0;
+    padding: 15px;
+  }
 }
