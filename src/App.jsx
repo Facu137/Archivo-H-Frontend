@@ -5,6 +5,7 @@ import { useAuth } from './context/AuthContext' // Asegúrate de importar useAut
 // components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
+import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import { Footer } from './components/Footer/Footer'
 // pages
 import { Home } from './pages/Home/Home'
@@ -57,6 +58,7 @@ export const App = () => {
           onClose={() => setIsSidebarOpen(false)}
         />
       )}
+       {user && <LeftSidebar />} {/* Agrega LeftSidebar aquí */}
       <div id="seccion-principal">
         <div className="ajusteancho" id="seccion-contenido">
           <main id="contenido">
