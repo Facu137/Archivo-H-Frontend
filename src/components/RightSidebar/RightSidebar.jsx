@@ -38,7 +38,9 @@ const RightSidebar = ({ isOpen, onClose }) => {
             <p>Rol: {capitalizeFirstLetter(user.role)}</p>
             <p>Nombre: {user.name}</p>
             <p>Apellido: {user.lastName}</p>
-            
+            <p>
+              <FaEnvelope /> {user.email}
+            </p>
           </div>
           <button
             onClick={() => (window.location.href = '/editar-usuario')}
