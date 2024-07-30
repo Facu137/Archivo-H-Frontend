@@ -1,13 +1,12 @@
+// src/App.jsx
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useAuth } from './context/AuthContext'
-
+import { useAuth } from './context/AuthContext' // Asegúrate de importar useAuth
 // components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
-import { Footer } from './components/Footer/Footer'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
-
+import { Footer } from './components/Footer/Footer'
 // pages
 import { Home } from './pages/Home/Home'
 import { Login } from './pages/Login/Login'
@@ -20,30 +19,26 @@ import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import './index.css'
 
 export const App = () => {
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false)
-  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('mode')
     return savedMode ? savedMode === 'dark' : true
   })
-  const { user } = useAuth()
-  const location = useLocation()
+  const { user } = useAuth() // Obtén el estado de autenticación
+  const location = useLocation() // Obtén la ubicación actual
 
+  // Almacena el modo de tema en localStorage
   useEffect(() => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
 
   useEffect(() => {
-    setIsRightSidebarOpen(false)
-    setIsLeftSidebarOpen(false)
+    // Cierra el sidebar cuando cambia la ruta
+    setIsSidebarOpen(false)
   }, [location])
 
-  const toggleRightSidebar = () => {
-    setIsRightSidebarOpen(!isRightSidebarOpen)
-  }
-
-  const toggleLeftSidebar = () => {
-    setIsLeftSidebarOpen(!isLeftSidebarOpen)
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen)
   }
 
   const toggleDarkMode = () => {
@@ -53,23 +48,17 @@ export const App = () => {
   return (
     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
       <NavBar
-        toggleRightSidebar={toggleRightSidebar}
-        toggleLeftSidebar={toggleLeftSidebar}
+        toggleSidebar={toggleSidebar}
         toggleDarkMode={toggleDarkMode}
         isDarkMode={isDarkMode}
       />
-      {user && (
-        <>
-          <RightSidebar
-            isOpen={isRightSidebarOpen}
-            onClose={() => setIsRightSidebarOpen(false)}
-          />
-          <LeftSidebar
-            isOpen={isLeftSidebarOpen}
-            onClose={() => setIsLeftSidebarOpen(false)}
-          />
-        </>
+      {user && ( // Solo renderiza el sidebar si hay un usuario autenticado
+        <RightSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
       )}
+       {user && <LeftSidebar />} {/* Agrega LeftSidebar aquí */}
       <div id="seccion-principal">
         <div className="ajusteancho" id="seccion-contenido">
           <main id="contenido">
