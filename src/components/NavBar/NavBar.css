@@ -1,83 +1,130 @@
 /* src\components\NavBar\NavBar.css */
+
 header {
   background: linear-gradient(to top, #585858, #000000);
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: fixed;
   z-index: 100;
   transition: background 0.3s, color 0.3s;
   padding: 10px 0;
   top: 0;
-  /* Asegura que el NavBar esté fijo en la parte superior */
 }
 
 .dark-mode header {
-  background: linear-gradient(to top, #121212, #333333);
+  background: linear-gradient(to top, #191929, #191929);
   color: #ffffff;
 }
 
 .light-mode header {
-  background: linear-gradient(to top, #ffffff, #e0e0e0);
+  background: linear-gradient(to top, #c8cdd0, #c8cdd0);
   color: #000000;
 }
 
-nav {
+.angry-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 2fr 2fr 2fr 1fr;
+  gap: 0px;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.navbar-container,
-.search-container {
+#item-0 {
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-row-end: 2;
+  grid-column-end: 2;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 10px 5%;
-  box-sizing: border-box;
-}
-
-.search-container {
   justify-content: center;
+  align-items: center;
 }
 
-.nav-link,
+#item-1 {
+  grid-row-start: 1;
+  grid-column-start: 2;
+  grid-row-end: 2;
+  grid-column-end: 4;
+  display: flex;
+  align-items: center;
+  padding-left: 10px; /* Alineación a la izquierda */
+}
+
+#item-2 {
+  grid-row-start: 1;
+  grid-column-start: 4;
+  grid-row-end: 2;
+  grid-column-end: 6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+#item-3 {
+  grid-row-start: 2;
+  grid-column-start: 2;
+  grid-row-end: 3;
+  grid-column-end: 6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.logo-container {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.logo img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+
+.logo-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: left; /* Alineación a la izquierda */
+}
+
+.navbar-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Asegura que los botones se ajusten al espacio disponible */
+}
+
 .nav-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 5px;
   padding: 10px;
   text-decoration: none;
-  flex: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 16px;
+  font-size: 1rem;
   border-radius: 5px;
   transition: background-color 0.3s, color 0.3s;
   color: inherit;
   border: none;
   background: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.nav-link:hover,
+.nav-button .nav-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .nav-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
-}
-
-.logo img {
-  height: 36px;
-  margin-right: 10px;
-}
-
-.spacer {
-  flex-grow: 1;
 }
 
 .search-input {
@@ -86,7 +133,7 @@ nav {
   border-radius: 20px;
   margin-right: 10px;
   box-sizing: border-box;
-  font-size: 14px;
+  font-size: 1rem;
   border: 1px solid #ccc;
 }
 
@@ -94,7 +141,7 @@ nav {
 .advanced-search-button {
   padding: 8px 12px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 1rem;
   transition: background-color 0.3s, color 0.3s;
   border: none;
   background-color: #f0f0f0;
@@ -107,84 +154,68 @@ nav {
   background-color: #e0e0e0;
 }
 
-.nav-text {
-  margin-left: 5px;
-}
-
 /* Responsive styles */
 @media (max-width: 1024px) {
-
-  .navbar-container,
-  .search-container {
-    padding: 8px 4%;
+  #item-2 {
+    flex-direction: row;
   }
 
-  .nav-link,
-  .nav-button {
-    padding: 8px;
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 932px) {
-
-  .navbar-container,
-  .search-container {
-    padding: 6px 3%;
+  #item-0,
+  #item-1,
+  #item-2,
+  #item-3 {
+    grid-column: 1 / -1;
+    grid-row: auto;
   }
 
   .navbar-container {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .nav-link,
-  .nav-button {
-    padding: 10px;
-    font-size: 14px;
-    margin: 4px;
-  }
-
-  .logo img {
-    height: 32px;
-  }
-
-  .search-input,
-  .search-button,
-  .advanced-search-button {
-    font-size: 14px;
-    padding: 10px 12px;
-  }
-
-  .search-container {
-    flex-wrap: nowrap;
-  }
-
-  .search-input {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .search-button,
-  .advanced-search-button {
-    flex: 0 0 auto;
-  }
-
-  .nav-link .fa-icon,
-  .nav-button .fa-icon {
-    font-size: 20px;
+  .logo-title {
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 768px) {
+  .search-input,
+  .search-button,
+  .advanced-search-button {
+    font-size: 14px;
+    padding: 8px;
+  }
 
-  .nav-link .fa-icon,
-  .nav-button .fa-icon {
-    font-size: 24px;
+  .logo-container {
+    width: 50px;
+    height: 50px;
+  }
+
+  .logo img {
+    max-width: 50px;
+  }
+
+  .logo-title {
+    font-size: 0.9rem;
+  }
+
+  .navbar-container {
+    align-items: flex-start;
+  }
+
+  .nav-button {
+    font-size: 14px;
+    padding: 8px;
+    width: auto;
+    box-sizing: border-box;
+  }
+
+  .nav-text {
+    display: none;
   }
 }
 
 @media (max-width: 480px) {
-
   .navbar-container,
   .search-container {
     padding: 5px 2%;
@@ -212,13 +243,33 @@ nav {
   .nav-button .fa-icon {
     font-size: 28px;
   }
+
+  #item-2 {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .navbar-container {
+    justify-content: center;
+  }
+
+  #item-1 .logo-title {
+    text-align: center; /* Centra el texto del título en móviles */
+    width: 100%;
+  }
+
+  .nav-button .nav-text {
+    display: none; /* Oculta el texto de los botones en dispositivos móviles */
+  }
+
+  .nav-button .fa-icon {
+    display: inline-block; /* Asegura que solo el ícono se muestre */
+  }
 }
 
 @media (max-width: 430px) {
-
-  .navbar-container,
-  .search-container {
-    padding: 4px 1.5%;
+  .nav-button {
+    padding: 8px;
   }
 
   .navbar-container {
@@ -243,7 +294,7 @@ nav {
   }
 
   .nav-text {
-    display: none;
+    display: none; /* Oculta el texto de los botones en dispositivos móviles */
   }
 
   .nav-link .fa-icon,

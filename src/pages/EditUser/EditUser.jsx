@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../schemas/authSchema'
+import axiosInstance from '../../api/axiosConfig'
 import './EditUser.css'
 
 export const EditUser = () => {
@@ -53,6 +54,18 @@ export const EditUser = () => {
         setError('Error updating user')
         console.error('Error updating user:', error)
       }
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    try {
+      await axiosInstance.post('/auth/init-acc-deletion', { email: user.email })
+      alert(
+        'Se ha enviado un correo para confirmar la eliminación de la cuenta.'
+      )
+    } catch (error) {
+      setError('Error al iniciar el proceso de eliminación de cuenta')
+      console.error('Error deleting account:', error)
     }
   }
 
@@ -122,6 +135,13 @@ export const EditUser = () => {
         </div>
         <button type="submit" className="submit-button">
           Guardar Cambios
+        </button>
+        <button
+          type="button"
+          className="delete-button"
+          onClick={handleDeleteAccount}
+        >
+          Eliminar Cuenta
         </button>
       </form>
     </div>

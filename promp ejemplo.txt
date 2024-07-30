@@ -1,0 +1,38 @@
+Tengo esta estructura en React Vite:
+
+src
+├── api
+│   └── axiosConfig.js
+├── assets
+├── components
+│   ├── Footer
+│   ├── NavBar
+│   └── RightSidebar
+├── context
+│   └── AuthContext.jsx
+├── hooks
+├── pages
+│   ├── EditUser
+│   ├── ForgotPassword
+│   ├── GestionArchivo
+│   ├── Home
+│   ├── Login
+│   ├── MiCuenta
+│   ├── Registrar
+│   ├── ResetPassword
+│   └── VerArchivo
+├── schemas
+│   └── authSchemas.js
+├── utils
+├── App.jsx
+├── index.css
+├── main.jsx
+.eslintrc.json
+.gitattributes
+.gitignore
+.prettierrc
+index.html
+package-lock.json
+package.json
+README.md
+vite.config.js
