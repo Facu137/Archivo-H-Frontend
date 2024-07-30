@@ -1,15 +1,39 @@
+/* src/pages/Home/Home.css */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+}
+
+.navbar {
+  width: 100%;
+  background-color: #333; /* Color de fondo del navbar */
+  color: #fff;
+  padding: 10px 20px; /* Ajusta el padding según tu diseño */
+  position: fixed; /* Fija el navbar en la parte superior */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
+}
+
 .home-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px; /* Mantener el padding general, si es necesario */
+  margin-top: 80px; /* Ajusta este valor según la altura del navbar para que .header-background se inicie debajo del navbar */
+  box-sizing: border-box; /* Incluye el padding en el tamaño total */
+  overflow-x: hidden;
 }
 
 .header-background {
-  height: 400px;
-  background-size: cover;
-  background-position: center;
+  width: 100vw; /* Asegura que el contenedor ocupe todo el ancho de la ventana de visualización */
+  height: 80vh; /* Ajustar la altura para ser aún más grande y vistoso */
+  background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
+  background-position: center; /* Centra la imagen */
   position: relative;
-  margin-bottom: 30px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: 60px; /* Espacio entre la imagen de fondo y las tarjetas */
+  overflow: hidden;
 }
 
 .overlay {
@@ -18,24 +42,30 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Oscurecer el fondo para mejorar la legibilidad del texto */
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px; /* Añadir relleno para el texto */
+  box-sizing: border-box; /* Incluir el padding en el tamaño total */
 }
 
 .overlay h2 {
   color: white;
-  font-size: 2.5em;
+  font-size: 3.5em; /* Aumentar el tamaño del texto para mayor visibilidad */
   text-align: center;
+  margin: 0; /* Eliminar márgenes para centrar el texto */
 }
 
 .card {
   background-color: #f8f8f8;
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 60px; /* Espacio entre las tarjetas y otros elementos */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box; /* Incluye el padding en el tamaño total */
+  width: 100%; /* Asegura que las tarjetas no se desborden */
+  max-width: 100%; /* Evita que las tarjetas excedan el ancho del contenedor */
 }
 
 .card p {
@@ -46,11 +76,13 @@
 .body-1, .body-2, .body-3 {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 60px; /* Aumentar el margen inferior para crear más espacio entre las tarjetas y la imagen de fondo */
   background-color: #f8f8f8;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%; /* Asegura que los contenedores no se desborden */
+  box-sizing: border-box; /* Incluye el padding en el tamaño total */
 }
 
 .body-2 {
@@ -79,21 +111,70 @@
   line-height: 1.6;
 }
 
-@media (max-width: 768px) {
-  .body-1, .body-2, .body-3 {
-    flex-direction: column;
-  }
-
-  .body-1-img, .body-2-img, .body-3-img,
-  .body-1-content, .body-2-content, .body-3-content {
-    width: 100%;
-  }
-
-  .body-1-img, .body-2-img, .body-3-img {
-    height: 200px;
+@media (max-width: 1200px) {
+  .header-background {
+    height: 70vh; /* Ajustar la altura para pantallas medianas */
   }
 
   .overlay h2 {
-    font-size: 1.8em;
+    font-size: 3em; /* Ajustar el tamaño del texto para pantallas medianas */
+  }
+}
+
+@media (max-width: 992px) {
+  .header-background {
+    height: 60vh; /* Ajustar la altura para pantallas más pequeñas */
+  }
+
+  .overlay h2 {
+    font-size: 2.5em; /* Ajustar el tamaño del texto para pantallas más pequeñas */
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 0 10px; /* Reducir el padding en pantallas pequeñas */
+    margin-top: 70px; /* Ajustar el margen superior si es necesario */
+  }
+
+  .header-background {
+    height: 50vh; /* Ajustar la altura para pantallas pequeñas */
+  }
+
+  .overlay h2 {
+    font-size: 2em; /* Ajustar el tamaño del texto para pantallas pequeñas */
+  }
+
+  .body-1, .body-2, .body-3 {
+    flex-direction: column;
+    margin-bottom: 40px; /* Reducir el margen inferior para pantallas pequeñas */
+  }
+
+  .body-1-img, .body-2-img, .body-3-img {
+    width: 100%;
+    height: 200px; /* Ajustar la altura de las imágenes para pantallas pequeñas */
+  }
+
+  .body-1-content, .body-2-content, .body-3-content {
+    width: 100%;
+    padding: 10px; /* Reducir el padding en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .header-background {
+    height: 40vh; /* Ajustar la altura para pantallas muy pequeñas */
+  }
+
+  .overlay h2 {
+    font-size: 1.5em; /* Ajustar el tamaño del texto para pantallas muy pequeñas */
+  }
+
+  .body-1-img, .body-2-img, .body-3-img {
+    height: 150px; /* Ajustar la altura de las imágenes para pantallas muy pequeñas */
+  }
+
+  .body-1-content, .body-2-content, .body-3-content {
+    padding: 5px; /* Reducir aún más el padding en pantallas muy pequeñas */
   }
 }
