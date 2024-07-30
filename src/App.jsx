@@ -60,7 +60,6 @@ export const App = () => {
   }, [])
 
   return (
-
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
         <NavBar
@@ -74,7 +73,7 @@ export const App = () => {
             onClose={() => setIsSidebarOpen(false)}
           />
         )}
-              {user && <LeftSidebar />}
+        {user && <LeftSidebar />}
 
         <main className="contenido">
           <Routes>
@@ -91,7 +90,7 @@ export const App = () => {
           </Routes>
         </main>
 
-      <Footer isDarkMode={isDarkMode} />
+        <Footer isDarkMode={isDarkMode} />
         {notification && (
           <NotificationBar
             message={notification.message}
@@ -102,7 +101,6 @@ export const App = () => {
         )}
       </div>
     </NotificationProvider>
-
   )
 }
 
