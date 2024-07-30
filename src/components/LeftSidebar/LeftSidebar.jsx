@@ -33,7 +33,8 @@ const LeftSidebar = () => {
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
       <div className={`left-sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="sidebar-section">
+      {user.role === 'Empleado' && (
+          <div className="sidebar-section">
           <h3>Archivos</h3>
           <ul>
             <li>
@@ -53,6 +54,7 @@ const LeftSidebar = () => {
             </li>
           </ul>
         </div>
+        )}
         {user.role === 'admin' && (
           <div className="sidebar-section">
             <h3>Administración</h3>
