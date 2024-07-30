@@ -1,46 +1,46 @@
 // src/App.jsx
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { useAuth } from './context/AuthContext' // Asegúrate de importar useAuth
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useAuth } from './context/AuthContext';
 // components
-import { NavBar } from './components/NavBar/NavBar'
-import RightSidebar from './components/RightSidebar/RightSidebar'
-import { Footer } from './components/Footer/Footer'
+import { NavBar } from './components/NavBar/NavBar';
+import RightSidebar from './components/RightSidebar/RightSidebar';
+import { Footer } from './components/Footer/Footer';
 // pages
-import { Home } from './pages/Home/Home'
-import { Login } from './pages/Login/Login'
-import { MiCuenta } from './pages/MiCuenta/MiCuenta'
-import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
-import { VerArchivo } from './pages/VerArchivo/VerArchivo'
-import { Registrar } from './pages/Registrar/Registrar'
-import { Institucional } from './pages/Institucional/Institucional'
-import './index.css'
+import { Home } from './pages/Home/Home';
+import { Login } from './pages/Login/Login';
+import { MiCuenta } from './pages/MiCuenta/MiCuenta';
+import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo';
+import { VerArchivo } from './pages/VerArchivo/VerArchivo';
+import { Registrar } from './pages/Registrar/Registrar';
+import { Institucional } from './pages/Institucional/Institucional';
+import './index.css';
 
 export const App = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('mode')
-    return savedMode ? savedMode === 'dark' : true
-  })
-  const { user } = useAuth() // Obtén el estado de autenticación
-  const location = useLocation() // Obtén la ubicación actual
+    const savedMode = localStorage.getItem('mode');
+    return savedMode ? savedMode === 'dark' : true;
+  });
+  const { user } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
-    localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
-  }, [isDarkMode])
+    localStorage.setItem('mode', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     // Cierra el sidebar cuando cambia la ruta
-    setIsSidebarOpen(false)
-  }, [location])
+    setIsSidebarOpen(false);
+  }, [location]);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
-  }
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode)
-  }
+    setIsDarkMode(!isDarkMode);
+  };
 
   return (
     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
@@ -49,7 +49,7 @@ export const App = () => {
         toggleDarkMode={toggleDarkMode}
         isDarkMode={isDarkMode}
       />
-      {user && ( // Solo renderiza el sidebar si hay un usuario autenticado
+      {user && (
         <RightSidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
@@ -70,8 +70,10 @@ export const App = () => {
             </Routes>
           </main>
         </div>
-        <Footer />
+        <Footer isDarkMode={isDarkMode} />
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default App;

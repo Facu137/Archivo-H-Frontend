@@ -166,7 +166,7 @@ html, body {
 .footer-card h3 {
   font-size: 14px; /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
   margin-bottom: 0; /* Eliminamos el margen inferior para ajustar el contenido */
-  color: #ffffff;
+  color: #d13333;
 }
 
 .footer-card p, .footer-card a {
@@ -184,37 +184,4 @@ html, body {
   margin-right: 5px;
 }
 
-.footer-copyright {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: #cccccc;
-}
 
-.footer-copyright a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.footer-copyright a:hover {
-  text-decoration: underline;
-}
-
-/* src/index.css */
-
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Asegura que el root ocupe toda la altura de la ventana */
-}
-
-#seccion-principal {
-  flex: 1; /* Hace que el contenido principal ocupe el espacio disponible */
-}
-
-/* Otros estilos globales... */

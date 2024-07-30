@@ -1,14 +1,23 @@
 /* src/components/Footer/Footer.css */
 .footer {
-  background-color: #1a1a1a;
-  color: #ffffff;
   padding: 20px 0;
   font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.footer.dark-mode {
+  background: linear-gradient(to top, #191929, #191929);
+  color: #ffffff;
+}
+
+.footer.light-mode {
+  background: linear-gradient(to top, #c8cdd0, #c8cdd0);
+  color: #000000;
 }
 
 .footer-container {
   display: flex;
-  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en varias filas */
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
@@ -18,7 +27,7 @@
 
 .footer-logo {
   flex: 0 0 auto;
-  margin-right: 20px; /* Añadir margen derecho para separar el logo de las tarjetas en modo PC */
+  margin-right: 20px;
 }
 
 .footer-logo img {
@@ -28,16 +37,15 @@
 .footer-cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start; /* Alinear las tarjetas a la izquierda en modo PC */
-  align-items: center;
-  width: 100%; /* Tomar todo el ancho en dispositivos pequeños */
+  justify-content: flex-start;
+  align-items: flex-start; /* Align items to the start to keep them at the same height */
+  width: 100%;
 }
 
 .footer-card {
-  background-color: #333333;
   border-radius: 8px;
   padding: 10px;
-  margin: 10px; /* Ajustar el margen para separar las tarjetas vertical y horizontalmente */
+  margin: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
   transition: background-color 0.3s ease;
@@ -47,29 +55,63 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1 1 200px; /* Flex-grow: 1, flex-shrink: 1, flex-basis: 200px */
+  flex: 1 1 200px;
+}
+
+.footer.dark-mode .footer-card {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.footer.light-mode .footer-card {
+  background-color: #ffffff;
+  color: #ffffff;
 }
 
 .footer-card:hover {
   background-color: #444444;
 }
 
+.footer.dark-mode .footer-card:hover {
+  background-color: #555555;
+}
+
+.footer.light-mode .footer-card:hover {
+  background-color: #dddddd;
+}
+
 .footer-card h3 {
   font-size: 14px;
   margin-bottom: 0;
-  color: #ffffff;
 }
 
 .footer-card p,
 .footer-card a {
   font-size: 12px;
   line-height: 1.4;
-  color: #ffffff;
   text-decoration: none;
+}
+
+.footer.dark-mode .footer-card p,
+.footer.dark-mode .footer-card a {
+  color: #ffffff;
+}
+
+.footer.light-mode .footer-card p,
+.footer.light-mode .footer-card a {
+  color: #000000;
 }
 
 .footer-card a:hover {
   color: #cccccc;
+}
+
+.footer.dark-mode .footer-card a:hover {
+  color: #ffffff;
+}
+
+.footer.light-mode .footer-card a:hover {
+  color: #000000;
 }
 
 .footer-card i {
@@ -80,15 +122,25 @@
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
-  color: #cccccc;
 }
 
 .footer-copyright a {
-  color: #ffffff;
   text-decoration: none;
 }
 
-.footer-copyright a:hover {
+.footer.dark-mode a {
+  color: #ffffff;
+}
+
+.footer.light-mode a {
+  color: #000000;
+}
+
+.footer.dark-mode a:hover {
+  text-decoration: underline;
+}
+
+.footer.light-mode a:hover {
   text-decoration: underline;
 }
 
@@ -108,9 +160,9 @@
   }
 
   .footer-card {
-    width: 90%; /* Aumentar el ancho de las tarjetas para que ocupen más espacio en dispositivos móviles */
-    max-width: 300px; /* Limitar el ancho máximo de las tarjetas */
-    margin: 10px 0; /* Ajustar el margen para separar las tarjetas verticalmente */
-    padding: 15px; /* Aumentar el padding para mejorar la apariencia interna */
+    width: 90%;
+    max-width: 300px;
+    margin: 10px 0;
+    padding: 15px;
   }
 }
