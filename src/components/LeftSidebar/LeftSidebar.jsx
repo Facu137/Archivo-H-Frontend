@@ -26,22 +26,25 @@ const LeftSidebar = () => {
       <div className={`left-sidebar ${isOpen ? 'open' : ''}`}>
         {user.role === 'Empleado' && (
           <div className="sidebar-section">
-            <h3>Archivos</h3>
-            <ul>
-              <li>
-                <FaFile /> <a href="/agregar-archivo">Agregar Archivo</a>
-              </li>
-              <li>
-                <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
-              </li>
-              <li>
-                <FaHistory /> <a href="/historial-archivos">Historial de Archivos Modificados</a>
-              </li>
-              <li>
-                <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
-              </li>
-            </ul>
-          </div>
+          <h3>Archivos</h3>
+          <ul>
+            <li>
+              <FaFile /> <a href="/agregar-archivo">Agregar Archivo</a>
+            </li>
+            <li>
+              <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
+            </li>
+            <li>
+              <FaHistory />{' '}
+              <a href="/historial-archivos">
+                Historial de Archivos Modificados
+              </a>
+            </li>
+            <li>
+              <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
+            </li>
+          </ul>
+        </div>
         )}
         {user.role === 'Admin' && (
           <div className="sidebar-section">
