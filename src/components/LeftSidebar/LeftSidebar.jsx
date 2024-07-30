@@ -1,12 +1,19 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit, FaFile, FaTrash, FaHistory, FaUserFriends, FaHome, FaBars } from 'react-icons/fa'
+import {
+  FaEdit,
+  FaFile,
+  FaTrash,
+  FaHistory,
+  FaUserFriends,
+  FaHome,
+  FaBars
+} from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './LeftSidebar.css'
 
 const LeftSidebar = () => {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleSidebar = () => {
@@ -22,7 +29,9 @@ const LeftSidebar = () => {
       <button className="open-sidebar-button" onClick={toggleSidebar}>
         <FaBars />
       </button>
-      {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+      {isOpen && (
+        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+      )}
       <div className={`left-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-section">
           <h3>Archivos</h3>
@@ -34,7 +43,10 @@ const LeftSidebar = () => {
               <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
             </li>
             <li>
-              <FaHistory /> <a href="/historial-archivos">Historial de Archivos Modificados</a>
+              <FaHistory />{' '}
+              <a href="/historial-archivos">
+                Historial de Archivos Modificados
+              </a>
             </li>
             <li>
               <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
@@ -46,10 +58,12 @@ const LeftSidebar = () => {
             <h3>Administración</h3>
             <ul>
               <li>
-                <FaUserFriends /> <a href="/gestionar-empleados">Gestionar Empleados</a>
+                <FaUserFriends />{' '}
+                <a href="/gestionar-empleados">Gestionar Empleados</a>
               </li>
               <li>
-                <FaHome /> <a href="/editar-portada">Editar Portada e Institucional</a>
+                <FaHome />{' '}
+                <a href="/editar-portada">Editar Portada e Institucional</a>
               </li>
             </ul>
           </div>

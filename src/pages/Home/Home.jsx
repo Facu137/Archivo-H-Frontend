@@ -1,10 +1,7 @@
 // src/pages/Home/Home.jsx
-import React from 'react';
-import './Home.css';
-import buildingImage from '../../assets/building.jpg'; 
-import acercaImg from '../../assets/almacen-AH.jpg';
-import evolucionImg from '../../assets/hoja-AH.jpg';
-import ubicacionImg from '../../assets/inaguracion-AH.jpg';
+import React from 'react'
+import './Home.css'
+import buildingImage from '../../assets/building.jpg'
 
 export const Home = () => {
   return (
@@ -20,19 +17,20 @@ export const Home = () => {
 
       <div className="card">
         <p>
-          "Un archivo con fondos no organizados y no descritos, es un archivo mudo, 
-          ciego, inservible, que oculta información y reduce, por no decir impide, 
-          la investigación."
+          &ldquo;Un archivo con fondos no organizados y no descritos, es un
+          archivo mudo, ciego, inservible, que oculta información y reduce, por
+          no decir impide, la investigación.&rdquo;
         </p>
       </div>
 
       <div className="card">
         <p>
-          "La Historia no puede resolverse sin acudir a los archivos. No es suficiente un 
-          conocimiento superficial o aproximado, por lo tanto es obligatorio consultar e 
-          interpretar los documentos de la época del lugar que se pretende investigar."
+          &ldquo;La Historia no puede resolverse sin acudir a los archivos. No
+          es suficiente un conocimiento superficial o aproximado, por lo tanto
+          es obligatorio consultar e interpretar los documentos de la época del
+          lugar que se pretende investigar.&rdquo;
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

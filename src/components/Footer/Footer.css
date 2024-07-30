@@ -166,3 +166,85 @@
     padding: 15px;
   }
 }
+
+.footer {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 20px 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-logo {
+  flex: 0 0 auto;
+}
+
+.footer-logo img {
+  height: 60px;
+  /* Aumentamos el tamaño del logo */
+}
+
+.footer-cards {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.footer-card {
+  background-color: #333333;
+  border-radius: 8px;
+  padding: 10px;
+  /* Reducimos el padding para que las tarjetas ocupen menos espacio */
+  margin: 0 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: background-color 0.3s ease;
+  /* Añadimos una transición para el efecto hover */
+  min-width: 150px;
+  /* Ajustamos el ancho mínimo de las tarjetas */
+  height: 60px;
+  /* Ajustamos el alto de las tarjetas para que coincida con el alto del logo */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-card:hover {
+  background-color: #444444;
+  /* Cambiamos el color de fondo al hacer hover */
+}
+
+.footer-card h3 {
+  font-size: 14px;
+  /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
+  margin-bottom: 0;
+  /* Eliminamos el margen inferior para ajustar el contenido */
+  color: #d13333;
+}
+
+.footer-card p,
+.footer-card a {
+  font-size: 12px;
+  /* Reducimos el tamaño de la fuente para que no ocupe mucho espacio */
+  line-height: 1.4;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-card a:hover {
+  color: #cccccc;
+}
+
+.footer-card i {
+  margin-right: 5px;
+}
