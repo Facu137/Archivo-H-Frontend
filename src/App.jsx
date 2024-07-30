@@ -5,10 +5,12 @@ import { useAuth } from './context/AuthContext'
 // components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
+import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 // pages
 import { Home } from './pages/Home/Home'
+import { Institucional } from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
@@ -58,6 +60,7 @@ export const App = () => {
   }, [])
 
   return (
+
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
         <NavBar
@@ -71,10 +74,12 @@ export const App = () => {
             onClose={() => setIsSidebarOpen(false)}
           />
         )}
+              {user && <LeftSidebar />}
 
         <main className="contenido">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/institucional" element={<Institucional />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registrar" element={<Registrar />} />
             <Route path="/editar-usuario" element={<EditUser />} />
@@ -86,7 +91,7 @@ export const App = () => {
           </Routes>
         </main>
 
-        <Footer />
+      <Footer isDarkMode={isDarkMode} />
         {notification && (
           <NotificationBar
             message={notification.message}
@@ -97,5 +102,8 @@ export const App = () => {
         )}
       </div>
     </NotificationProvider>
+
   )
 }
+
+export default App
