@@ -5,19 +5,9 @@ import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit, FaFile, FaTrash, FaHistory, F
 import { useAuth } from '../../context/AuthContext'
 import './LeftSidebar.css'
 
-const RightSidebar = () => {
+const LeftSidebar = () => {
   const { user, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
-
-  // Función para capitalizar la primera letra de una palabra
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
-  }
-
-  const handleLogout = () => {
-    logout()
-    setIsOpen(false)
-  }
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
@@ -69,4 +59,4 @@ const RightSidebar = () => {
   )
 }
 
-export default RightSidebar
+export default LeftSidebar

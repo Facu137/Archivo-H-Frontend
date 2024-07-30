@@ -28,11 +28,6 @@
     z-index: 999;
 }
 
-
-
-
-
-
 /* Modo Oscuro */
 .dark-mode .left-sidebar {
     background-color: #222; /* Dark mode background */
@@ -43,13 +38,12 @@
     color: #fff; /* Dark mode text color */
 }
 
-
-
 .sidebar-section {
     margin-top: 20px;
 }
 
 .sidebar-section h3 {
+    margin-top: 50px;
     margin-bottom: 10px;
     color: #333; /* Light mode text color */
     
@@ -71,7 +65,6 @@
 
 .sidebar-section li:hover {
     background-color: #bdbdbd; /* Light mode hover background */
- 
 }
 
 .sidebar-section a {
@@ -128,9 +121,15 @@
     transition: background-color 0.2s;
     left: 10px;
     z-index: 1001; /* Asegura que el botón esté por encima del sidebar */
+   
 }
 
 /* Modo Oscuro */
 .dark-mode .open-sidebar-button {
     color: #fff; /* Dark mode button color */
+}
+
+/* Ajuste para el botón cuando el sidebar está abierto */
+.left-sidebar.open + .open-sidebar-button {
+    left: 300px; /* Ajusta la posición del botón cuando el sidebar está abierto */
 }
