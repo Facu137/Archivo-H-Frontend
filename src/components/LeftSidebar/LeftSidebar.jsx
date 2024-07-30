@@ -24,8 +24,7 @@ const LeftSidebar = () => {
       </button>
       {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
       <div className={`left-sidebar ${isOpen ? 'open' : ''}`}>
-      {user.role === 'Empleado' && (
-          <div className="sidebar-section">
+        <div className="sidebar-section">
           <h3>Archivos</h3>
           <ul>
             <li>
@@ -35,17 +34,13 @@ const LeftSidebar = () => {
               <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
             </li>
             <li>
-              <FaHistory />{' '}
-              <a href="/historial-archivos">
-                Historial de Archivos Modificados
-              </a>
+              <FaHistory /> <a href="/historial-archivos">Historial de Archivos Modificados</a>
             </li>
             <li>
               <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
             </li>
           </ul>
         </div>
-        )}
         {user.role === 'admin' && (
           <div className="sidebar-section">
             <h3>Administración</h3>
