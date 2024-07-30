@@ -4,48 +4,53 @@ import './Login.css'
 import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useNotification } from '../../hooks/useNotification'
 
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const { login, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const showNotification = useNotification()
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     if (searchParams.get('verified') === 'true') {
-      setSuccess('Correo verificado con éxito. Ahora puedes iniciar sesión.')
+      showNotification(
+        'Correo verificado con éxito. Ahora puedes iniciar sesión.',
+        'success'
+      )
     } else if (searchParams.get('error')) {
       const errorType = searchParams.get('error')
+      let errorMessage = ''
       switch (errorType) {
         case 'no_token':
-          setError('Token de verificación no proporcionado.')
+          errorMessage = 'Token de verificación no proporcionado.'
           break
         case 'user_not_found':
-          setError('Usuario no encontrado.')
+          errorMessage = 'Usuario no encontrado.'
           break
         case 'already_verified':
-          setError('El correo electrónico ya ha sido verificado.')
+          errorMessage = 'El correo electrónico ya ha sido verificado.'
           break
         case 'invalid_token':
-          setError('Token inválido.')
+          errorMessage = 'Token inválido.'
           break
         case 'token_expired':
-          setError('Token expirado.')
+          errorMessage = 'Token expirado.'
           break
         default:
-          setError('Hubo un error al verificar el correo electrónico.')
+          errorMessage = 'Hubo un error al verificar el correo electrónico.'
       }
+      showNotification(errorMessage, 'error')
     } else if (searchParams.get('accountDeleted') === 'true') {
-      setSuccess('Tu cuenta ha sido eliminada con éxito.')
+      showNotification('Tu cuenta ha sido eliminada con éxito.', 'success')
       if (searchParams.get('logout') === 'true') {
         logout()
       }
     }
-  }, [location, logout])
+  }, [location, logout, showNotification])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -59,17 +64,19 @@ export const Login = () => {
       if (response.status === 200) {
         const { accessToken, user } = response.data
         login(user, accessToken)
+        showNotification('Inicio de sesión exitoso', 'success')
         navigate('/')
       }
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        setError(
-          'Por favor, verifica tu correo electrónico antes de iniciar sesión'
+        showNotification(
+          'Por favor, verifica tu correo electrónico antes de iniciar sesión',
+          'warning'
         )
       } else if (error.response && error.response.status === 401) {
-        setError('Correo o contraseña incorrectos')
+        showNotification('Correo o contraseña incorrectos', 'error')
       } else {
-        setError('Hubo un error al intentar iniciar sesión')
+        showNotification('Hubo un error al intentar iniciar sesión', 'error')
       }
     }
   }
@@ -78,8 +85,6 @@ export const Login = () => {
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
         <h2>Iniciar Sesión</h2>
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
         <div className="login-form-group">
           <label htmlFor="email">Correo Electrónico</label>
           <input
