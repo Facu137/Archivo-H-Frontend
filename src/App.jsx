@@ -1,11 +1,12 @@
 // src/App.jsx
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
 // components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
+import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 // pages
 import { Home } from './pages/Home/Home'
@@ -18,6 +19,8 @@ import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import './index.css'
+// hooks
+import { NotificationProvider } from './hooks/useNotification'
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -27,14 +30,13 @@ export const App = () => {
   })
   const { user } = useAuth()
   const location = useLocation()
+  const [notification, setNotification] = useState(null)
 
-  // Almacena el modo de tema en localStorage
   useEffect(() => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
 
   useEffect(() => {
-    // Cierra el sidebar cuando cambia la ruta
     setIsSidebarOpen(false)
   }, [location])
 
@@ -46,39 +48,61 @@ export const App = () => {
     setIsDarkMode(!isDarkMode)
   }
 
+  const showNotification = useCallback(
+    (message, type = 'info', duration = 9000) => {
+      setNotification({ message, type, duration })
+    },
+    []
+  )
+
+  const closeNotification = useCallback(() => {
+    setNotification(null)
+  }, [])
+
   return (
-    <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-      <NavBar
-        toggleSidebar={toggleSidebar}
-        toggleDarkMode={toggleDarkMode}
-        isDarkMode={isDarkMode}
-      />
-      {user && (
-        <RightSidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
+
+    <NotificationProvider showNotification={showNotification}>
+      <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+        <NavBar
+          toggleSidebar={toggleSidebar}
+          toggleDarkMode={toggleDarkMode}
+          isDarkMode={isDarkMode}
         />
-      )}
+        {user && (
+          <RightSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        )}
+              {user && <LeftSidebar />}
 
-      {user && <LeftSidebar />}
-
-      <main id="contenido">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registrar" element={<Registrar />} />
-          <Route path="/editar-usuario" element={<EditUser />} />
-          <Route path="/gestion" element={<GestionArchivo />} />
-          <Route path="/visor" element={<VerArchivo />} />
-          <Route path="/institucional" element={<Institucional />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/*" element={<Navigate to="/" />} />
-        </Routes>
-      </main>
+        <main className="contenido">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/institucional" element={<Institucional />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registrar" element={<Registrar />} />
+            <Route path="/editar-usuario" element={<EditUser />} />
+            <Route path="/gestion" element={<GestionArchivo />} />
+            <Route path="/visor" element={<VerArchivo />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
 
       <Footer isDarkMode={isDarkMode} />
-    </div>
+        {notification && (
+          <NotificationBar
+            message={notification.message}
+            type={notification.type}
+            duration={notification.duration}
+            onClose={closeNotification}
+          />
+        )}
+      </div>
+    </NotificationProvider>
+
   )
 }
 
