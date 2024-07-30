@@ -60,27 +60,24 @@ export const App = () => {
         />
       )}
 
-      <div className="main-container">
-        <div className="ajusteancho content" id="seccion-contenido">
-          {user && <LeftSidebar />}
+      {user && <LeftSidebar />}
 
-          <main id="contenido">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registrar" element={<Registrar />} />
-              <Route path="/editar-usuario" element={<EditUser />} />
-              <Route path="/gestion" element={<GestionArchivo />} />
-              <Route path="/visor" element={<VerArchivo />} />
-              <Route path="/institucional" element={<Institucional />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/*" element={<Navigate to="/" />} />
-            </Routes>
-          </main>
-        </div>
-        <Footer isDarkMode={isDarkMode} />
-      </div>
+      <main id="contenido">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registrar" element={<Registrar />} />
+          <Route path="/editar-usuario" element={<EditUser />} />
+          <Route path="/gestion" element={<GestionArchivo />} />
+          <Route path="/visor" element={<VerArchivo />} />
+          <Route path="/institucional" element={<Institucional />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
+
+      <Footer isDarkMode={isDarkMode} />
     </div>
   )
 }
