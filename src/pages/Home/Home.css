@@ -5,49 +5,39 @@ body {
   overflow-x: hidden; /* Evita el desplazamiento horizontal */
 }
 
-.navbar {
-  width: 100%;
-  background-color: #333; /* Color de fondo del navbar */
-  color: #fff;
-  padding: 10px 20px; /* Ajusta el padding según tu diseño */
-  position: fixed; /* Fija el navbar en la parte superior */
-  top: 0;
-  left: 0;
-  z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
-}
-
-.home-container {
-  padding: 0 20px; /* Mantener el padding general, si es necesario */
-  margin-top: 80px; /* Ajusta este valor según la altura del navbar para que .header-background se inicie debajo del navbar */
-  box-sizing: border-box; /* Incluye el padding en el tamaño total */
-  overflow-x: hidden;
-}
-
 .header-background {
-  width: 100vw; /* Asegura que el contenedor ocupe todo el ancho de la ventana de visualización */
-  height: 80vh; /* Ajustar la altura para ser aún más grande y vistoso */
+  height: 100dvh; /* Ajustar la altura para ser aún más grande y vistoso */
   background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
   background-position: center; /* Centra la imagen */
+  padding: 0;
   position: relative;
+  top: 76px;
+  left: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  margin-bottom: 60px; /* Espacio entre la imagen de fondo y las tarjetas */
+  margin-bottom: 136px; /* Espacio entre la imagen de fondo y las tarjetas */
   overflow: hidden;
 }
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Oscurecer el fondo para mejorar la legibilidad del texto */
+  top: 40%;
+  bottom: 40%;
+  left: 15%;
+  right: 15%;
+  border-width: 2px;
+  border-style: solid;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #f8f8f8;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* Añadir relleno para el texto */
+  padding: 30px; /* Añadir relleno para el texto */
   box-sizing: border-box; /* Incluir el padding en el tamaño total */
+  @media screen and (max-width: 768px) {
+    font-size: 0.6em;
+  }
 }
 
 .overlay h2 {
@@ -57,6 +47,16 @@ body {
   margin: 0; /* Eliminar márgenes para centrar el texto */
 }
 
+.home-container {
+  display: flex;
+  box-sizing: border-box;
+  /* Incluye el padding en el tamaño total */
+  overflow-x: hidden;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
 .card {
   background-color: #f8f8f8;
   border-radius: 8px;
@@ -64,7 +64,7 @@ body {
   margin-bottom: 60px; /* Espacio entre las tarjetas y otros elementos */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   box-sizing: border-box; /* Incluye el padding en el tamaño total */
-  width: 100%; /* Asegura que las tarjetas no se desborden */
+  width: 80%; /* Asegura que las tarjetas no se desborden */
   max-width: 100%; /* Evita que las tarjetas excedan el ancho del contenedor */
 }
 

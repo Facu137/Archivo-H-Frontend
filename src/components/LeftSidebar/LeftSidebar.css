@@ -1,6 +1,7 @@
+/* src/components/LeftSidebar/LeftSidebar.css */
 .left-sidebar {
     width: 280px;
-    background-color: #f4f4f4; /* Light mode background */
+    background-color: #f4f4f4;
     position: fixed;
     left: -320px;
     top: 0;
@@ -22,18 +23,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Light mode overlay */
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
-}
-
-/* Modo Oscuro */
-.dark-mode .left-sidebar {
-    background-color: #222; /* Dark mode background */
-}
-
-.dark-mode .user-card {
-    background-color: #333; /* Dark mode card background */
-    color: #fff; /* Dark mode text color */
 }
 
 .sidebar-section {
@@ -41,9 +32,8 @@
 }
 
 .sidebar-section h3 {
-    margin-top: 50px;
     margin-bottom: 10px;
-    color: #333; /* Light mode text color */
+    color: #333;
 }
 
 .sidebar-section ul {
@@ -53,100 +43,39 @@
 
 .sidebar-section li {
     margin-bottom: 10px;
-    border: 1px none #adadad; /* Light mode border color */
-    border-radius: 5px;
-    padding: 10px;
-    transition: background-color 0.3s;
-    background-color: #dbdbdb;
-}
-
-.sidebar-section li:hover {
-    background-color: #bdbdbd; /* Light mode hover background */
+    display: flex;
+    align-items: center;
 }
 
 .sidebar-section a {
     text-decoration: none;
-    color: #929292; /* Light mode text color */
+    color: #333;
     display: flex;
     align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
     width: 100%;
 }
 
 .sidebar-section a:hover {
-    text-decoration: none;
-    color: none;
-    background-color: none;
-    background: none;
+    background-color: #e0e0e0;
 }
 
 .sidebar-section a svg {
     margin-right: 10px;
 }
 
-/* Modo Oscuro */
-.dark-mode .sidebar-section h3 {
-    color: #fff; /* Dark mode text color */
+/* Dark mode */
+.dark-mode .left-sidebar {
+    background-color: #222;
 }
 
+.dark-mode .sidebar-section h3,
 .dark-mode .sidebar-section a {
-    color: #fff; /* Dark mode text color */
+    color: #fff;
 }
 
-.dark-mode .sidebar-section li {
-    border-color: #555; /* Dark mode border color */
-    background-color: #333; /* Dark mode background */
-}
-
-.sidebar-section li:hover {
-    cursor: pointer;
-}
-
-.dark-mode .sidebar-section li:hover {
-    background-color: #444; /* Dark mode hover background */
-}
-
-/* Estilos para el botón de abrir sidebar */
-.open-sidebar-button {
-    background: none;
-    border: none;
-    border-radius: 5px;
-    font-size: 24px;
-    cursor: pointer;
-    color: #333; /* Light mode button color */
-    position: fixed;
-    top: 10px;
-    transition: background-color 0.2s;
-    left: 10px;
-    z-index: 1001; /* Asegura que el botón esté por encima del sidebar */
-}
-
-/* Modo Oscuro */
-.dark-mode .open-sidebar-button {
-    color: #fff; /* Dark mode button color */
-}
-
-/* Ajuste para el botón cuando el sidebar está abierto */
-.left-sidebar.open + .open-sidebar-button {
-    left: 300px; /* Ajusta la posición del botón cuando el sidebar está abierto */
-}
-
-/* Media Queries para hacer el sidebar responsivo */
-@media (max-width: 768px) {
-    .left-sidebar {
-        width: 240px; /* Reducir el ancho del sidebar en pantallas pequeñas */
-    }
-
-    .left-sidebar.open + .open-sidebar-button {
-        left: 260px; /* Ajustar la posición del botón en pantallas pequeñas */
-    }
-}
-
-@media (max-width: 480px) {
-    .left-sidebar {
-        width: 200px; /* Reducir aún más el ancho del sidebar en pantallas muy pequeñas */
-    }
-
-    .left-sidebar.open + .open-sidebar-button {
-        left: 220px; /* Ajustar la posición del botón en pantallas muy pequeñas */
-    }
+.dark-mode .sidebar-section a:hover {
+    background-color: #444;
 }

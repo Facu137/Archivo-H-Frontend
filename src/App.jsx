@@ -12,6 +12,7 @@ import { Footer } from './components/Footer/Footer'
 import { Home } from './pages/Home/Home'
 import { Institucional } from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
+import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
@@ -23,7 +24,10 @@ import './index.css'
 import { NotificationProvider } from './hooks/useNotification'
 
 export const App = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState({
+    left: false,
+    right: false
+  })
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('mode')
     return savedMode ? savedMode === 'dark' : true
@@ -37,11 +41,14 @@ export const App = () => {
   }, [isDarkMode])
 
   useEffect(() => {
-    setIsSidebarOpen(false)
+    setIsSidebarOpen({ left: false, right: false })
   }, [location])
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
+  const toggleSidebar = (side) => {
+    setIsSidebarOpen((prev) => ({
+      ...prev,
+      [side]: !prev[side]
+    }))
   }
 
   const toggleDarkMode = () => {
@@ -69,17 +76,23 @@ export const App = () => {
         />
         {user && (
           <RightSidebar
-            isOpen={isSidebarOpen}
-            onClose={() => setIsSidebarOpen(false)}
+            isOpen={isSidebarOpen.right}
+            onClose={() => toggleSidebar('right')}
           />
         )}
-        {user && <LeftSidebar />}
+        {user && (
+          <LeftSidebar
+            isOpen={isSidebarOpen.left}
+            onClose={() => toggleSidebar('left')}
+          />
+        )}
 
         <main className="contenido">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/institucional" element={<Institucional />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/cuenta" element={<MiCuenta />} />
             <Route path="/registrar" element={<Registrar />} />
             <Route path="/editar-usuario" element={<EditUser />} />
             <Route path="/gestion" element={<GestionArchivo />} />
