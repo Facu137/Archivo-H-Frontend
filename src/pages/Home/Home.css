@@ -26,9 +26,10 @@ body {
   bottom: 40%;
   left: 15%;
   right: 15%;
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
-  background-color: rgba(0, 0, 0, 0.5); /* Oscurecer el fondo para mejorar la legibilidad del texto */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #f8f8f8;
   display: flex;
   justify-content: center;
   align-items: center;
