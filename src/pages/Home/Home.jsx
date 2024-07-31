@@ -11,25 +11,25 @@ export const Home = () => {
         style={{ backgroundImage: `url(${buildingImage})` }}
       >
         <div className="overlay">
-          <h2>PATRIMONIO HISTÓRICO Y CULTURAL</h2>
+          <h1>PATRIMONIO HISTÓRICO Y CULTURAL</h1>
         </div>
       </div>
       <div className="home-container">
         <div className="card">
-          <p>
+          <blockquote>
             &ldquo;Un archivo con fondos no organizados y no descritos, es un
             archivo mudo, ciego, inservible, que oculta información y reduce,
             por no decir impide, la investigación.&rdquo;
-          </p>
+          </blockquote>
         </div>
 
         <div className="card">
-          <p>
+          <blockquote>
             &ldquo;La Historia no puede resolverse sin acudir a los archivos. No
             es suficiente un conocimiento superficial o aproximado, por lo tanto
             es obligatorio consultar e interpretar los documentos de la época
             del lugar que se pretende investigar.&rdquo;
-          </p>
+          </blockquote>
         </div>
       </div>
     </>

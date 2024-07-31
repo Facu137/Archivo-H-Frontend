@@ -20,7 +20,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -28,10 +28,6 @@
 .footer-logo {
   flex: 0 0 auto;
   margin-right: 20px;
-}
-
-.footer-logo img {
-  height: 60px;
 }
 
 .footer-cards {

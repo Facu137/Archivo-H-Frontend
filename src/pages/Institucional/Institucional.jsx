@@ -1,11 +1,13 @@
+// src/pages/Institucional/Institucional.jsx
 import React from 'react'
 import acercaImg from '../../assets/almacen-AH.jpg'
 import evolucionImg from '../../assets/hoja-AH.jpg'
 import ubicacionImg from '../../assets/inaguracion-AH.jpg'
+import './Institucional.css'
 
 export const Institucional = () => {
   return (
-    <div className="home-container">
+    <div className="institucional-container">
       <div className="navbar-spacer"></div>
       <div className="body-1">
         <img src={acercaImg} alt="Acerca de" className="body-1-img" />

@@ -37,7 +37,7 @@ header {
 
 .logo-container {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-start;
 }
 
@@ -47,9 +47,10 @@ header {
 }
 
 .title {
-  font-size: 1.5rem;
   margin: 0;
   text-align: left;
+  border-left: #fff 5px solid;
+  padding-left: 10px;
 }
 
 .spacer {

@@ -68,47 +68,9 @@ body {
   max-width: 100%; /* Evita que las tarjetas excedan el ancho del contenedor */
 }
 
-.card p {
+.card blockquote {
   font-style: italic;
   color: #555;
-}
-
-.body-1, .body-2, .body-3 {
-  display: flex;
-  align-items: center;
-  margin-bottom: 60px; /* Aumentar el margen inferior para crear más espacio entre las tarjetas y la imagen de fondo */
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  width: 100%; /* Asegura que los contenedores no se desborden */
-  box-sizing: border-box; /* Incluye el padding en el tamaño total */
-}
-
-.body-2 {
-  flex-direction: row-reverse;
-}
-
-.body-1-img, .body-2-img, .body-3-img {
-  width: 40%;
-  height: 300px;
-  object-fit: cover;
-}
-
-.body-1-content, .body-2-content, .body-3-content {
-  width: 60%;
-  padding: 20px;
-}
-
-.body-1 h3, .body-2 h3, .body-3 h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 1.5em;
-}
-
-.body-1 p, .body-2 p, .body-3 p {
-  color: #555;
-  line-height: 1.6;
 }
 
 @media (max-width: 1200px) {
@@ -144,21 +106,6 @@ body {
   .overlay h2 {
     font-size: 2em; /* Ajustar el tamaño del texto para pantallas pequeñas */
   }
-
-  .body-1, .body-2, .body-3 {
-    flex-direction: column;
-    margin-bottom: 40px; /* Reducir el margen inferior para pantallas pequeñas */
-  }
-
-  .body-1-img, .body-2-img, .body-3-img {
-    width: 100%;
-    height: 200px; /* Ajustar la altura de las imágenes para pantallas pequeñas */
-  }
-
-  .body-1-content, .body-2-content, .body-3-content {
-    width: 100%;
-    padding: 10px; /* Reducir el padding en pantallas pequeñas */
-  }
 }
 
 @media (max-width: 480px) {
@@ -168,13 +115,5 @@ body {
 
   .overlay h2 {
     font-size: 1.5em; /* Ajustar el tamaño del texto para pantallas muy pequeñas */
-  }
-
-  .body-1-img, .body-2-img, .body-3-img {
-    height: 150px; /* Ajustar la altura de las imágenes para pantallas muy pequeñas */
-  }
-
-  .body-1-content, .body-2-content, .body-3-content {
-    padding: 5px; /* Reducir aún más el padding en pantallas muy pequeñas */
   }
 }

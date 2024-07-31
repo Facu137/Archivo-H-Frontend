@@ -50,7 +50,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
     user && (user.role === 'administrador' || user.role === 'empleado')
 
   const Title = () => (
-    <h1 className="title">
+    <h6 className="title">
       {isMobile ? (
         <></>
       ) : (
@@ -60,7 +60,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
           SANTIAGO DEL ESTERO
         </>
       )}
-    </h1>
+    </h6>
   )
 
   const closeSearchRow = () => {
