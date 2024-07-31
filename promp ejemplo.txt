@@ -6,16 +6,20 @@ src
 ├── assets
 ├── components
 │   ├── Footer
+│   ├── LeftSidebar
 │   ├── NavBar
+│   ├── NotificationBar
 │   └── RightSidebar
 ├── context
 │   └── AuthContext.jsx
 ├── hooks
+│   └── useNotification.jsx
 ├── pages
 │   ├── EditUser
 │   ├── ForgotPassword
 │   ├── GestionArchivo
 │   ├── Home
+│   ├── Institucional
 │   ├── Login
 │   ├── MiCuenta
 │   ├── Registrar

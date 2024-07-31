@@ -12,6 +12,7 @@ import { Footer } from './components/Footer/Footer'
 import { Home } from './pages/Home/Home'
 import { Institucional } from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
+import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
@@ -80,6 +81,7 @@ export const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/institucional" element={<Institucional />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/cuenta" element={<MiCuenta />} />
             <Route path="/registrar" element={<Registrar />} />
             <Route path="/editar-usuario" element={<EditUser />} />
             <Route path="/gestion" element={<GestionArchivo />} />
