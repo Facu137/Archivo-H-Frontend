@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../schemas/authSchema'
 import axiosInstance from '../../api/axiosConfig'
 import './EditUser.css'
+import { useNotification } from '../../hooks/useNotification' // Importa useNotification
 
 export const EditUser = () => {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser, logout } = useAuth()
   const navigate = useNavigate()
+  const showNotification = useNotification() // Usa useNotification
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,7 +40,7 @@ export const EditUser = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault() // Previene el comportamiento por defecto del formulario
     try {
       const validatedData = updateUserSchema.parse({
         ...formData,
@@ -46,7 +48,12 @@ export const EditUser = () => {
         confirmPassword: formData.confirmPassword || undefined // Convierte '' a undefined
       })
       await updateUser(validatedData)
-      navigate('/')
+      showNotification(
+        'Cambios guardados correctamente. Por favor, vuelva a iniciar sesión para ver los cambios.',
+        'success'
+      )
+      logout()
+      navigate('/login')
     } catch (error) {
       if (error.issues) {
         setError(error.issues.map((issue) => issue.message).join(', '))
@@ -54,15 +61,17 @@ export const EditUser = () => {
         setError('Error updating user')
         console.error('Error updating user:', error)
       }
+      showNotification('Error al guardar los cambios', 'error')
     }
   }
 
   const handleDeleteAccount = async () => {
     try {
       await axiosInstance.post('/auth/init-acc-deletion', { email: user.email })
-      alert(
-        'Se ha enviado un correo para confirmar la eliminación de la cuenta.'
-      )
+      showNotification(
+        'Se ha enviado un correo para confirmar la eliminación de la cuenta.',
+        'info'
+      ) // Muestra la notificación
     } catch (error) {
       setError('Error al iniciar el proceso de eliminación de cuenta')
       console.error('Error deleting account:', error)
@@ -90,7 +99,7 @@ export const EditUser = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Nueva Contraseña:</label>
+          <label htmlFor="password">Nueva Contraseña (opcional):</label>
           <input
             type="password"
             id="password"
@@ -133,7 +142,7 @@ export const EditUser = () => {
             required
           />
         </div>
-        <button type="submit" className="submit-button">
+        <button type="button" className="submit-button" onClick={handleSubmit}>
           Guardar Cambios
         </button>
         <button
