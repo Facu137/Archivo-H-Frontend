@@ -364,8 +364,11 @@ p {
 }
 
 .dark-mode button {
-  background-color: #333333;
+  background-color: #0a0a0a;
   color: #ffffff;
+  border-radius: 20px;
+  border-width: 2px;
+  border-style: solid;
 }
 
 .dark-mode button:hover {
@@ -387,6 +390,10 @@ p {
 .light-mode button {
   background-color: #f0f0f0;
   color: #000000;
+  border-radius: 20px;
+  border-width: 2px;
+  border-style: solid;
+  
 }
 
 .light-mode button:hover {

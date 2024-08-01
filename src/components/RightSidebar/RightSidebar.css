@@ -30,11 +30,11 @@
 
 .close-button {
     position: absolute;
-    top: 10px;
     right: 10px;
     font-size: 24px;
     background: none;
     border: none;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -50,7 +50,7 @@
 .user-avatar {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .user-avatar svg {
@@ -66,33 +66,33 @@
     color: #333;
 }
 
-.user-info p {
-    margin-bottom: 10px 0;
+.user-info {
+    margin-bottom: 10px;
     display: flex;
-    align-items: center;
+    overflow: overlay;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+    flex-wrap: nowrap;
+    flex-direction: column;
 }
 
-.user-info p svg {
-    margin-right: 10px;
+.user-info-item strong {
+    display: inline-block;
+    width: 80px;
 }
+
 
 .logout-button {
     width: 100%;
     padding: 10px;
     margin-top: 20px;
-    background-color: #dc3545;
-    color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.logout-button:hover {
-    background-color: #c82333;
 }
 
 .logout-button svg {
@@ -117,22 +117,11 @@
     color: #fff;
 }
 
-.dark-mode .logout-button {
-    background-color: #6c757d;
-}
-
-.dark-mode .logout-button:hover {
-    background-color: #5a6268;
-}
-
 .edit-button {
     width: 100%;
     padding: 10px;
     margin-top: 20px;
-    background-color: #007bff;
-    color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
     display: flex;
@@ -140,19 +129,7 @@
     justify-content: center;
 }
 
-.edit-button:hover {
-    background-color: #0056b3;
-}
-
 .edit-button svg {
     margin-right: 10px;
 }
 
-/* Modo Oscuro */
-.dark-mode .edit-button {
-    background-color: #6c757d;
-}
-
-.dark-mode .edit-button:hover {
-    background-color: #5a6268;
-}

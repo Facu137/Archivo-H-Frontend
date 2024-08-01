@@ -1,7 +1,7 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaEnvelope, FaSignOutAlt, FaEdit } from 'react-icons/fa'
+import { FaUser, FaSignOutAlt, FaEdit } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './RightSidebar.css'
 
@@ -33,14 +33,20 @@ const RightSidebar = ({ isOpen, onClose }) => {
           <div className="user-avatar">
             <FaUser size={48} />
           </div>
-          <h3>Detalles de la Cuenta</h3>
+
           <div className="user-info">
-            <p>Rol: {capitalizeFirstLetter(user.role)}</p>
-            <p>Nombre: {user.name}</p>
-            <p>Apellido: {user.lastName}</p>
-            <p>
-              <FaEnvelope /> {user.email}
-            </p>
+            <div className="user-info-item">
+              <strong>Rol:</strong> {capitalizeFirstLetter(user.role)}
+            </div>
+            <div className="user-info-item">
+              <strong>Nombre:</strong> {user.name}
+            </div>
+            <div className="user-info-item">
+              <strong>Apellidos:</strong> {user.lastName}
+            </div>
+            <div className="user-info-item">
+              <strong>Email:</strong> {user.email}
+            </div>
           </div>
           <button
             onClick={() => (window.location.href = '/editar-usuario')}

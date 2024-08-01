@@ -1,34 +1,32 @@
 /* src\pages\Institucional\Institucional.css */
 .institucional-container {
   position: relative;
-  top: 76px;
-  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  margin-top: 0; /* Cambiado de 20px a 0 */
   display: flex;
-  box-sizing: border-box;
-  /* Incluye el padding en el tamaño total */
-  overflow-x: hidden;
   flex-direction: column;
-  flex-wrap: wrap;
   align-content: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  align-items: center;
 }
+
+.navbar-spacer-institucional {
+  height: 76px;
+}
+
 .body-1,
 .body-2,
 .body-3 {
   display: flex;
   align-items: center;
   margin-bottom: 60px;
-  /* Aumentar el margen inferior para crear más espacio entre las tarjetas y la imagen de fondo */
   background-color: #f8f8f8;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  /* Asegura que los contenedores no se desborden */
+  width: 90%;
   box-sizing: border-box;
-  /* Incluye el padding en el tamaño total */
 }
 
 .body-2 {
@@ -38,16 +36,21 @@
 .body-1-img,
 .body-2-img,
 .body-3-img {
-  width: 40%;
-  height: 300px;
   object-fit: cover;
+  width: 40%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .body-1-content,
 .body-2-content,
 .body-3-content {
-  width: 60%;
   padding: 20px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .body-1 h3,
@@ -55,56 +58,18 @@
 .body-3 h3 {
   color: #333;
   margin-bottom: 15px;
-  font-size: 1.5em;
 }
 
 .body-1 p,
 .body-2 p,
 .body-3 p {
   color: #555;
-  line-height: 1.6;
-}
-
-@media (max-width: 1200px) {
-  .header-background {
-    height: 70vh;
-    /* Ajustar la altura para pantallas medianas */
-  }
-
-  .overlay h2 {
-    font-size: 3em;
-    /* Ajustar el tamaño del texto para pantallas medianas */
-  }
-}
-
-@media (max-width: 992px) {
-  .header-background {
-    height: 60vh;
-    /* Ajustar la altura para pantallas más pequeñas */
-  }
-
-  .overlay h2 {
-    font-size: 2.5em;
-    /* Ajustar el tamaño del texto para pantallas más pequeñas */
-  }
 }
 
 @media (max-width: 768px) {
   .institucional-container {
     padding: 0 10px;
-    /* Reducir el padding en pantallas pequeñas */
     margin-top: 70px;
-    /* Ajustar el margen superior si es necesario */
-  }
-
-  .header-background {
-    height: 50vh;
-    /* Ajustar la altura para pantallas pequeñas */
-  }
-
-  .overlay h2 {
-    font-size: 2em;
-    /* Ajustar el tamaño del texto para pantallas pequeñas */
   }
 
   .body-1,
@@ -112,106 +77,42 @@
   .body-3 {
     flex-direction: column;
     margin-bottom: 40px;
-    /* Reducir el margen inferior para pantallas pequeñas */
   }
 
   .body-1-img,
   .body-2-img,
   .body-3-img {
+  object-fit: cover;
     width: 100%;
-    height: 200px;
-    /* Ajustar la altura de las imágenes para pantallas pequeñas */
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 10px;
   }
 
   .body-1-content,
   .body-2-content,
   .body-3-content {
-    width: 100%;
+    width: 80%;
     padding: 10px;
-    /* Reducir el padding en pantallas pequeñas */
   }
 }
 
 @media (max-width: 480px) {
-  .header-background {
-    height: 40vh;
-    /* Ajustar la altura para pantallas muy pequeñas */
-  }
-
-  .overlay h2 {
-    font-size: 1.5em;
-    /* Ajustar el tamaño del texto para pantallas muy pequeñas */
-  }
 
   .body-1-img,
   .body-2-img,
   .body-3-img {
-    height: 150px;
-    /* Ajustar la altura de las imágenes para pantallas muy pequeñas */
+  object-fit: cover;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 10px;
   }
 
   .body-1-content,
   .body-2-content,
   .body-3-content {
     padding: 5px;
-    /* Reducir aún más el padding en pantallas muy pequeñas */
-  }
-}
-
-.body-1, .body-2, .body-3 {
-  display: flex;
-  align-items: stretch;
-  margin-bottom: 30px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.body-2 {
-  flex-direction: row-reverse;
-}
-
-.body-1-img, .body-2-img, .body-3-img {
-  width: 40%;
-  min-height: 300px;
-  object-fit: cover;
-}
-
-.body-1-content, .body-2-content, .body-3-content {
-  width: 60%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.body-1 h3, .body-2 h3, .body-3 h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 1.5em;
-}
-
-.body-1 p, .body-2 p, .body-3 p {
-  color: #555;
-  line-height: 1.6;
-}
-
-@media (max-width: 768px) {
-  .institucional-container {
-    margin-top: 0; /* Asegurar que también se ajuste en dispositivos móviles */
-  }
-
-  .body-1, .body-2, .body-3 {
-    flex-direction: column;
-  }
-
-  .body-1-img, .body-2-img, .body-3-img,
-  .body-1-content, .body-2-content, .body-3-content {
-    width: 100%;
-  }
-
-  .body-1-img, .body-2-img, .body-3-img {
-    min-height: 200px;
+    width: 80%;
   }
 }

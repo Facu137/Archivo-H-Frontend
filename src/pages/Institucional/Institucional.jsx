@@ -8,7 +8,7 @@ import './Institucional.css'
 export const Institucional = () => {
   return (
     <div className="institucional-container">
-      <div className="navbar-spacer"></div>
+      <div className="navbar-spacer-institucional"></div>
       <div className="body-1">
         <img src={acercaImg} alt="Acerca de" className="body-1-img" />
         <div className="body-1-content">

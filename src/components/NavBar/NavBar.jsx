@@ -39,7 +39,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768)
+      setIsMobile(window.innerWidth <= 1070)
     }
 
     window.addEventListener('resize', handleResize)
@@ -93,10 +93,13 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
                 {!isMobile && <span className="nav-text">Administración</span>}
               </button>
             )}
-            <Link to="/institucional" className="nav-button">
+            <button
+              onClick={() => (window.location.href = '/institucional')}
+              className="nav-button"
+            >
               <FontAwesomeIcon icon={faBuilding} />
               {!isMobile && <span className="nav-text">Institucional</span>}
-            </Link>
+            </button>
             {!showSearchRow && (
               <button
                 onClick={() => setShowSearchRow(true)}
