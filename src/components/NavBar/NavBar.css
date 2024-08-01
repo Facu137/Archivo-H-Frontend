@@ -48,11 +48,18 @@ header {
   bottom: 5px;
 }
 
-.title {
-  margin: 0;
-  text-align: left;
-  border-left: #fff 5px solid;
-  padding-left: 10px;
+.dark-mode .title {
+    margin: 0;
+      text-align: left;
+      border-left: #fff 5px solid;
+      padding-left: 10px;
+}
+
+.light-mode .title {
+    margin: 0;
+      text-align: left;
+      border-left: #000 5px solid;
+      padding-left: 10px;
 }
 
 .spacer {

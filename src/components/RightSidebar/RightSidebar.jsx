@@ -3,10 +3,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FaUser, FaSignOutAlt, FaEdit } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
+import { useNavigate } from 'react-router-dom' // Importa useNavigate
 import './RightSidebar.css'
 
 const RightSidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth()
+  const navigate = useNavigate() // Usa useNavigate
 
   // Función para capitalizar la primera letra de una palabra
   const capitalizeFirstLetter = (string) => {
@@ -16,6 +18,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
   const handleLogout = () => {
     logout()
     onClose()
+    navigate('/') // Navega a la página principal después de cerrar sesión
   }
 
   if (!user) {
