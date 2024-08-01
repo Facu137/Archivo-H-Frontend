@@ -23,6 +23,9 @@ const LeftSidebar = ({ isOpen, onClose }) => {
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose}></div>}
       <div className={`left-sidebar ${isOpen ? 'open' : ''}`}>
+        <button className="left-close-button" onClick={onClose}>
+          &times;
+        </button>
         <div className="left-sidebar-content">
           <div className="sidebar-section">
             <h3>Archivos</h3>

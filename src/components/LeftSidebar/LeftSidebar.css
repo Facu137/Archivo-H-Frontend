@@ -17,6 +17,15 @@
     left: 0;
 }
 
+.left-close-button {
+    position: absolute;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -28,7 +37,7 @@
 }
 
 .sidebar-section {
-    margin-top: 20px;
+    margin-top: 60px;
 }
 
 .sidebar-section h3 {

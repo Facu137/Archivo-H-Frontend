@@ -35,14 +35,10 @@ body {
   align-items: center;
   padding: 30px; /* Añadir relleno para el texto */
   box-sizing: border-box; /* Incluir el padding en el tamaño total */
-  @media screen and (max-width: 768px) {
-    font-size: 0.6em;
-  }
 }
 
 .overlay h2 {
   color: white;
-  font-size: 3.5em; /* Aumentar el tamaño del texto para mayor visibilidad */
   text-align: center;
   margin: 0; /* Eliminar márgenes para centrar el texto */
 }
@@ -65,6 +61,9 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   box-sizing: border-box; /* Incluye el padding en el tamaño total */
   width: 80%; /* Asegura que las tarjetas no se desborden */
+  @media screen and (max-width: 768px) {
+    width: 900%;
+  }
   max-width: 100%; /* Evita que las tarjetas excedan el ancho del contenedor */
 }
 
@@ -75,22 +74,16 @@ body {
 
 @media (max-width: 1200px) {
   .header-background {
-    height: 70vh; /* Ajustar la altura para pantallas medianas */
+    height: 100vh; /* Ajustar la altura para pantallas medianas */
   }
 
-  .overlay h2 {
-    font-size: 3em; /* Ajustar el tamaño del texto para pantallas medianas */
-  }
 }
 
 @media (max-width: 992px) {
   .header-background {
-    height: 60vh; /* Ajustar la altura para pantallas más pequeñas */
+    height: 100vh; /* Ajustar la altura para pantallas más pequeñas */
   }
 
-  .overlay h2 {
-    font-size: 2.5em; /* Ajustar el tamaño del texto para pantallas más pequeñas */
-  }
 }
 
 @media (max-width: 768px) {
@@ -100,20 +93,14 @@ body {
   }
 
   .header-background {
-    height: 50vh; /* Ajustar la altura para pantallas pequeñas */
+    height: 100vh; /* Ajustar la altura para pantallas pequeñas */
   }
 
-  .overlay h2 {
-    font-size: 2em; /* Ajustar el tamaño del texto para pantallas pequeñas */
-  }
 }
 
 @media (max-width: 480px) {
   .header-background {
-    height: 40vh; /* Ajustar la altura para pantallas muy pequeñas */
+    height: 100vh; /* Ajustar la altura para pantallas muy pequeñas */
   }
 
-  .overlay h2 {
-    font-size: 1.5em; /* Ajustar el tamaño del texto para pantallas muy pequeñas */
-  }
 }
