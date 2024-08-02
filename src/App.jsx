@@ -69,52 +69,53 @@ export const App = () => {
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-        <NavBar
-          toggleSidebar={toggleSidebar}
-          toggleDarkMode={toggleDarkMode}
-          isDarkMode={isDarkMode}
-        />
-        {user && (
-          <RightSidebar
-            isOpen={isSidebarOpen.right}
-            onClose={() => toggleSidebar('right')}
-          />
-        )}
-        {user && (
-          <LeftSidebar
-            isOpen={isSidebarOpen.left}
-            onClose={() => toggleSidebar('left')}
-          />
-        )}
-
-        <main className="contenido">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/institucional" element={<Institucional />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/cuenta" element={<MiCuenta />} />
-            <Route path="/registrar" element={<Registrar />} />
-            <Route path="/editar-usuario" element={<EditUser />} />
-            <Route path="/gestion" element={<GestionArchivo />} />
-            <Route path="/visor" element={<VerArchivo />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
-
-        <Footer isDarkMode={isDarkMode} />
-        {notification && (
-          <NotificationBar
-            message={notification.message}
-            type={notification.type}
-            duration={notification.duration}
-            onClose={closeNotification}
-          />
-        )}
+        <div className="main-container">
+          <div className="content">
+            <NavBar
+              toggleSidebar={toggleSidebar}
+              toggleDarkMode={toggleDarkMode}
+              isDarkMode={isDarkMode}
+            />
+            {user && (
+              <RightSidebar
+                isOpen={isSidebarOpen.right}
+                onClose={() => toggleSidebar('right')}
+              />
+            )}
+            {user && (
+              <LeftSidebar
+                isOpen={isSidebarOpen.left}
+                onClose={() => toggleSidebar('left')}
+              />
+            )}
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/institucional" element={<Institucional />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/cuenta" element={<MiCuenta />} />
+                <Route path="/registrar" element={<Registrar />} />
+                <Route path="/editar-usuario" element={<EditUser />} />
+                <Route path="/gestion" element={<GestionArchivo />} />
+                <Route path="/visor" element={<VerArchivo />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/*" element={<Navigate to="/" />} />
+              </Routes>
+            </main>
+            <Footer isDarkMode={isDarkMode} />
+            {notification && (
+              <NotificationBar
+                message={notification.message}
+                type={notification.type}
+                duration={notification.duration}
+                onClose={closeNotification}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </NotificationProvider>
   )
 }
-
 export default App

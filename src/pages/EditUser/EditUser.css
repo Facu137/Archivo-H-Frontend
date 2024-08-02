@@ -4,7 +4,7 @@
     max-width: 600px;
     width: 90%;
     /* Ajuste para mejorar la responsividad */
-    margin: 120px auto 40px;
+    margin: 120px auto ;
     padding: 30px;
     background-color: var(--bg-color);
     color: var(--text-color);

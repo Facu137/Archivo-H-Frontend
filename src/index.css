@@ -319,9 +319,14 @@ svg {
   /* Impide que estos elementos se extiendan más allá del ancho de su contenedor. */
 }
 
+/* Nuevos estilos */
+html,
 body {
+  height: 100%;
   margin: 0;
-  /* Elimina los márgenes predeterminados del navegador para el elemento body. */
+}
+
+body {
   transition: background-color 0.3s, color 0.3s;
   /* Agrega una transición suave para el cambio de modo. */
 }
@@ -400,22 +405,41 @@ p {
   background-color: #d0d0d0;
 }
 
-.seccion-contenido {
-  padding-top: 80px;
-}
-
-/* Nuevos estilos */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
 .main-container {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
+  background-image: url('./assets/entrada.avif');
+  /* Ruta relativa a la imagen en la carpeta assets */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  /* Asegura que el pseudo-elemento no se desborde */
+  z-index: 1;
+  /* Asegura que el contenedor principal esté por encima del pseudo-elemento */
+}
+
+.main-container::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  /* Ajusta estos valores para asegurar que cubra completamente el contenedor */
+  right: -80px;
+  bottom: -80px;
+  left: -80px;
+  background: inherit;
+  filter: blur(40px) grayscale(100%);
+  /* Efecto de blanco y negro y desenfoque */
+  z-index: -1;
+  /* Asegura que el pseudo-elemento esté detrás del contenido */
+  background-image: url('./assets/entrada.avif');
+  /* Asegura que el pseudo-elemento tenga la misma imagen de fondo */
+  background-size: cover;
+  background-position: center;
 }
 
 .content {
-  flex: 1;
+  position: relative;
+  /* Asegura que el contenido esté por encima del pseudo-elemento */
+  z-index: 2;
+  /* Asegura que el contenido esté por encima del pseudo-elemento */
 }
