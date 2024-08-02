@@ -1,8 +1,8 @@
 // src/pages/Institucional/Institucional.jsx
 import React from 'react'
-import acercaImg from '../../assets/almacen-AH.jpg'
-import evolucionImg from '../../assets/hoja-AH.jpg'
-import ubicacionImg from '../../assets/inaguracion-AH.jpg'
+import acercaImg from '../../assets/topaz-museo_historico_4.avif'
+import evolucionImg from '../../assets/topaz-hoja-AH.avif'
+import ubicacionImg from '../../assets/topaz-inaguracion-AH.avif'
 import './Institucional.css'
 
 export const Institucional = () => {

@@ -1,14 +1,14 @@
 // src/pages/Home/Home.jsx
 import React from 'react'
 import './Home.css'
-import buildingImage from '../../assets/building.jpg'
+import entrada from '../../assets/entrada.avif'
 
 export const Home = () => {
   return (
     <>
       <div
         className="header-background"
-        style={{ backgroundImage: `url(${buildingImage})` }}
+        style={{ backgroundImage: `url(${entrada})` }}
       >
         <div className="overlay">
           <h1>PATRIMONIO HISTÓRICO Y CULTURAL</h1>

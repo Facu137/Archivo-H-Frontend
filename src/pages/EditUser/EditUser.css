@@ -1,21 +1,37 @@
 /* src/pages/EditUser/EditUser.css */
 
 .edit-user-container {
-    max-width: 600px;
+    max-width: 1200px;
     width: 90%;
-    /* Ajuste para mejorar la responsividad */
-    margin: 120px auto 40px;
+    margin: 120px auto;
     padding: 30px;
-    background-color: var(--bg-color);
     color: var(--text-color);
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     box-sizing: border-box;
-    /* Asegura que el padding no afecte el ancho total */
 }
 
-.edit-user-container h2 {
+.edit-user-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.edit-user-form,
+.request-employee-card {
+    flex: 1;
+    min-width: 300px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.edit-user-form h2 {
     text-align: center;
     margin-bottom: 30px;
     font-size: 28px;
@@ -43,7 +59,6 @@
     color: var(--input-text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-sizing: border-box;
-    /* Asegura que el padding no afecte el ancho total */
 }
 
 .form-group input:focus {
@@ -52,7 +67,8 @@
     box-shadow: 0 0 0 2px var(--focus-shadow-color);
 }
 
-.submit-button, .delete-button {
+.submit-button,
+.delete-button {
     width: 100%;
     padding: 14px;
     background-color: var(--button-bg-color);
@@ -63,10 +79,21 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    /* Añadido para separar los botones */
 }
 
 .submit-button:hover {
     background-color: var(--button-hover-bg-color);
+}
+
+.delete-button {
+    background-color: var(--error-bg-color);
+    color: var(--error-text-color);
+}
+
+.delete-button:hover {
+    background-color: var(--error-hover-bg-color);
 }
 
 .error-message {
@@ -94,6 +121,7 @@
     --button-hover-bg-color: #2980b9;
     --error-bg-color: #ffebee;
     --error-text-color: #c62828;
+    --error-hover-bg-color: #e57373;
 }
 
 /* Estilos para modo oscuro */
@@ -112,23 +140,24 @@
     --button-hover-bg-color: #2980b9;
     --error-bg-color: #4a0f0f;
     --error-text-color: #ff8a80;
+    --error-hover-bg-color: #d32f2f;
 }
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
     .edit-user-container {
         width: 95%;
-        /* Aumenta ligeramente el ancho en pantallas más pequeñas */
         margin: 100px auto 30px;
         padding: 20px;
     }
 
-    .edit-user-container h2 {
+    .edit-user-form h2 {
         font-size: 24px;
     }
 
     .form-group input,
-    .submit-button, .delete-button {
+    .submit-button,
+    .delete-button {
         font-size: 16px;
     }
 }
@@ -136,14 +165,12 @@
 @media (max-width: 480px) {
     .edit-user-container {
         width: 100%;
-        /* Ocupa todo el ancho en pantallas muy pequeñas */
         margin: 80px auto 20px;
         padding: 15px;
         border-radius: 0;
-        /* Elimina el borde redondeado en pantallas muy pequeñas */
     }
 
-    .edit-user-container h2 {
+    .edit-user-form h2 {
         font-size: 22px;
         margin-bottom: 20px;
     }
@@ -157,7 +184,8 @@
     }
 
     .form-group input,
-    .submit-button, .delete-button {
+    .submit-button,
+    .delete-button {
         padding: 10px;
         font-size: 14px;
     }
