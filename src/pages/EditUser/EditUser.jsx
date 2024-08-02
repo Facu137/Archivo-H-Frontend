@@ -6,6 +6,7 @@ import { updateUserSchema } from '../../schemas/authSchema'
 import axiosInstance from '../../api/axiosConfig'
 import './EditUser.css'
 import { useNotification } from '../../hooks/useNotification' // Importa useNotification
+import RequestEmployeeCard from '../../components/RequestEmployeeCard/RequestEmployeeCard'
 
 export const EditUser = () => {
   const { user, updateUser, logout } = useAuth()
@@ -84,75 +85,86 @@ export const EditUser = () => {
 
   return (
     <div className="edit-user-container">
-      <h2>Editar Usuario</h2>
-      {error && <div className="error-message">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+      <div className="edit-user-content">
+        <RequestEmployeeCard />
+        <div className="edit-user-form">
+          <h2>Editar Usuario</h2>
+          {error && <div className="error-message">{error}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Nueva Contraseña (opcional):</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                autoComplete="new-password"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">
+                Confirmar Nueva Contraseña:
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="nombre">Nombre:</label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="apellido">Apellido:</label>
+              <input
+                type="text"
+                id="apellido"
+                name="apellido"
+                value={formData.apellido}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <button
+              type="button"
+              className="submit-button"
+              onClick={handleSubmit}
+            >
+              Guardar Cambios
+            </button>
+            <button
+              type="button"
+              className="delete-button"
+              onClick={handleDeleteAccount}
+            >
+              Eliminar Cuenta
+            </button>
+          </form>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Nueva Contraseña (opcional):</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            autoComplete="new-password"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="confirmPassword">Confirmar Nueva Contraseña:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            autoComplete="new-password"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="nombre">Nombre:</label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="apellido">Apellido:</label>
-          <input
-            type="text"
-            id="apellido"
-            name="apellido"
-            value={formData.apellido}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="button" className="submit-button" onClick={handleSubmit}>
-          Guardar Cambios
-        </button>
-        <button
-          type="button"
-          className="delete-button"
-          onClick={handleDeleteAccount}
-        >
-          Eliminar Cuenta
-        </button>
-      </form>
+      </div>
     </div>
   )
 }
