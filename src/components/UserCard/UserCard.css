@@ -1,0 +1,54 @@
+/* src/components/UserCard.css */
+.user-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    /* Reducido para compactar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    /* Ajusta el tamaño del avatar */
+    height: 70px;
+    /* Ajusta el tamaño del avatar */
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.user-avatar svg {
+    color: #ffffff;
+}
+
+.user-info {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;}
+
+.user-info-item strong {
+    margin-bottom: 2px;
+    /* Reducido para compactar */
+}
+
+/* Modo Oscuro */
+.dark-mode .user-card {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .user-avatar svg {
+    color: #ffffff;
+}
