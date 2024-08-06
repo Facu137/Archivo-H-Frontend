@@ -45,28 +45,30 @@ const UserCard = ({ user, className }) => {
 
   return (
     <div className={`user-card ${className}`}>
-      <div
-        className="user-avatar"
-        style={{ backgroundColor: getAvatarColorByRole(user.role) }}
-      >
-        {getAvatarByRole(user.role)}
-      </div>
-      <div className="user-info">
-        <div className="user-info-item">
-          <strong style={{ color: roleColor }}>Rol:</strong>
-          {capitalizeFirstLetter(user.role)}
+      <div className="user-card-content">
+        <div
+          className="user-avatar"
+          style={{ backgroundColor: getAvatarColorByRole(user.role) }}
+        >
+          {getAvatarByRole(user.role)}
         </div>
-        <div className="user-info-item">
-          <strong style={{ color: roleColor }}>Nombre:</strong>
-          {truncateString(user.name, 20)}
-        </div>
-        <div className="user-info-item">
-          <strong style={{ color: roleColor }}>Apellidos:</strong>
-          {truncateString(user.lastName, 20)}
-        </div>
-        <div className="user-info-item">
-          <strong style={{ color: roleColor }}>Email:</strong>
-          {truncateString(user.email, 25)}
+        <div className="user-info">
+          <div className="user-info-item">
+            <strong style={{ color: roleColor }}>Rol:</strong>
+            <span>{capitalizeFirstLetter(user.role)}</span>
+          </div>
+          <div className="user-info-item">
+            <strong style={{ color: roleColor }}>Nombre:</strong>
+            <span>{truncateString(user.name, 15)}</span>
+          </div>
+          <div className="user-info-item">
+            <strong style={{ color: roleColor }}>Apellidos:</strong>
+            <span>{truncateString(user.lastName, 15)}</span>
+          </div>
+          <div className="user-info-item">
+            <strong style={{ color: roleColor }}>Email:</strong>
+            <span>{truncateString(user.email, 15)}</span>
+          </div>
         </div>
       </div>
     </div>
