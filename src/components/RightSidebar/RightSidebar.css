@@ -38,51 +38,6 @@
     cursor: pointer;
 }
 
-.user-card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 60px;
-    /* Ajusta este valor según la altura de tu navbar */
-}
-
-.user-avatar {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.user-avatar svg {
-    background-color: #0099ff;
-    color: #ffffff;
-    padding: 10px;
-    border-radius: 50%;
-}
-
-.user-card h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.user-info {
-    margin-bottom: 10px;
-    display: flex;
-    overflow: overlay;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-break: break-all;
-    flex-wrap: nowrap;
-    flex-direction: column;
-}
-
-.user-info-item strong {
-    display: inline-block;
-    width: 80px;
-}
-
-
 .logout-button {
     width: 100%;
     padding: 10px;
@@ -104,16 +59,7 @@
     background-color: #222;
 }
 
-.dark-mode .user-card {
-    background-color: #333;
-    color: #fff;
-}
-
 .dark-mode .close-button {
-    color: #fff;
-}
-
-.dark-mode .user-card h3 {
     color: #fff;
 }
 

@@ -1,24 +1,20 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaSignOutAlt, FaEdit } from 'react-icons/fa'
+import { FaSignOutAlt, FaEdit } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
-import { useNavigate } from 'react-router-dom' // Importa useNavigate
+import { useNavigate } from 'react-router-dom'
+import UserCard from '../UserCard/UserCard'
 import './RightSidebar.css'
 
 const RightSidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth()
-  const navigate = useNavigate() // Usa useNavigate
-
-  // Función para capitalizar la primera letra de una palabra
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
-  }
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     logout()
     onClose()
-    navigate('/') // Navega a la página principal después de cerrar sesión
+    navigate('/')
   }
 
   if (!user) {
@@ -32,35 +28,16 @@ const RightSidebar = ({ isOpen, onClose }) => {
         <button className="close-button" onClick={onClose}>
           &times;
         </button>
-        <div className="user-card">
-          <div className="user-avatar">
-            <FaUser size={48} />
-          </div>
-
-          <div className="user-info">
-            <div className="user-info-item">
-              <strong>Rol:</strong> {capitalizeFirstLetter(user.role)}
-            </div>
-            <div className="user-info-item">
-              <strong>Nombre:</strong> {user.name}
-            </div>
-            <div className="user-info-item">
-              <strong>Apellidos:</strong> {user.lastName}
-            </div>
-            <div className="user-info-item">
-              <strong>Email:</strong> {user.email}
-            </div>
-          </div>
-          <button
-            onClick={() => (window.location.href = '/editar-usuario')}
-            className="edit-button"
-          >
-            <FaEdit /> Editar Detalles
-          </button>
-          <button onClick={handleLogout} className="logout-button">
-            <FaSignOutAlt /> Cerrar Sesión
-          </button>
-        </div>
+        <UserCard user={user} className="user-card" />
+        <button
+          onClick={() => (window.location.href = '/editar-usuario')}
+          className="edit-button"
+        >
+          <FaEdit /> Editar Detalles
+        </button>
+        <button onClick={handleLogout} className="logout-button">
+          <FaSignOutAlt /> Cerrar Sesión
+        </button>
       </div>
     </>
   )
