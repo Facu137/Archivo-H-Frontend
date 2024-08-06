@@ -1,4 +1,3 @@
-// src/pages/Login/Login.jsx
 import React, { useState, useEffect } from 'react'
 import './Login.css'
 import axios from 'axios'
@@ -82,51 +81,53 @@ export const Login = () => {
   }
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2>Iniciar Sesión</h2>
-        <div className="login-form-group">
-          <label htmlFor="email">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="username"
-          />
-        </div>
-        <div className="login-form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-        </div>
-        <button type="submit">Iniciar Sesión</button>
-        <div className="login-links">
-          <button
-            type="button"
-            className="forgot-password-button"
-            onClick={() => navigate('/forgot-password')}
-          >
-            Recuperar Contraseña
-          </button>
-          <button
-            type="button"
-            className="register-button"
-            onClick={() => navigate('/registrar')}
-          >
-            Registrarse
-          </button>
-        </div>
-      </form>
+    <div className="login-background">
+      <div className="login-container">
+        <form onSubmit={handleSubmit} className="login-form">
+          <h2>Iniciar Sesión</h2>
+          <div className="login-form-group">
+            <label htmlFor="email">Correo Electrónico</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="username"
+            />
+          </div>
+          <div className="login-form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+          </div>
+          <button type="submit">Iniciar Sesión</button>
+          <div className="login-links">
+            <button
+              type="button"
+              className="forgot-password-button"
+              onClick={() => navigate('/forgot-password')}
+            >
+              Recuperar Contraseña
+            </button>
+            <button
+              type="button"
+              className="register-button"
+              onClick={() => navigate('/registrar')}
+            >
+              Registrarse
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
