@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FaUser, FaUserTie, FaUserShield } from 'react-icons/fa'
+import Tooltip from '../Tooltip/Tooltip'
 import './UserCard.css'
 
 const UserCard = ({ user, className }) => {
@@ -55,19 +56,29 @@ const UserCard = ({ user, className }) => {
         <div className="user-info">
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Rol:</strong>
-            <span>{capitalizeFirstLetter(user.role)}</span>
+            <Tooltip content={capitalizeFirstLetter(user.role)}>
+              <span>
+                {truncateString(capitalizeFirstLetter(user.role), 15)}
+              </span>
+            </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Nombre:</strong>
-            <span>{truncateString(user.name, 15)}</span>
+            <Tooltip content={user.name}>
+              <span>{truncateString(user.name, 15)}</span>
+            </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Apellidos:</strong>
-            <span>{truncateString(user.lastName, 15)}</span>
+            <Tooltip content={user.lastName}>
+              <span>{truncateString(user.lastName, 15)}</span>
+            </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Email:</strong>
-            <span>{truncateString(user.email, 15)}</span>
+            <Tooltip content={user.email}>
+              <span>{truncateString(user.email, 15)}</span>
+            </Tooltip>
           </div>
         </div>
       </div>
