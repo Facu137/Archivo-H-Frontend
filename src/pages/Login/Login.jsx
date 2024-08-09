@@ -1,7 +1,6 @@
 // src/pages/Login/Login.jsx
 import React, { useState, useEffect } from 'react'
 import './Login.css'
-import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useNotification } from '../../hooks/useNotification'
@@ -56,17 +55,9 @@ export const Login = () => {
     event.preventDefault()
 
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', {
-        email,
-        password
-      })
-
-      if (response.status === 200) {
-        const { accessToken, user } = response.data
-        login(user, accessToken)
-        showNotification('Inicio de sesión exitoso', 'success')
-        navigate('/')
-      }
+      await login({ email, password }) // Utiliza la función login del contexto
+      showNotification('Inicio de sesión exitoso', 'success')
+      navigate('/')
     } catch (error) {
       if (error.response && error.response.status === 403) {
         showNotification(

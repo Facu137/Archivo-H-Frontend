@@ -42,7 +42,7 @@ const UserCard = ({ user, className }) => {
       : str
   }
 
-  const roleColor = getAvatarColorByRole(user.role)
+  const roleColor = getAvatarColorByRole(user.role || '') // Asignar un valor por defecto si user.role es undefined
 
   return (
     <div className={`user-card ${className}`}>
@@ -63,7 +63,7 @@ const UserCard = ({ user, className }) => {
             </Tooltip>
           </div>
           <div className="user-info-item">
-            <strong style={{ color: roleColor }}>Nombre:</strong>
+            <strong style={{ color: roleColor }}>Nombres:</strong>
             <Tooltip content={user.name}>
               <span>{truncateString(user.name, 15)}</span>
             </Tooltip>

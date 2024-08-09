@@ -44,7 +44,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [user])
 
   const isAdminOrEmployee =
     user && (user.role === 'administrador' || user.role === 'empleado')

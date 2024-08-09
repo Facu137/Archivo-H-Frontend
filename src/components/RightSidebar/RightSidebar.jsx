@@ -1,5 +1,5 @@
 // src/components/RightSidebar/RightSidebar.jsx
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FaSignOutAlt, FaEdit } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
@@ -16,6 +16,10 @@ const RightSidebar = ({ isOpen, onClose }) => {
     onClose()
     navigate('/')
   }
+  useEffect(() => {
+    // Puedes agregar lógica aquí si es necesario,
+    // o dejar el cuerpo del useEffect vacío para solo re-renderizar
+  }, [user])
 
   if (!user) {
     return null

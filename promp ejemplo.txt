@@ -11,6 +11,7 @@ src
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
+│   ├── Tooltip
 │   └── UserCard
 ├── context
 │   └── AuthContext.jsx
@@ -20,6 +21,7 @@ src
 │   ├── EditUser
 │   ├── ForgotPassword
 │   ├── GestionArchivo
+│   ├── GestionarEmpleados
 │   ├── Home
 │   ├── Institucional
 │   ├── Login
