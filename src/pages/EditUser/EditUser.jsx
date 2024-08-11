@@ -1,12 +1,12 @@
 // src/pages/EditUser/EditUser.jsx
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
+import axiosInstance from '../../api/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../schemas/authSchema'
-import axiosInstance from '../../api/axiosConfig'
-import './EditUser.css'
 import { useNotification } from '../../hooks/useNotification' // Importa useNotification
 import RequestEmployeeCard from '../../components/RequestEmployeeCard/RequestEmployeeCard'
+import './EditUser.css'
 
 export const EditUser = () => {
   const { user, updateUser, logout } = useAuth()

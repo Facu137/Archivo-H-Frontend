@@ -71,17 +71,15 @@ h6 {
   font-size: 1.31rem;
 }
 
-/* 21px */
 p,
 ul,
 ol,
 li {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
 }
 
-/* 24px */
 blockquote {
-  font-size: 1.87rem;
+  font-size: 1.3rem;
 }
 
 /* 30px */
@@ -89,7 +87,6 @@ pre {
   font-size: 1.19rem;
 }
 
-/* 19px */
 span,
 b,
 i,
@@ -97,7 +94,10 @@ strong,
 em,
 a,
 code {
-  font-size: var(--font-size-base);
+  font-size: 0.9em;
+  /* Usar unidades relativas para spans */
+  font-size-adjust: 0.5;
+  /* Ajustar el tamaño de la fuente para mejorar la legibilidad */
 }
 
 /* 16px */
@@ -138,12 +138,11 @@ code {
     font-size: 1.13rem;
   }
 
-  /* 18px */
   p,
   ul,
   ol,
   li {
-    font-size: 1.31rem;
+    font-size: 1rem;
   }
 
   /* 21px */
@@ -156,16 +155,15 @@ code {
     font-size: 1rem;
   }
 
-  /* 16px */
-  span,
-  b,
-  i,
-  strong,
-  em,
-  a,
-  code {
-    font-size: var(--font-size-base);
-  }
+    span,
+    b,
+    i,
+    strong,
+    em,
+    a,
+    code {
+      font-size: 0.85em;
+    }
 
   /* 14px */
 }
@@ -205,12 +203,11 @@ code {
     font-size: 1rem;
   }
 
-  /* 16px */
   p,
   ul,
   ol,
   li {
-    font-size: 1.13rem;
+    font-size: 0.9rem;
   }
 
   /* 18px */
@@ -223,16 +220,15 @@ code {
     font-size: 0.94rem;
   }
 
-  /* 15px */
-  span,
-  b,
-  i,
-  strong,
-  em,
-  a,
-  code {
-    font-size: var(--font-size-base);
-  }
+    span,
+    b,
+    i,
+    strong,
+    em,
+    a,
+    code {
+      font-size: 0.8em;
+    }
 
   /* 12px */
 }
@@ -362,10 +358,6 @@ p {
   /* Heredar el color del texto */
   text-decoration: none;
   /* Quitar el subrayado */
-}
-
-.dark-mode a:hover {
-  color: #b3c7ff;
 }
 
 .dark-mode button {
