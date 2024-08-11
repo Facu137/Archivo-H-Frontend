@@ -360,10 +360,6 @@ p {
   /* Quitar el subrayado */
 }
 
-.dark-mode a:hover {
-  color: #b3c7ff;
-}
-
 .dark-mode button {
   background-color: #0a0a0a;
   color: #ffffff;

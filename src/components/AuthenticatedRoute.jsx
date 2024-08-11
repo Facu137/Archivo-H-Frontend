@@ -7,7 +7,7 @@ import axiosInstance from '../api/axiosConfig'
 
 const AuthenticatedRoute = ({ element: Element, ...rest }) => {
   const { user, isLoading, token, logout, refreshAccessToken } = useAuth()
-  const location = useLocation()
+  const location = useLocation() // Obtén la ruta actual con useLocation
 
   useEffect(() => {
     const setAuthToken = (config) => {
@@ -47,13 +47,26 @@ const AuthenticatedRoute = ({ element: Element, ...rest }) => {
     }
   }, [token, logout, refreshAccessToken])
 
-  return isLoading ? (
-    <div>Cargando...</div>
-  ) : user ? (
-    <Element {...rest} />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  )
+  console.log('AuthenticatedRoute: user:', user) // Log del usuario en AuthenticatedRoute
+  console.log('AuthenticatedRoute: isLoading:', isLoading) // Log del estado isLoading
+  console.log('AuthenticatedRoute: location.pathname:', location.pathname) // Log de la ruta actual con location.pathname
+  console.log('AuthenticatedRoute: renderizando componente', user, isLoading) // Log al renderizar
+  if (isLoading) {
+    return <div>Cargando...</div>
+  }
+
+  if (isLoading) {
+    return <div>Cargando...</div>
+  }
+
+  // Redirige al login solo si el usuario NO está autenticado
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  // Renderiza el componente si el usuario está autenticado
+  // La verificación del rol se hará en el propio componente
+  return <Element {...rest} />
 }
 
 AuthenticatedRoute.propTypes = {

@@ -33,8 +33,11 @@ export const AuthProvider = ({ children }) => {
 
   // Obtener la información del usuario al iniciar o refrescar el token
   const fetchUser = useCallback(async () => {
-    setIsLoading(true) // Inicia la carga
+    setIsLoading(true)
     try {
+      // Simula un retraso de 1 segundo
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       const response = await axiosInstance.get('/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -43,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Fetch user error:', error)
       logout()
     } finally {
-      setIsLoading(false) // Finaliza la carga
+      setIsLoading(false)
     }
   }, [token, logout])
 

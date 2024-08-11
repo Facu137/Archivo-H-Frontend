@@ -6,7 +6,8 @@ import Tooltip from '../Tooltip/Tooltip'
 import './UserCard.css'
 
 const UserCard = ({ user, className }) => {
-  if (!user) {
+  if (!user || !user.rol) {
+    // Corrección: user.rol en lugar de user.role
     return null
   }
 
@@ -42,42 +43,44 @@ const UserCard = ({ user, className }) => {
       : str
   }
 
-  const roleColor = getAvatarColorByRole(user.role || '') // Asignar un valor por defecto si user.role es undefined
-
+  const roleColor = getAvatarColorByRole(user.rol?.toLowerCase()) // Corrección: user.rol
   return (
     <div className={`user-card ${className}`}>
       <div className="user-card-content">
         <div
           className="user-avatar"
-          style={{ backgroundColor: getAvatarColorByRole(user.role) }}
+          style={{ backgroundColor: getAvatarColorByRole(user.rol) }} // Corrección: user.rol
         >
-          {getAvatarByRole(user.role)}
+          {getAvatarByRole(user.rol)} {/* Corrección: user.rol */}
         </div>
         <div className="user-info">
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Rol:</strong>
-            <Tooltip content={capitalizeFirstLetter(user.role)}>
+            <Tooltip content={capitalizeFirstLetter(user.rol)}>
+              {' '}
+              {/* Corrección: user.rol */}
               <span>
-                {truncateString(capitalizeFirstLetter(user.role), 15)}
+                {truncateString(capitalizeFirstLetter(user.rol), 15)}{' '}
+                {/* Corrección: user.rol */}
               </span>
             </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Nombres:</strong>
-            <Tooltip content={user.name}>
-              <span>{truncateString(user.name, 15)}</span>
+            <Tooltip content={user.nombre}>
+              <span>{truncateString(user.nombre || '', 15)}</span>
             </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Apellidos:</strong>
-            <Tooltip content={user.lastName}>
-              <span>{truncateString(user.lastName, 15)}</span>
+            <Tooltip content={user.apellido}>
+              <span>{truncateString(user.apellido || '', 15)}</span>
             </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Email:</strong>
             <Tooltip content={user.email}>
-              <span>{truncateString(user.email, 15)}</span>
+              <span>{truncateString(user.email || '', 15)}</span>
             </Tooltip>
           </div>
         </div>

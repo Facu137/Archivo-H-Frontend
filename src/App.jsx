@@ -20,6 +20,7 @@ import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
+import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
 import './index.css'
 // hooks
 import { NotificationProvider } from './hooks/useNotification'
@@ -108,6 +109,10 @@ export const App = () => {
                 <Route
                   element={<AuthenticatedRoute element={GestionArchivo} />}
                   path="/gestion"
+                />
+                <Route
+                  element={<AuthenticatedRoute element={GestionarEmpleados} />}
+                  path="/gestionar-empleados"
                 />
 
                 <Route path="/*" element={<Navigate to="/" />} />
