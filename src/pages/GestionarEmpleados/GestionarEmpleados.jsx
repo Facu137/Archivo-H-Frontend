@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import axiosInstance from '../../api/axiosConfig'
 import UserCard from '../../components/UserCard/UserCard'
-import './GestionarEmpleados.css'
 import { useNotification } from '../../hooks/useNotification'
+import './GestionarEmpleados.css'
 
 export const GestionarEmpleados = () => {
   const { user, token } = useAuth()
@@ -73,16 +73,65 @@ export const GestionarEmpleados = () => {
   if (possibleEmployees.length === 0) {
     return <div>No se encontraron posibles empleados.</div>
   }
+  const handleAcceptConversion = async (employeeId) => {
+    try {
+      await axiosInstance.post(
+        '/admin/convert-to-employee',
+        { userId: employeeId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      showNotification('Empleado aceptado con éxito', 'success')
+      // Actualizar la lista de posibles empleados
+      setPossibleEmployees(
+        possibleEmployees.filter((employee) => employee.id !== employeeId)
+      )
+    } catch (error) {
+      console.error('Error al aceptar la conversión:', error)
+      showNotification('Error al aceptar la conversión', 'error')
+    }
+  }
 
+  const handleRejectConversion = async (employeeId) => {
+    try {
+      await axiosInstance.put(
+        '/admin/cancel-employee-conversion',
+        { userId: employeeId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      showNotification('Conversión rechazada con éxito', 'success')
+      // Actualizar la lista de posibles empleados
+      setPossibleEmployees(
+        possibleEmployees.filter((employee) => employee.id !== employeeId)
+      )
+    } catch (error) {
+      console.error('Error al rechazar la conversión:', error)
+      showNotification('Error al rechazar la conversión', 'error')
+    }
+  }
   return (
     <div className="gestionar-empleados-container">
-      <h2>Gestionar Empleados</h2>
+      <h2>Gestionar Nuevos Empleados</h2>
       <div className="employee-list">
         {possibleEmployees.map((employee) => (
-          <UserCard
-            key={employee.email}
-            user={{ ...employee, name: employee.nombre || '' }}
-          />
+          <div key={employee.id} className="employee-card-container">
+            <UserCard user={employee} />
+            <div className="buttons-container">
+              <button onClick={() => handleAcceptConversion(employee.id)}>
+                Aceptar
+              </button>
+              <button onClick={() => handleRejectConversion(employee.id)}>
+                Rechazar
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     </div>

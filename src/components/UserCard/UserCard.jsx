@@ -60,7 +60,7 @@ const UserCard = ({ user, className }) => {
               {' '}
               {/* Corrección: user.rol */}
               <span>
-                {truncateString(capitalizeFirstLetter(user.rol), 15)}{' '}
+                {truncateString(capitalizeFirstLetter(user.rol), 14)}{' '}
                 {/* Corrección: user.rol */}
               </span>
             </Tooltip>
@@ -68,19 +68,19 @@ const UserCard = ({ user, className }) => {
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Nombres:</strong>
             <Tooltip content={user.nombre}>
-              <span>{truncateString(user.nombre || '', 15)}</span>
+              <span>{truncateString(user.nombre || '', 14)}</span>
             </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Apellidos:</strong>
             <Tooltip content={user.apellido}>
-              <span>{truncateString(user.apellido || '', 15)}</span>
+              <span>{truncateString(user.apellido || '', 14)}</span>
             </Tooltip>
           </div>
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Email:</strong>
             <Tooltip content={user.email}>
-              <span>{truncateString(user.email || '', 15)}</span>
+              <span>{truncateString(user.email || '', 14)}</span>
             </Tooltip>
           </div>
         </div>

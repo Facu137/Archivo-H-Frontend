@@ -94,7 +94,7 @@ strong,
 em,
 a,
 code {
-  font-size: 0.9em;
+  font-size: 0.75em;
   /* Usar unidades relativas para spans */
   font-size-adjust: 0.5;
   /* Ajustar el tamaño de la fuente para mejorar la legibilidad */
@@ -162,7 +162,7 @@ code {
     em,
     a,
     code {
-      font-size: 0.85em;
+      font-size: 0.75em;
     }
 
   /* 14px */
@@ -227,7 +227,7 @@ code {
     em,
     a,
     code {
-      font-size: 0.8em;
+      font-size: 0.75em;
     }
 
   /* 12px */
@@ -398,6 +398,11 @@ p {
 }
 
 .main-container {
+  margin-top: 87px; /* Altura de la barra de navegación */
+
+  @media screen and (max-width: 1200px) {
+    margin-top: 70px;
+  }
   min-height: 100vh;
   background-image: url('./assets/entrada.avif');
   /* Ruta relativa a la imagen en la carpeta assets */
