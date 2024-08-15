@@ -12,7 +12,8 @@ src
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
 │   ├── Tooltip
-│   └── UserCard
+│   ├── UserCard
+│   └── AuthenticatedRoute.jsx
 ├── context
 │   └── AuthContext.jsx
 ├── hooks

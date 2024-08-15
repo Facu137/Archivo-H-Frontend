@@ -11,7 +11,6 @@ body {
   background-position: center; /* Centra la imagen */
   padding: 0;
   position: relative;
-  top: 76px;
   left: 0;
   margin: 0;
   padding: 0;
@@ -89,7 +88,6 @@ body {
 @media (max-width: 768px) {
   .home-container {
     padding: 0 10px; /* Reducir el padding en pantallas pequeñas */
-    margin-top: 70px; /* Ajustar el margen superior si es necesario */
   }
 
   .header-background {

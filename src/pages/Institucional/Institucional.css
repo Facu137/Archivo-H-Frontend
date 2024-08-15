@@ -11,9 +11,6 @@
   align-items: center;
 }
 
-.navbar-spacer-institucional {
-  height: 76px;
-}
 
 .body-1,
 .body-2,
@@ -67,10 +64,6 @@
 }
 
 @media (max-width: 768px) {
-  .institucional-container {
-    padding: 0 10px;
-    margin-top: 70px;
-  }
 
   .body-1,
   .body-2,

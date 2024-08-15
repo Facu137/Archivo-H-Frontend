@@ -3,7 +3,7 @@
 .edit-user-container {
     max-width: 1200px;
     width: 90%;
-    margin: 120px auto;
+    margin: auto auto;
     padding: 30px;
     color: var(--text-color);
     border-radius: 12px;
@@ -147,7 +147,6 @@
 @media (max-width: 768px) {
     .edit-user-container {
         width: 95%;
-        margin: 100px auto 30px;
         padding: 20px;
     }
 
@@ -165,7 +164,6 @@
 @media (max-width: 480px) {
     .edit-user-container {
         width: 100%;
-        margin: 80px auto 20px;
         padding: 15px;
         border-radius: 0;
     }
