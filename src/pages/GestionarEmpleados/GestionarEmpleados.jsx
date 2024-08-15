@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import axiosInstance from '../../api/axiosConfig'
 import UserCard from '../../components/UserCard/UserCard'
+import ConversionKeyManager from '../../components/ConversionKeyManager/ConversionKeyManager'
 import { useNotification } from '../../hooks/useNotification'
 import './GestionarEmpleados.css'
 
@@ -119,6 +120,7 @@ export const GestionarEmpleados = () => {
   return (
     <div className="gestionar-empleados-container">
       <h2>Gestionar Nuevos Empleados</h2>
+      <ConversionKeyManager />
       <div className="employee-list">
         {possibleEmployees.map((employee) => (
           <div key={employee.id} className="employee-card-container">

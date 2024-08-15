@@ -1,4 +1,4 @@
-// src/components/UserCard.jsx
+// src/components/UserCard/UserCard.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FaUser, FaUserTie, FaUserShield } from 'react-icons/fa'
@@ -7,7 +7,6 @@ import './UserCard.css'
 
 const UserCard = ({ user, className }) => {
   if (!user || !user.rol) {
-    // Corrección: user.rol en lugar de user.role
     return null
   }
 
@@ -43,26 +42,21 @@ const UserCard = ({ user, className }) => {
       : str
   }
 
-  const roleColor = getAvatarColorByRole(user.rol?.toLowerCase()) // Corrección: user.rol
+  const roleColor = getAvatarColorByRole(user.rol?.toLowerCase())
   return (
     <div className={`user-card ${className}`}>
       <div className="user-card-content">
         <div
           className="user-avatar"
-          style={{ backgroundColor: getAvatarColorByRole(user.rol) }} // Corrección: user.rol
+          style={{ backgroundColor: getAvatarColorByRole(user.rol) }}
         >
-          {getAvatarByRole(user.rol)} {/* Corrección: user.rol */}
+          {getAvatarByRole(user.rol)}
         </div>
         <div className="user-info">
           <div className="user-info-item">
             <strong style={{ color: roleColor }}>Rol:</strong>
             <Tooltip content={capitalizeFirstLetter(user.rol)}>
-              {' '}
-              {/* Corrección: user.rol */}
-              <span>
-                {truncateString(capitalizeFirstLetter(user.rol), 14)}{' '}
-                {/* Corrección: user.rol */}
-              </span>
+              <span>{truncateString(capitalizeFirstLetter(user.rol), 14)}</span>
             </Tooltip>
           </div>
           <div className="user-info-item">
