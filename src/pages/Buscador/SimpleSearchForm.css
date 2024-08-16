@@ -1,0 +1,32 @@
+#simple-search-form {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    gap: 10px;
+  }
+  
+  .search-bar-container {
+    position: relative;
+    flex: 1;
+  }
+  
+  #simple-search-input {
+    width: 97%;
+    padding: 10px 10px 10px 35px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url("lupa.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }

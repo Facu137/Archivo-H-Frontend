@@ -1,0 +1,11 @@
+#advanced-search-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #campos-busqueda {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }

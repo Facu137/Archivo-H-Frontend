@@ -19,6 +19,7 @@ import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
+import Buscador from './pages/Buscador/Buscador' // Importa el nuevo componente de búsqueda
 import './index.css'
 // hooks
 import { NotificationProvider } from './hooks/useNotification'
@@ -100,6 +101,8 @@ export const App = () => {
                 <Route path="/visor" element={<VerArchivo />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/buscador" element={<Buscador />} />{' '}
+                {/* Nueva ruta para el buscador */}
                 <Route path="/*" element={<Navigate to="/" />} />
               </Routes>
             </main>

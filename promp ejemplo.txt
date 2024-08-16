@@ -27,6 +27,7 @@ src
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo
+|   └── Buscador
 ├── schemas
 │   └── authSchemas.js
 ├── utils

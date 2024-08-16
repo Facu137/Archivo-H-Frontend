@@ -1,0 +1,29 @@
+.result-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    cursor: pointer;
+    background-color: #f5f5f5;
+  }
+  
+  .result-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 2px 0 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-content {
+    flex: 1;
+  }
+  
+  .miniatura {
+    width: 100px;
+    margin-left: 10px;
+  }
+  
+  .miniatura img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
