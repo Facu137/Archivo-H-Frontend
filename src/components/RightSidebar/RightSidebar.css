@@ -79,3 +79,39 @@
     margin-right: 10px;
 }
 
+/* Estilos para la tarjeta del empleado */
+.employee-card {
+    max-width: 250px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    /* Margen superior para separar de UserCard */
+    display: flex;
+    align-items: center;
+}
+
+.employee-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.employee-info-item strong {
+    margin-right: 5px;
+    font-weight: bold;
+    color: #33FF57;
+    /* Agrega el color aquí */
+}
+
+/* Modo Oscuro */
+.dark-mode .employee-card {
+    background-color: #333;
+    color: #fff;
+}

@@ -82,10 +82,12 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     try {
       const response = await axiosInstance.post('/auth/login', userData)
-      const { accessToken, user } = response.data
+      const { accessToken } = response.data
       setToken(accessToken)
-      setUser(user)
       localStorage.setItem('accessToken', accessToken)
+
+      // Obtener la información del usuario después de iniciar sesión
+      await fetchUser()
     } catch (error) {
       console.error('Login error:', error)
       throw error
