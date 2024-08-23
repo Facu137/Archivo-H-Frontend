@@ -40,10 +40,10 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [user])
 
   const isAdminOrEmployee =
-    user && (user.role === 'administrador' || user.role === 'empleado')
+    user && (user.rol === 'administrador' || user.rol === 'empleado')
 
   const Title = () => (
     <h6 className="title">
@@ -81,19 +81,16 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
                 {!isMobile && <span className="nav-text">Administración</span>}
               </button>
             )}
-            <button
-              onClick={() => (window.location.href = '/institucional')}
-              className="nav-button"
-            >
+            <Link to="/institucional" className="nav-button">
               <FontAwesomeIcon icon={faBuilding} />
               {!isMobile && <span className="nav-text">Institucional</span>}
+
             </button>
             <Link to="/buscador" className="nav-button">
-              {' '}
-              {/* Cambio aquí */}
               <FontAwesomeIcon icon={faSearch} />
               {!isMobile && <span className="nav-text">Buscar</span>}
             </Link>
+
             <button onClick={toggleDarkMode} className="nav-button">
               <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
               {!isMobile && (

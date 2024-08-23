@@ -5,6 +5,7 @@ src
 │   └── axiosConfig.js
 ├── assets
 ├── components
+│   ├── ConversionKeyManager
 │   ├── Footer
 │   |   └── Footer.css
 │   |   └── Footer.jsx
@@ -15,7 +16,9 @@ src
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
-│   └── UserCard
+│   ├── Tooltip
+│   ├── UserCard
+│   └── AuthenticatedRoute.jsx
 ├── context
 │   └── AuthContext.jsx
 ├── hooks
@@ -24,6 +27,7 @@ src
 │   ├── EditUser
 │   ├── ForgotPassword
 │   ├── GestionArchivo
+│   ├── GestionarEmpleados
 │   ├── Home
 │   ├── Institucional
 │   ├── Login

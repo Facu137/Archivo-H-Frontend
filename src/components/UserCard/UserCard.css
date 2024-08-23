@@ -1,14 +1,23 @@
 /* src/components/UserCard.css */
 .user-card {
+    max-width: 250px;
     background-color: #ffffff;
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px;
+    /* Reducido el padding */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
     /* Reducido para compactar */
     display: flex;
-    flex-direction: column;
+    /* Añadido flex para controlar el diseño */
     align-items: center;
+    /* Alinea los elementos al centro verticalmente */
+}
+
+/* Nuevo estilo para el contenedor del avatar y la información */
+.user-card-content {
+    display: flex;
+    align-items: center;
+    /* Alinea los elementos al centro verticalmente */
 }
 
 .user-avatar {
@@ -16,11 +25,11 @@
     justify-content: center;
     align-items: center;
     width: 70px;
-    /* Ajusta el tamaño del avatar */
+    min-width: 70px;
     height: 70px;
-    /* Ajusta el tamaño del avatar */
+    min-height: 70px;
     border-radius: 50%;
-    margin-bottom: 10px;
+    margin-right: 15px;
 }
 
 .user-avatar svg {
@@ -30,17 +39,33 @@
 .user-info {
     margin-bottom: 10px;
     display: flex;
+    /* Cambiado a flex-column para un diseño vertical */
     flex-direction: column;
 }
 
 .user-info-item {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;}
+    flex-direction: row;
+    /* Cambiado a row para alinear los elementos en una fila */
+    align-items: center;
+    /* Alinea los elementos al centro verticalmente */
+    margin-bottom: 5px;
+    /* Añadido margen inferior para separar los elementos */
+}
 
 .user-info-item strong {
-    margin-bottom: 2px;
-    /* Reducido para compactar */
+    margin-right: 5px;
+    /* Añadido margen derecho para separar el texto en negrita del valor */
+    font-weight: bold;
+    /* Asegurar que el texto esté en negrita */
+}
+
+/* Añadido estilo para el span dentro de user-info-item */
+.user-info-item span {
+    /* Permite que el texto se ajuste a varias líneas si es necesario */
+    word-break: break-word;
+    text-align: left;
+    /* Alinea el texto a la izquierda */
 }
 
 /* Modo Oscuro */

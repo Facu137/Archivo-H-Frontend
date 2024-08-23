@@ -78,12 +78,15 @@ header {
   align-items: center;
   padding: 10px;
   text-decoration: none;
-  color: inherit;
   transition: background-color 0.3s;
   border: none;
   background: none;
   cursor: pointer;
-  border-radius: 5px; /* Añade bordes redondeados */
+
+  background-color: #0a0a0a;
+  border-radius: 20px;
+  border-width: 2px;
+  border-style: solid;
 }
 
 .nav-button:hover {

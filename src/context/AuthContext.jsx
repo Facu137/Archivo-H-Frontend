@@ -1,5 +1,11 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useState, useContext, useEffect } from 'react'
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback
+} from 'react'
 import PropTypes from 'prop-types'
 import axiosInstance from '../api/axiosConfig'
 
@@ -10,54 +16,84 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
+  const [isLoading, setIsLoading] = useState(true) // Estado de carga
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user')
-    const storedToken = localStorage.getItem('token')
-
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser)
-        setUser(parsedUser)
-      } catch (error) {
-        console.error('Error parsing user data from localStorage', error)
-        setUser(null)
-      }
-    }
-
-    if (storedToken) {
-      setToken(storedToken)
+  // Eliminar el token de localStorage al cerrar sesión
+  const logout = useCallback(async () => {
+    try {
+      await axiosInstance.post('/auth/logout')
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      setUser(null)
+      setToken(null)
+      localStorage.removeItem('accessToken')
     }
   }, [])
 
-  const login = (userData, token) => {
-    setUser(userData)
-    setToken(token)
-    localStorage.setItem('user', JSON.stringify(userData))
-    localStorage.setItem('token', token)
-  }
-
-  const logout = () => {
-    setUser(null)
-    setToken(null)
-    localStorage.removeItem('user')
-    localStorage.removeItem('token')
-  }
-
-  const updateUser = async (userData) => {
+  // Obtener la información del usuario al iniciar o refrescar el token
+  const fetchUser = useCallback(async () => {
+    setIsLoading(true)
     try {
-      const response = await axiosInstance.put('/auth/edit-user', userData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      // Simula un retraso de 1 segundo
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      const response = await axiosInstance.get('/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
       })
-      const updatedUser = response.data.user
-      setUser(updatedUser)
-      localStorage.setItem('user', JSON.stringify(updatedUser))
+      setUser(response.data)
     } catch (error) {
-      console.error('Update user error:', error)
+      console.error('Fetch user error:', error)
+      logout()
+    } finally {
+      setIsLoading(false)
+    }
+  }, [token, logout])
+
+  // Actualizar el token en localStorage al refrescarlo
+  const refreshAccessToken = useCallback(async () => {
+    try {
+      const response = await axiosInstance.post('/auth/refresh-token')
+      const { accessToken } = response.data
+      setToken(accessToken)
+      localStorage.setItem('accessToken', accessToken)
+    } catch (error) {
+      console.error('Refresh token error:', error)
+      logout()
+    }
+  }, [logout])
+
+  // Cargar el token desde localStorage al iniciar
+  useEffect(() => {
+    const storedToken = localStorage.getItem('accessToken')
+    if (storedToken) {
+      setToken(storedToken)
+    }
+
+    const refreshToken = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('refreshToken='))
+    if (refreshToken) {
+      refreshAccessToken()
+    }
+  }, [refreshAccessToken])
+
+  // Guardar el token en localStorage al iniciar sesión
+  const login = async (userData) => {
+    try {
+      const response = await axiosInstance.post('/auth/login', userData)
+      const { accessToken } = response.data
+      setToken(accessToken)
+      localStorage.setItem('accessToken', accessToken)
+
+      // Obtener la información del usuario después de iniciar sesión
+      await fetchUser()
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
     }
   }
+
 
   const addFavorite = async (documento_id) => {
     try {
@@ -89,6 +125,29 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  useEffect(() => {
+    if (token) {
+      fetchUser()
+    }
+  }, [token, fetchUser])
+
+  // Configurar el token en los headers de las solicitudes de axios
+  const setAuthToken = useCallback(
+    (config) => {
+      // Envolviendo setAuthToken en useCallback
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
+      return config
+    },
+    [token]
+  )
+
+  useEffect(() => {
+    axiosInstance.interceptors.request.use(setAuthToken)
+  }, [setAuthToken])
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -96,6 +155,7 @@ export const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
+        isLoading,
         updateUser,
         addFavorite,
         removeFavorite
@@ -109,3 +169,5 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired
 }
+
+export default AuthProvider

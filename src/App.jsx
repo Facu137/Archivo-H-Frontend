@@ -1,5 +1,5 @@
 // src/App.jsx
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
 // components
@@ -8,6 +8,7 @@ import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
+import AuthenticatedRoute from './components/AuthenticatedRoute'
 // pages
 import { Home } from './pages/Home/Home'
 import { Institucional } from './pages/Institucional/Institucional'
@@ -20,6 +21,8 @@ import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador' // Importa el nuevo componente de búsqueda
+import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+
 import './index.css'
 // hooks
 import { NotificationProvider } from './hooks/useNotification'
@@ -34,16 +37,11 @@ export const App = () => {
     return savedMode ? savedMode === 'dark' : true
   })
   const { user } = useAuth()
-  const location = useLocation()
   const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
-
-  useEffect(() => {
-    setIsSidebarOpen({ left: false, right: false })
-  }, [location])
 
   const toggleSidebar = (side) => {
     setIsSidebarOpen((prev) => ({
@@ -89,23 +87,41 @@ export const App = () => {
                 onClose={() => toggleSidebar('left')}
               />
             )}
+
             <main>
               <Routes>
+                {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/institucional" element={<Institucional />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/cuenta" element={<MiCuenta />} />
                 <Route path="/registrar" element={<Registrar />} />
-                <Route path="/editar-usuario" element={<EditUser />} />
-                <Route path="/gestion" element={<GestionArchivo />} />
-                <Route path="/visor" element={<VerArchivo />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/buscador" element={<Buscador />} />{' '}
-                {/* Nueva ruta para el buscador */}
+                <Route path="/buscador" element={<Buscador />} />
+                <Route path="/visor" element={<VerArchivo />} />
+
+                {/* Rutas protegidas */}
+                <Route
+                  element={<AuthenticatedRoute element={MiCuenta} />}
+                  path="/cuenta"
+                />
+                <Route
+                  element={<AuthenticatedRoute element={EditUser} />}
+                  path="/editar-usuario"
+                />
+                <Route
+                  element={<AuthenticatedRoute element={GestionArchivo} />}
+                  path="/gestion"
+                />
+                <Route
+                  element={<AuthenticatedRoute element={GestionarEmpleados} />}
+                  path="/gestionar-empleados"
+                />
+
                 <Route path="/*" element={<Navigate to="/" />} />
               </Routes>
             </main>
+
             <Footer isDarkMode={isDarkMode} />
             {notification && (
               <NotificationBar
