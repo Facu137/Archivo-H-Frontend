@@ -84,8 +84,8 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
             <Link to="/institucional" className="nav-button">
               <FontAwesomeIcon icon={faBuilding} />
               {!isMobile && <span className="nav-text">Institucional</span>}
+            </Link>
 
-            </button>
             <Link to="/buscador" className="nav-button">
               <FontAwesomeIcon icon={faSearch} />
               {!isMobile && <span className="nav-text">Buscar</span>}

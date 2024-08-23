@@ -94,12 +94,11 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-
-  const addFavorite = async (documento_id) => {
+  const addFavorite = async (documentoId) => {
     try {
       await axiosInstance.post(
         '/favorites',
-        { documento_id },
+        { documentoId },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -112,9 +111,9 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const removeFavorite = async (documento_id) => {
+  const removeFavorite = async (documentoId) => {
     try {
-      await axiosInstance.delete(`/favorites/${documento_id}`, {
+      await axiosInstance.delete(`/favorites/${documentoId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -147,7 +146,6 @@ export const AuthProvider = ({ children }) => {
     axiosInstance.interceptors.request.use(setAuthToken)
   }, [setAuthToken])
 
-
   return (
     <AuthContext.Provider
       value={{
@@ -156,7 +154,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isLoading,
-        updateUser,
+        updateUser: fetchUser,
         addFavorite,
         removeFavorite
       }}
