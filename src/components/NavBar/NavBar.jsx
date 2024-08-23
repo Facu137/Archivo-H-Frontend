@@ -1,4 +1,3 @@
-// src/components/NavBar/NavBar.jsx
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
@@ -10,8 +9,7 @@ import {
   faUser,
   faSignInAlt,
   faSearch,
-  faCog,
-  faTimes
+  faCog
 } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../../context/AuthContext'
 import logo from '../../assets/logo.svg'
@@ -20,8 +18,6 @@ import './NavBar.css'
 export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
   const { user } = useAuth()
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
-  const [showSearchRow, setShowSearchRow] = useState(false)
-  const [isClosing, setIsClosing] = useState(false)
 
   const handleAccountClick = () => {
     if (user) {
@@ -63,14 +59,6 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
     </h6>
   )
 
-  const closeSearchRow = () => {
-    setIsClosing(true)
-    setTimeout(() => {
-      setShowSearchRow(false)
-      setIsClosing(false)
-    }, 300) // duración de la animación de deslizamiento
-  }
-
   return (
     <header className={isDarkMode ? 'dark-mode' : 'light-mode'}>
       <nav className="navbar">
@@ -96,16 +84,13 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
             <Link to="/institucional" className="nav-button">
               <FontAwesomeIcon icon={faBuilding} />
               {!isMobile && <span className="nav-text">Institucional</span>}
+
+            </button>
+            <Link to="/buscador" className="nav-button">
+              <FontAwesomeIcon icon={faSearch} />
+              {!isMobile && <span className="nav-text">Buscar</span>}
             </Link>
-            {!showSearchRow && (
-              <button
-                onClick={() => setShowSearchRow(true)}
-                className="nav-button"
-              >
-                <FontAwesomeIcon icon={faSearch} />
-                {!isMobile && <span className="nav-text">Buscar</span>}
-              </button>
-            )}
+
             <button onClick={toggleDarkMode} className="nav-button">
               <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
               {!isMobile && (
@@ -122,20 +107,6 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
             </button>
           </div>
         </div>
-        {showSearchRow && (
-          <div className={`search-row ${isClosing ? 'slide-up' : ''}`}>
-            <input type="text" placeholder="Buscar" id="search-input" />
-            <button type="submit" className="search-button">
-              <FontAwesomeIcon icon={faSearch} />
-            </button>
-            <button className="advanced-search-button">
-              <FontAwesomeIcon icon={faCog} />
-            </button>
-            <button className="close-search-button" onClick={closeSearchRow}>
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </div>
-        )}
       </nav>
     </header>
   )

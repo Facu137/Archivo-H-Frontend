@@ -20,7 +20,9 @@ import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
+import Buscador from './pages/Buscador/Buscador' // Importa el nuevo componente de búsqueda
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+
 import './index.css'
 // hooks
 import { NotificationProvider } from './hooks/useNotification'
@@ -95,6 +97,7 @@ export const App = () => {
                 <Route path="/registrar" element={<Registrar />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/buscador" element={<Buscador />} />
                 <Route path="/visor" element={<VerArchivo />} />
 
                 {/* Rutas protegidas */}

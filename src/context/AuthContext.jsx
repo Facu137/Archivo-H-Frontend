@@ -94,6 +94,37 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+
+  const addFavorite = async (documento_id) => {
+    try {
+      await axiosInstance.post(
+        '/favorites',
+        { documento_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      // Actualizar el estado del usuario si es necesario
+    } catch (error) {
+      console.error('Error adding favorite:', error)
+    }
+  }
+
+  const removeFavorite = async (documento_id) => {
+    try {
+      await axiosInstance.delete(`/favorites/${documento_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      // Actualizar el estado del usuario si es necesario
+    } catch (error) {
+      console.error('Error removing favorite:', error)
+    }
+  }
+
   useEffect(() => {
     if (token) {
       fetchUser()
@@ -116,15 +147,18 @@ export const AuthProvider = ({ children }) => {
     axiosInstance.interceptors.request.use(setAuthToken)
   }, [setAuthToken])
 
+
   return (
     <AuthContext.Provider
       value={{
         user,
         token,
-        isLoading,
         login,
         logout,
-        updateUser: fetchUser // Pasa fetchUser como updateUser
+        isLoading,
+        updateUser,
+        addFavorite,
+        removeFavorite
       }}
     >
       {children}

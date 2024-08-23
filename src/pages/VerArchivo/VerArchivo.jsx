@@ -8,14 +8,15 @@ export const VerArchivo = () => {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const fileUrl = queryParams.get('file')
-  const [fileType, setFileType] = useState(null)
+  const initialFileType = queryParams.get('type')
+  const [fileType, setFileType] = useState(initialFileType)
 
   useEffect(() => {
-    if (fileUrl) {
+    if (fileUrl && !initialFileType) {
       const fileExtension = fileUrl.split('.').pop().toLowerCase()
       setFileType(fileExtension)
     }
-  }, [fileUrl])
+  }, [fileUrl, initialFileType])
 
   return (
     <div>

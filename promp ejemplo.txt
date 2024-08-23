@@ -7,8 +7,12 @@ src
 ├── components
 │   ├── ConversionKeyManager
 │   ├── Footer
+│   |   └── Footer.css
+│   |   └── Footer.jsx
 │   ├── LeftSidebar
 │   ├── NavBar
+│   |   └── NavBar.css
+│   |   └── NavBar.jsx
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
@@ -31,6 +35,25 @@ src
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo
+│   |   └── ImageViewer.css
+│   |   └── ImageViewer.jsx
+│   |   └── PdfViewer.css
+│   |   └── PdfViewer.jsx
+│   |   └── VerArchivo.css
+│   |   └── VerArchivo.jsx
+|   └── Buscador
+|       └── AdvancedSearchForm.css
+|       └── AdvancedSearchForm.jsx
+|       └── Buscador.css
+|       └── Buscador.jsx
+|       └── ResultCard.css
+|       └── ResultCard.jsx
+|       └── ResultsContainer.css
+|       └── ResultsContainer.jsx
+|       └── SearchContainer.css
+|       └── SearchContainer.jsx
+|       └── SimpleSearchForm.css
+|       └── SimpleSearchForm.jsx
 ├── schemas
 │   └── authSchemas.js
 ├── utils

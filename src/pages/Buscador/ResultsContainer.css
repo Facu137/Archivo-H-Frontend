@@ -1,0 +1,8 @@
+/* src/pages/Buscador/ResultsContainer.css */
+#results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Reduce el espacio entre las tarjetas */
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+  margin: 20px 0; /* Añade un margen superior e inferior razonable */
+}

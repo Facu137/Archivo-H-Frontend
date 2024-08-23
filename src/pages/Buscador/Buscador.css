@@ -1,0 +1,14 @@
+/* src/pages/Buscador/Buscador.css */
+.buscador-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px; /* Ajusta según sea necesario */
+  margin: 0 auto; /* Centra el contenedor en la página */
+}
+
+.results-container {
+  width: 100%; /* Asegura que el contenedor de resultados ocupe todo el ancho */
+}
