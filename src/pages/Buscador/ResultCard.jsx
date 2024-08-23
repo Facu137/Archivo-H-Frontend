@@ -32,7 +32,10 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
   const { user, addFavorite, removeFavorite } = useAuth()
 
   const handleClick = () => {
-    const fileUrl = imagen_url || ''
+    // Construye la URL completa de la imagen
+    const fileUrl = imagen_url
+      ? `http://localhost:3000/uploads/${imagen_url}`
+      : '' // Ajusta la URL base si es necesario
     const fileType = fileUrl.split('.').pop().toLowerCase()
     navigate(`/visor?file=${encodeURIComponent(fileUrl)}&type=${fileType}`)
   }
@@ -107,7 +110,8 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
       </div>
       {imagen_url && (
         <div className="miniatura">
-          <img src={imagen_url} alt="Miniatura" />
+          <img src={`http://localhost:3000/${imagen_url}`} alt="Miniatura" />{' '}
+          {/* URL completa */}
         </div>
       )}
       {user && (

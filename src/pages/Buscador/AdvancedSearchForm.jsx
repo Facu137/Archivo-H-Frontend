@@ -99,12 +99,78 @@ const AdvancedSearchForm = ({ onSearch }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     try {
-      const response = await axios.get('http://localhost:3000/api/general', {
-        params: {
-          search: JSON.stringify(camposBusqueda)
-        }
-      })
+      // Construir los parámetros de la consulta
+      const params = { tipo_documento: categoria }
+
+      // Agregar los campos de búsqueda específicos de la categoría
+      switch (categoria) {
+        case 'mensura':
+          params.legajo = camposBusqueda.Legajo
+          params.legajoBis = camposBusqueda['Legajo bis']
+          params.expediente = camposBusqueda.Expediente
+          params.expedienteBis = camposBusqueda['Expediente bis']
+          params.departamento = camposBusqueda['Dpto. Antiguo'] // O 'Dpto. Actual' según corresponda
+          params.lugar = camposBusqueda.Lugar
+          params.dia = camposBusqueda.Dia
+          params.mes = camposBusqueda.Mes
+          params.anio = camposBusqueda.Año
+          params.titular = camposBusqueda.Titular
+          params.caratula = camposBusqueda.Caratula
+          params.propiedad = camposBusqueda.Propiedad
+          params.folios = camposBusqueda.Fojas
+          break
+        case 'notarial':
+          params.escribano = camposBusqueda.Escribano
+          params.registro = camposBusqueda.Registro
+          params.protocolo = camposBusqueda.Protocolo
+          params.mes_inicio = camposBusqueda['Mes inicio']
+          params.mes_fin = camposBusqueda['Mes fin']
+          params.dia = camposBusqueda.Dia
+          params.mes = camposBusqueda.Mes
+          params.anio = camposBusqueda.Año
+          params.escritura_nro = camposBusqueda['Escritura N°']
+          params.iniciador = camposBusqueda.Iniciador
+          params.extracto = camposBusqueda.Extracto // Ajusta el nombre del campo si es necesario
+          params.negocio_juridico = camposBusqueda['Negocio juridico']
+          params.folio = camposBusqueda.Folio
+          break
+        case 'correspondencia':
+        case 'leyesdecretos':
+          params.legajo = camposBusqueda.Legajo
+          params.legajoBis = camposBusqueda['Legajo bis']
+          params.expediente = camposBusqueda.Expediente
+          params.expedienteBis = camposBusqueda['Expediente bis']
+          params.dia = camposBusqueda.Dia
+          params.mes = camposBusqueda.Mes
+          params.anio = camposBusqueda.Año
+          params.emisor = camposBusqueda.Emisor
+          params.destinatario = camposBusqueda.Destinatario
+          params.asunto = camposBusqueda.Asunto // Ajusta el nombre del campo si es necesario
+          params.folios = camposBusqueda.Fojas
+          break
+        case 'gobierno':
+        case 'tierrasfiscales':
+        case 'tribunales':
+          params.legajo = camposBusqueda.Legajo
+          params.legajoBis = camposBusqueda['Legajo bis']
+          params.expediente = camposBusqueda.Expediente
+          params.expedienteBis = camposBusqueda['Expediente bis']
+          params.dia = camposBusqueda.Dia
+          params.mes = camposBusqueda.Mes
+          params.anio = camposBusqueda.Año
+          params.iniciador = camposBusqueda.Iniciador
+          params.caratula = camposBusqueda.Caratula
+          params.tema = camposBusqueda.Tema
+          params.folios = camposBusqueda.Folios
+          break
+      }
+
+      const response = await axios.get(
+        'http://localhost:3000/api/documents/advanced-search',
+        { params }
+      )
       onSearch(response.data)
     } catch (error) {
       console.error('Error al hacer la búsqueda:', error)
