@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './SearchContainer.css'
 import AdvancedSearchForm from './AdvancedSearchForm'
 import SimpleSearchForm from './SimpleSearchForm'
@@ -8,9 +8,7 @@ const SearchContainer = () => {
   const [searchType, setSearchType] = useState('simple')
   const [searchResults, setSearchResults] = useState([])
 
-  const handleSearch = (searchTerm, camposBusqueda) => {
-    // Lógica de búsqueda (simulada o real)
-    const results = obtenerResultadosDeLaBaseDeDatos(searchTerm, camposBusqueda)
+  const handleSearch = (results) => {
     setSearchResults(results)
   }
 

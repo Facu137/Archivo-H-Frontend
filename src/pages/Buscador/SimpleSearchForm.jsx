@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
 import './SimpleSearchForm.css'
+import axios from 'axios'
 
 const SimpleSearchForm = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSearch(searchTerm, {})
+    try {
+      const response = await axios.get('http://localhost:3000/api/general', {
+        params: {
+          search: searchTerm
+        }
+      })
+      onSearch(response.data)
+    } catch (error) {
+      console.error('Error al hacer la búsqueda:', error)
+    }
   }
 
   return (

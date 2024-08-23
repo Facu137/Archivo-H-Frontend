@@ -59,8 +59,48 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const addFavorite = async (documento_id) => {
+    try {
+      await axiosInstance.post(
+        '/favorites',
+        { documento_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      // Actualizar el estado del usuario si es necesario
+    } catch (error) {
+      console.error('Error adding favorite:', error)
+    }
+  }
+
+  const removeFavorite = async (documento_id) => {
+    try {
+      await axiosInstance.delete(`/favorites/${documento_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      // Actualizar el estado del usuario si es necesario
+    } catch (error) {
+      console.error('Error removing favorite:', error)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        login,
+        logout,
+        updateUser,
+        addFavorite,
+        removeFavorite
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )

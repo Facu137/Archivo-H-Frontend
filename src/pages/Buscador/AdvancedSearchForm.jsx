@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './AdvancedSearchForm.css'
+import axios from 'axios'
 
 const AdvancedSearchForm = ({ onSearch }) => {
   const [categoria, setCategoria] = useState('mensura')
@@ -14,70 +15,70 @@ const AdvancedSearchForm = ({ onSearch }) => {
     switch (categoria) {
       case 'mensura':
         campos = [
-          { label: 'Legajo', id: 'legajo' },
-          { label: 'Legajo bis', id: 'legajo_bis' },
-          { label: 'Expediente', id: 'expediente' },
-          { label: 'Expediente bis', id: 'expediente_bis' },
-          { label: 'Departamento Antiguo', id: 'depto_antiguo' },
-          { label: 'Departamento Actual', id: 'depto_actual' },
-          { label: 'Lugar', id: 'lugar' },
-          { label: 'Dia', id: 'dia' },
-          { label: 'Mes', id: 'mes' },
-          { label: 'Año', id: 'ano' },
-          { label: 'Titular', id: 'titular' },
-          { label: 'Carátula', id: 'caratula' },
-          { label: 'Propiedad', id: 'propiedad' },
-          { label: 'Fojas', id: 'fojas' }
+          { label: 'Legajo', id: 'Legajo' },
+          { label: 'Legajo bis', id: 'Legajo bis' },
+          { label: 'Expediente', id: 'Expediente' },
+          { label: 'Expediente bis', id: 'Expediente bis' },
+          { label: 'Departamento Antiguo', id: 'Dpto. Antiguo' },
+          { label: 'Departamento Actual', id: 'Dpto. Actual' },
+          { label: 'Lugar', id: 'Lugar' },
+          { label: 'Dia', id: 'Dia' },
+          { label: 'Mes', id: 'Mes' },
+          { label: 'Año', id: 'Año' },
+          { label: 'Titular', id: 'Titular' },
+          { label: 'Carátula', id: 'Caratula' },
+          { label: 'Propiedad', id: 'Propiedad' },
+          { label: 'Fojas', id: 'Fojas' }
         ]
         break
       case 'notarial':
         campos = [
-          { label: 'Escribano', id: 'escribano' },
-          { label: 'Registro', id: 'registro' },
-          { label: 'Protocolo', id: 'protocolo' },
-          { label: 'Mes-inicio', id: 'mes_inicio' },
-          { label: 'Mes-fin', id: 'mes_fin' },
-          { label: 'Dia', id: 'dia' },
-          { label: 'Mes', id: 'mes' },
-          { label: 'Año', id: 'ano' },
-          { label: 'Escritura Nº', id: 'escritura_num' },
-          { label: 'Iniciador', id: 'iniciador' },
-          { label: 'Extracto', id: 'extracto' },
-          { label: 'Negocio-Jurídico', id: 'negocio_juridico' },
-          { label: 'Folio', id: 'folio' }
+          { label: 'Escribano', id: 'Escribano' },
+          { label: 'Registro', id: 'Registro' },
+          { label: 'Protocolo', id: 'Protocolo' },
+          { label: 'Mes inicio', id: 'Mes inicio' },
+          { label: 'Mes fin', id: 'Mes fin' },
+          { label: 'Dia', id: 'Dia' },
+          { label: 'Mes', id: 'Mes' },
+          { label: 'Año', id: 'Año' },
+          { label: 'Escritura Nº', id: 'Escritura N°' },
+          { label: 'Iniciador', id: 'Iniciador' },
+          { label: 'Extracto', id: 'Extracto' },
+          { label: 'Negocio Jurídico', id: 'Negocio juridico' },
+          { label: 'Folio', id: 'Folio' }
         ]
         break
       case 'correspondencia':
       case 'leyesdecretos': // Mismos campos para correspondencia y leyesdecretos
         campos = [
-          { label: 'Legajo', id: 'legajo' },
-          { label: 'Legajo bis', id: 'legajo_bis' },
-          { label: 'Expediente', id: 'expediente' },
-          { label: 'Expediente bis', id: 'expediente_bis' },
-          { label: 'Dia', id: 'dia' },
-          { label: 'Mes', id: 'mes' },
-          { label: 'Año', id: 'ano' },
-          { label: 'Emisor', id: 'emisor' },
-          { label: 'Destinatario', id: 'destinatario' },
-          { label: 'Asunto', id: 'asunto' },
-          { label: 'Fojas', id: 'fojas' }
+          { label: 'Legajo', id: 'Legajo' },
+          { label: 'Legajo bis', id: 'Legajo bis' },
+          { label: 'Expediente', id: 'Expediente' },
+          { label: 'Expediente bis', id: 'Expediente bis' },
+          { label: 'Dia', id: 'Dia' },
+          { label: 'Mes', id: 'Mes' },
+          { label: 'Año', id: 'Año' },
+          { label: 'Emisor', id: 'Emisor' },
+          { label: 'Destinatario', id: 'Destinatario' },
+          { label: 'Asunto', id: 'Asunto' },
+          { label: 'Fojas', id: 'Fojas' }
         ]
         break
       case 'gobierno':
       case 'tierrasfiscales': // Mismos campos para gobierno y tierrasfiscales
       case 'tribunales': // Mismos campos para tribunales
         campos = [
-          { label: 'Legajo', id: 'legajo' },
-          { label: 'Legajo bis', id: 'legajo_bis' },
-          { label: 'Expediente', id: 'expediente' },
-          { label: 'Expediente bis', id: 'expediente_bis' },
-          { label: 'Dia', id: 'dia' },
-          { label: 'Mes', id: 'mes' },
-          { label: 'Año', id: 'ano' },
-          { label: 'Iniciador', id: 'iniciador' },
-          { label: 'Carátula', id: 'caratula' },
-          { label: 'Tema', id: 'tema' },
-          { label: 'Folios', id: 'folios' }
+          { label: 'Legajo', id: 'Legajo' },
+          { label: 'Legajo bis', id: 'Legajo bis' },
+          { label: 'Expediente', id: 'Expediente' },
+          { label: 'Expediente bis', id: 'Expediente bis' },
+          { label: 'Dia', id: 'Dia' },
+          { label: 'Mes', id: 'Mes' },
+          { label: 'Año', id: 'Año' },
+          { label: 'Iniciador', id: 'Iniciador' },
+          { label: 'Carátula', id: 'Caratula' },
+          { label: 'Tema', id: 'Tema' },
+          { label: 'Folios', id: 'Folios' }
         ]
         break
     }
@@ -96,9 +97,18 @@ const AdvancedSearchForm = ({ onSearch }) => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSearch('', camposBusqueda)
+    try {
+      const response = await axios.get('http://localhost:3000/api/general', {
+        params: {
+          search: JSON.stringify(camposBusqueda)
+        }
+      })
+      onSearch(response.data)
+    } catch (error) {
+      console.error('Error al hacer la búsqueda:', error)
+    }
   }
 
   return (
@@ -107,10 +117,15 @@ const AdvancedSearchForm = ({ onSearch }) => {
       <select
         id="categoria"
         value={categoria}
-        onChange={(e) => setCategoria(e.target.value)}
+        onChange={(e) => setCategoria(e.target.value.toLowerCase())}
       >
         <option value="mensura">Mensura</option>
-        {/* ... otras opciones */}
+        <option value="notarial">Notarial</option>
+        <option value="correspondencia">Correspondencia</option>
+        <option value="leyesdecretos">Leyes Decretos</option>
+        <option value="gobierno">Gobierno</option>
+        <option value="tierrasfiscales">Tierras Fiscales</option>
+        <option value="tribunales">Tribunales</option>
       </select>
       <div id="campos-busqueda">
         {Object.keys(camposBusqueda).map((key) => (
