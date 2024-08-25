@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css';
+import './GestionArchivo.css';
 import * as zod from 'zod';
 
 export const GestionArchivo = () => {
