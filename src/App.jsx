@@ -65,6 +65,7 @@ export const App = () => {
     setNotification(null)
   }, [])
 
+
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
