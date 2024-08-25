@@ -1,5 +1,6 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 import {
   FaEdit,
   FaFile,
@@ -38,19 +39,19 @@ const LeftSidebar = () => {
           <h3>Archivos</h3>
           <ul>
             <li>
-              <FaFile /> <a href="/agregar-archivo">Agregar Archivo</a>
+            <FaFile /> <Link to="/agregar-archivo">Agregar Archivo</Link>
             </li>
             <li>
-              <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
+            <FaEdit /> <Link to="/editar-archivo">Editar o Eliminar Archivo</Link>
             </li>
             <li>
               <FaHistory />{' '}
-              <a href="/historial-archivos">
-                Historial de Archivos Modificados
-              </a>
+              <Link to="/historial-archivos">
+                  Historial de Archivos Modificados
+                </Link>
             </li>
             <li>
-              <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
+            <FaTrash /> <Link to="/archivos-eliminados">Archivos Eliminados</Link>
             </li>
           </ul>
         </div>
@@ -60,12 +61,12 @@ const LeftSidebar = () => {
             <h3>Administración</h3>
             <ul>
               <li>
-                <FaUserFriends />{' '}
-                <a href="/gestionar-empleados">Gestionar Empleados</a>
+              <FaUserFriends />
+              <Link to="/gestionar-empleados">Gestionar Empleados</Link>
               </li>
               <li>
-                <FaHome />{' '}
-                <a href="/editar-portada">Editar Portada e Institucional</a>
+              <FaHome />
+              <Link to="/editar-portada">Editar Portada e Institucional</Link>
               </li>
             </ul>
           </div>

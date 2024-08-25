@@ -43,7 +43,7 @@ export const GestionArchivo = () => {
   };
 
   const handleFileUpload = (e) => {
-    setFileUploads([...fileUploads, e.target.files[0]]);
+    setFileUploads([...fileUploads, ...e.target.files]);
   };
 
   const handleFileRemove = (index) => {
@@ -90,7 +90,10 @@ export const GestionArchivo = () => {
     });
 
     try {
-      const validatedData = schema.parse(Object.fromEntries(formData));
+      const validatedData = schema.parse({
+        ...Object.fromEntries(formData),
+        files: fileUploads
+      });
       // Aquí puedes enviar formData al servidor usando fetch o XMLHttpRequest
       console.log(validatedData);
     } catch (error) {
@@ -137,7 +140,7 @@ export const GestionArchivo = () => {
 
         <div id="fileUploads">
           <label htmlFor="files">Archivos (imágenes o PDFs):</label>
-          <input type="file" id="files" name="files"  multiple onChange={handleFileUpload} />
+          <input type="file" id="files" name="files" multiple onChange={handleFileUpload} />
           {fileUploads.map((file, index) => (
             <div key={index}>
               {file.name}
@@ -148,7 +151,7 @@ export const GestionArchivo = () => {
           ))}
         </div>
 
-        <button type="submit" class="submit-button">Guardar</button>
+        <button type="submit" className="submit-button">Guardar</button>
       </form>
     </div>
   );

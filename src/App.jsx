@@ -58,6 +58,7 @@ export const App = () => {
   const closeNotification = useCallback(() => {
     setNotification(null)
   }, [])
+  
 
   return (
     <NotificationProvider showNotification={showNotification}>
@@ -87,6 +88,7 @@ export const App = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/*" element={<Navigate to="/" />} />
+            <Route path="/agregar-archivo" element={<GestionArchivo />} />
           </Routes>
         </main>
 
