@@ -65,6 +65,7 @@ export const App = () => {
     setNotification(null)
   }, [])
 
+
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
@@ -99,7 +100,7 @@ export const App = () => {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/buscador" element={<Buscador />} />
                 <Route path="/visor" element={<VerArchivo />} />
-
+                <Route path="/agregar-archivo" element={<GestionArchivo />} />
                 {/* Rutas protegidas */}
                 <Route
                   element={<AuthenticatedRoute element={MiCuenta} />}
