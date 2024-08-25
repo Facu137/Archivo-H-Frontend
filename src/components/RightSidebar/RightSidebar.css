@@ -30,69 +30,24 @@
 
 .close-button {
     position: absolute;
-    top: 10px;
     right: 10px;
     font-size: 24px;
     background: none;
     border: none;
-    cursor: pointer;
-}
-
-.user-card {
-    background-color: #ffffff;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 60px;
-    /* Ajusta este valor según la altura de tu navbar */
-}
-
-.user-avatar {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.user-avatar svg {
-    background-color: #0099ff;
-    color: #ffffff;
-    padding: 10px;
-    border-radius: 50%;
-}
-
-.user-card h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.user-info p {
-    margin-bottom: 10px 0;
-    display: flex;
-    align-items: center;
-}
-
-.user-info p svg {
-    margin-right: 10px;
+    cursor: pointer;
 }
 
 .logout-button {
     width: 100%;
     padding: 10px;
     margin-top: 20px;
-    background-color: #dc3545;
-    color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.logout-button:hover {
-    background-color: #c82333;
 }
 
 .logout-button svg {
@@ -104,35 +59,15 @@
     background-color: #222;
 }
 
-.dark-mode .user-card {
-    background-color: #333;
-    color: #fff;
-}
-
 .dark-mode .close-button {
     color: #fff;
-}
-
-.dark-mode .user-card h3 {
-    color: #fff;
-}
-
-.dark-mode .logout-button {
-    background-color: #6c757d;
-}
-
-.dark-mode .logout-button:hover {
-    background-color: #5a6268;
 }
 
 .edit-button {
     width: 100%;
     padding: 10px;
     margin-top: 20px;
-    background-color: #007bff;
-    color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
     display: flex;
@@ -140,19 +75,43 @@
     justify-content: center;
 }
 
-.edit-button:hover {
-    background-color: #0056b3;
-}
-
 .edit-button svg {
     margin-right: 10px;
 }
 
-/* Modo Oscuro */
-.dark-mode .edit-button {
-    background-color: #6c757d;
+/* Estilos para la tarjeta del empleado */
+.employee-card {
+    max-width: 250px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    /* Margen superior para separar de UserCard */
+    display: flex;
+    align-items: center;
 }
 
-.dark-mode .edit-button:hover {
-    background-color: #5a6268;
+.employee-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.employee-info-item strong {
+    margin-right: 5px;
+    font-weight: bold;
+    color: #33FF57;
+    /* Agrega el color aquí */
+}
+
+/* Modo Oscuro */
+.dark-mode .employee-card {
+    background-color: #333;
+    color: #fff;
 }

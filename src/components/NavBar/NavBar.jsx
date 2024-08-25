@@ -1,11 +1,8 @@
-// src/components/NavBar/NavBar.jsx
-import React from 'react';
-import './NavBar.css';
-import PropTypes from 'prop-types';
-import logo from '../../assets/logo.svg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faHome,
   faBuilding,
   faSun,
   faMoon,
@@ -13,52 +10,94 @@ import {
   faSignInAlt,
   faSearch,
   faCog
-} from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../context/AuthContext';
+} from '@fortawesome/free-solid-svg-icons'
+import { useAuth } from '../../context/AuthContext'
+import logo from '../../assets/logo.svg'
+import './NavBar.css'
 
 export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
-  const { user } = useAuth();
+  const { user } = useAuth()
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
   const handleAccountClick = () => {
     if (user) {
-      toggleSidebar();
+      toggleSidebar('right')
     } else {
-      window.location.href = '/login';
+      window.location.href = '/login'
     }
-  };
+  }
+
+  const handleAdminClick = () => {
+    if (user) {
+      toggleSidebar('left')
+    }
+  }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1070)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [user])
+
+  const isAdminOrEmployee =
+    user && (user.rol === 'administrador' || user.rol === 'empleado')
+
+  const Title = () => (
+    <h6 className="title">
+      {isMobile ? (
+        <></>
+      ) : (
+        <>
+          ARCHIVO HISTORICO
+          <br />
+          SANTIAGO DEL ESTERO
+        </>
+      )}
+    </h6>
+  )
 
   return (
     <header className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-      <nav>
-        <div className="angry-grid">
-          <div id="item-0" className="logo">
-            <div className="logo-container">
-              <img src={logo} alt="Logo" />
-            </div>
+      <nav className="navbar">
+        <div className="first-row">
+          <div className="logo-container">
+            <Link to="/">
+              <img src={logo} alt="Logo" className="logo" />
+            </Link>
+            <Link to="/">
+              <Title />
+            </Link>
           </div>
-          <div id="item-1" className="title-container">
-            <span className="logo-title">ARCHIVO HISTORICO SANTIAGO DEL ESTERO</span>
-          </div>
-          <div id="item-2" className="navbar-container">
-            <button
-              onClick={() => (window.location.href = '/')}
-              className="nav-button"
-            >
-              <FontAwesomeIcon icon={faHome} />
-              <span className="nav-text">Inicio</span>
-            </button>
-            <button
-              onClick={() => (window.location.href = '/institucional')}
-              className="nav-button"
-            >
+
+          <div className="spacer"></div>
+
+          <div className="nav-links">
+            {isAdminOrEmployee && (
+              <button onClick={handleAdminClick} className="nav-button">
+                <FontAwesomeIcon icon={faCog} />
+                {!isMobile && <span className="nav-text">Administración</span>}
+              </button>
+            )}
+            <Link to="/institucional" className="nav-button">
               <FontAwesomeIcon icon={faBuilding} />
-              <span className="nav-text">Institucional</span>
-            </button>
+              {!isMobile && <span className="nav-text">Institucional</span>}
+            </Link>
+
+            <Link to="/buscador" className="nav-button">
+              <FontAwesomeIcon icon={faSearch} />
+              {!isMobile && <span className="nav-text">Buscar</span>}
+            </Link>
+
             <button onClick={toggleDarkMode} className="nav-button">
               <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
-              <span className="nav-text">
-                {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
-              </span>
+              {!isMobile && (
+                <span className="nav-text">
+                  {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
+                </span>
+              )}
             </button>
             <button onClick={handleAccountClick} className="nav-button">
               <FontAwesomeIcon icon={user ? faUser : faSignInAlt} />
@@ -67,27 +106,14 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
               </span>
             </button>
           </div>
-          <div id="item-3" className="search-container">
-            <input type="text" placeholder="Buscar" className="search-input" />
-            <button type="submit" className="search-button">
-              <FontAwesomeIcon icon={faSearch} />
-              <span className="nav-text">Buscar</span>
-            </button>
-            <button className="advanced-search-button">
-              <FontAwesomeIcon icon={faCog} />
-              <span className="nav-text">Búsqueda Avanzada</span>
-            </button>
-          </div>
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}
 
 NavBar.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
   toggleDarkMode: PropTypes.func.isRequired,
   isDarkMode: PropTypes.bool.isRequired
-};
-
-export default NavBar;
+}

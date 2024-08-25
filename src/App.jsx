@@ -1,5 +1,5 @@
 // src/App.jsx
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
 // components
@@ -8,40 +8,46 @@ import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
+import AuthenticatedRoute from './components/AuthenticatedRoute'
 // pages
 import { Home } from './pages/Home/Home'
 import { Institucional } from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
+import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
+import Buscador from './pages/Buscador/Buscador' // Importa el nuevo componente de búsqueda
+import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+
 import './index.css'
 // hooks
 import { NotificationProvider } from './hooks/useNotification'
 
 export const App = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState({
+    left: false,
+    right: false
+  })
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('mode')
     return savedMode ? savedMode === 'dark' : true
   })
   const { user } = useAuth()
-  const location = useLocation()
   const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
 
-  useEffect(() => {
-    setIsSidebarOpen(false)
-  }, [location])
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
+  const toggleSidebar = (side) => {
+    setIsSidebarOpen((prev) => ({
+      ...prev,
+      [side]: !prev[side]
+    }))
   }
 
   const toggleDarkMode = () => {
@@ -88,22 +94,22 @@ export const App = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/*" element={<Navigate to="/" />} />
-            <Route path="/agregar-archivo" element={<GestionArchivo />} />
           </Routes>
         </main>
 
-        <Footer isDarkMode={isDarkMode} />
-        {notification && (
-          <NotificationBar
-            message={notification.message}
-            type={notification.type}
-            duration={notification.duration}
-            onClose={closeNotification}
-          />
-        )}
+            <Footer isDarkMode={isDarkMode} />
+            {notification && (
+              <NotificationBar
+                message={notification.message}
+                type={notification.type}
+                duration={notification.duration}
+                onClose={closeNotification}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </NotificationProvider>
   )
 }
-
 export default App

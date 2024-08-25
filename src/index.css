@@ -1,6 +1,304 @@
 /* src/index.css
 Este este archivo se encarga de la configuración de los estilos globales.*/
+/* Define variables CSS para la tipografía */
+:root {
+  --font-family-primary: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+  --font-size-base: 1rem;
+  /* 1rem = 16px por defecto */
+  --line-height-base: 1.618;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+}
 
+/* Tipografía con razón áurea */
+body {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+span,
+b,
+i,
+strong,
+em,
+ul,
+ol,
+li,
+a,
+code {
+  font-family: var(--font-family-primary);
+  line-height: var(--line-height-base);
+}
+
+/* Tamaños de fuente basados en la proporción áurea */
+h1 {
+  font-size: 2.44rem;
+}
+
+/* 39px */
+h2 {
+  font-size: 2.06rem;
+}
+
+/* 33px */
+h3 {
+  font-size: 1.87rem;
+}
+
+/* 30px */
+h4 {
+  font-size: 1.69rem;
+}
+
+/* 27px */
+h5 {
+  font-size: 1.5rem;
+}
+
+/* 24px */
+h6 {
+  font-size: 1.31rem;
+}
+
+p,
+ul,
+ol,
+li {
+  font-size: 1.1rem;
+}
+
+blockquote {
+  font-size: 1.3rem;
+}
+
+/* 30px */
+pre {
+  font-size: 1.19rem;
+}
+
+span,
+b,
+i,
+strong,
+em,
+a,
+code {
+  font-size: 0.75em;
+  /* Usar unidades relativas para spans */
+  font-size-adjust: 0.5;
+  /* Ajustar el tamaño de la fuente para mejorar la legibilidad */
+}
+
+/* 16px */
+
+/* Consultas de medios para adaptabilidad */
+@media (max-width: 1200px) {
+  :root {
+    --font-size-base: 0.875rem;
+    /* 14px */
+  }
+
+  h1 {
+    font-size: 2.13rem;
+  }
+
+  /* 34px */
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  /* 29px */
+  h3 {
+    font-size: 1.63rem;
+  }
+
+  /* 26px */
+  h4 {
+    font-size: 1.5rem;
+  }
+
+  /* 24px */
+  h5 {
+    font-size: 1.31rem;
+  }
+
+  /* 21px */
+  h6 {
+    font-size: 1.13rem;
+  }
+
+  p,
+  ul,
+  ol,
+  li {
+    font-size: 1rem;
+  }
+
+  /* 21px */
+  blockquote {
+    font-size: 1.63rem;
+  }
+
+  /* 26px */
+  pre {
+    font-size: 1rem;
+  }
+
+    span,
+    b,
+    i,
+    strong,
+    em,
+    a,
+    code {
+      font-size: 0.75em;
+    }
+
+  /* 14px */
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 0.75rem;
+    /* 12px */
+  }
+
+  h1 {
+    font-size: 1.83rem;
+  }
+
+  /* 29px */
+  h2 {
+    font-size: 1.54rem;
+  }
+
+  /* 24px */
+  h3 {
+    font-size: 1.4rem;
+  }
+
+  /* 22px */
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  /* 20px */
+  h5 {
+    font-size: 1.13rem;
+  }
+
+  /* 18px */
+  h6 {
+    font-size: 1rem;
+  }
+
+  p,
+  ul,
+  ol,
+  li {
+    font-size: 0.9rem;
+  }
+
+  /* 18px */
+  blockquote {
+    font-size: 1.4rem;
+  }
+
+  /* 22px */
+  pre {
+    font-size: 0.94rem;
+  }
+
+    span,
+    b,
+    i,
+    strong,
+    em,
+    a,
+    code {
+      font-size: 0.75em;
+    }
+
+  /* 12px */
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: 0.625rem;
+    /* 10px */
+  }
+
+  h1 {
+    font-size: 1.53rem;
+  }
+
+  /* 24px */
+  h2 {
+    font-size: 1.28rem;
+  }
+
+  /* 20px */
+  h3 {
+    font-size: 1.16rem;
+  }
+
+  /* 18px */
+  h4 {
+    font-size: 1.06rem;
+  }
+
+  /* 17px */
+  h5 {
+    font-size: 0.94rem;
+  }
+
+  /* 15px */
+  h6 {
+    font-size: 0.83rem;
+  }
+
+  /* 13px */
+  p,
+  ul,
+  ol,
+  li {
+    font-size: 0.94rem;
+  }
+
+  /* 15px */
+  blockquote {
+    font-size: 1.16rem;
+  }
+
+  /* 18px */
+  pre {
+    font-size: 0.74rem;
+  }
+
+  /* 12px */
+  span,
+  b,
+  i,
+  strong,
+  em,
+  a,
+  code {
+    font-size: var(--font-size-base);/* 10px */
+  }
+}
+
+/* Estilos globales */
 * {
   min-width: 0;
   /* Evita problemas con el desbordamiento en Flexbox y Grid. */
@@ -17,9 +315,14 @@ svg {
   /* Impide que estos elementos se extiendan más allá del ancho de su contenedor. */
 }
 
+/* Nuevos estilos */
+html,
 body {
+  height: 100%;
   margin: 0;
-  /* Elimina los márgenes predeterminados del navegador para el elemento body. */
+}
+
+body {
   transition: background-color 0.3s, color 0.3s;
   /* Agrega una transición suave para el cambio de modo. */
 }
@@ -57,13 +360,12 @@ p {
   /* Quitar el subrayado */
 }
 
-.dark-mode a:hover {
-  color: #b3c7ff;
-}
-
 .dark-mode button {
-  background-color: #333333;
+  background-color: #0a0a0a;
   color: #ffffff;
+  border-radius: 20px;
+  border-width: 2px;
+  border-style: solid;
 }
 
 .dark-mode button:hover {
@@ -85,28 +387,56 @@ p {
 .light-mode button {
   background-color: #f0f0f0;
   color: #000000;
+  border-radius: 20px;
+  border-width: 2px;
+  border-style: solid;
+  
 }
 
 .light-mode button:hover {
   background-color: #d0d0d0;
 }
 
-.seccion-contenido {
-  padding-top: 80px;
-}
-
-/* Nuevos estilos */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
 .main-container {
-  display: flex;
-  flex-direction: column;
+  margin-top: 87px; /* Altura de la barra de navegación */
+
+  @media screen and (max-width: 1200px) {
+    margin-top: 70px;
+  }
   min-height: 100vh;
+  background-image: url('./assets/entrada.avif');
+  /* Ruta relativa a la imagen en la carpeta assets */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  /* Asegura que el pseudo-elemento no se desborde */
+  z-index: 1;
+  /* Asegura que el contenedor principal esté por encima del pseudo-elemento */
+}
+
+.main-container::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  /* Ajusta estos valores para asegurar que cubra completamente el contenedor */
+  right: -80px;
+  bottom: -80px;
+  left: -80px;
+  background: inherit;
+  filter: blur(40px) grayscale(100%);
+  /* Efecto de blanco y negro y desenfoque */
+  z-index: -1;
+  /* Asegura que el pseudo-elemento esté detrás del contenido */
+  background-image: url('./assets/entrada.avif');
+  /* Asegura que el pseudo-elemento tenga la misma imagen de fondo */
+  background-size: cover;
+  background-position: center;
 }
 
 .content {
-  flex: 1;
+  position: relative;
+  /* Asegura que el contenido esté por encima del pseudo-elemento */
+  z-index: 2;
+  /* Asegura que el contenido esté por encima del pseudo-elemento */
 }

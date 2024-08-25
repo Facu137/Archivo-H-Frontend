@@ -5,28 +5,61 @@ src
 │   └── axiosConfig.js
 ├── assets
 ├── components
+│   ├── ConversionKeyManager
 │   ├── Footer
+│   |   └── Footer.css
+│   |   └── Footer.jsx
+│   ├── LeftSidebar
 │   ├── NavBar
-│   └── RightSidebar
+│   |   └── NavBar.css
+│   |   └── NavBar.jsx
+│   ├── NotificationBar
+│   ├── RequestEmployeeCard
+│   ├── RightSidebar
+│   ├── Tooltip
+│   ├── UserCard
+│   └── AuthenticatedRoute.jsx
 ├── context
 │   └── AuthContext.jsx
 ├── hooks
+│   └── useNotification.jsx
 ├── pages
 │   ├── EditUser
 │   ├── ForgotPassword
 │   ├── GestionArchivo
+│   ├── GestionarEmpleados
 │   ├── Home
+│   ├── Institucional
 │   ├── Login
 │   ├── MiCuenta
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo
+│   |   └── ImageViewer.css
+│   |   └── ImageViewer.jsx
+│   |   └── PdfViewer.css
+│   |   └── PdfViewer.jsx
+│   |   └── VerArchivo.css
+│   |   └── VerArchivo.jsx
+|   └── Buscador
+|       └── AdvancedSearchForm.css
+|       └── AdvancedSearchForm.jsx
+|       └── Buscador.css
+|       └── Buscador.jsx
+|       └── ResultCard.css
+|       └── ResultCard.jsx
+|       └── ResultsContainer.css
+|       └── ResultsContainer.jsx
+|       └── SearchContainer.css
+|       └── SearchContainer.jsx
+|       └── SimpleSearchForm.css
+|       └── SimpleSearchForm.jsx
 ├── schemas
 │   └── authSchemas.js
 ├── utils
 ├── App.jsx
 ├── index.css
-├── main.jsx
+└── main.jsx
 .eslintrc.json
 .gitattributes
 .gitignore

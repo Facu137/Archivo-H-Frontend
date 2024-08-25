@@ -1,0 +1,41 @@
+/* src/pages/Buscador/AdvancedSearchForm.css */
+#advanced-search-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#categoria {
+  margin-bottom: 20px; /* Espacio razonable entre la barra de categorías y los campos de búsqueda */
+}
+
+#campos-busqueda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#campos-busqueda input {
+  flex: 1 1 calc(25% - 10px); /* Ajusta según sea necesario */
+  min-width: 200px; /* Ajusta según sea necesario */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  align-self: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px; /* Espacio razonable entre los campos de búsqueda y el botón de búsqueda */
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}

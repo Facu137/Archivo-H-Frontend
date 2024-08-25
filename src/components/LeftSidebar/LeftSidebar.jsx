@@ -1,57 +1,48 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
 import {
   FaEdit,
   FaFile,
   FaTrash,
   FaHistory,
   FaUserFriends,
-  FaHome,
-  FaBars
+  FaCog
 } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './LeftSidebar.css'
 
-const LeftSidebar = () => {
+const LeftSidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth()
-  const [isOpen, setIsOpen] = useState(false)
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
-
-  if (!user) {
+  if (!user || (user.rol !== 'empleado' && user.rol !== 'administrador')) {
     return null
   }
 
   return (
     <>
-      <button className="open-sidebar-button" onClick={toggleSidebar}>
-        <FaBars />
-      </button>
-      {isOpen && (
-        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
-      )}
+      {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
       <div className={`left-sidebar ${isOpen ? 'open' : ''}`}>
-      {user.role === 'Empleado' && (
+        <button className="left-close-button" onClick={onClose}>
+          ×
+        </button>
+        <div className="left-sidebar-content">
           <div className="sidebar-section">
           <h3>Archivos</h3>
           <ul>
             <li>
-            <FaFile /> <Link to="/agregar-archivo">Agregar Archivo</Link>
+              <FaFile /> <a href="/agregar-archivo">Agregar Archivo</a>
             </li>
             <li>
-            <FaEdit /> <Link to="/editar-archivo">Editar o Eliminar Archivo</Link>
+              <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
             </li>
             <li>
               <FaHistory />{' '}
-              <Link to="/historial-archivos">
-                  Historial de Archivos Modificados
-                </Link>
+              <a href="/historial-archivos">
+                Historial de Archivos Modificados
+              </a>
             </li>
             <li>
-            <FaTrash /> <Link to="/archivos-eliminados">Archivos Eliminados</Link>
+              <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
             </li>
           </ul>
         </div>
@@ -61,12 +52,12 @@ const LeftSidebar = () => {
             <h3>Administración</h3>
             <ul>
               <li>
-              <FaUserFriends />
-              <Link to="/gestionar-empleados">Gestionar Empleados</Link>
+                <FaUserFriends />{' '}
+                <a href="/gestionar-empleados">Gestionar Empleados</a>
               </li>
               <li>
-              <FaHome />
-              <Link to="/editar-portada">Editar Portada e Institucional</Link>
+                <FaHome />{' '}
+                <a href="/editar-portada">Editar Portada e Institucional</a>
               </li>
             </ul>
           </div>
@@ -74,6 +65,11 @@ const LeftSidebar = () => {
       </div>
     </>
   )
+}
+
+LeftSidebar.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
 }
 
 export default LeftSidebar
