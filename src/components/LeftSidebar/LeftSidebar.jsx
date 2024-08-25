@@ -1,7 +1,5 @@
-// src/components/LeftSidebar/LeftSidebar.jsx
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom' // Importa Link
+// src/components/RightSidebar/RightSidebar.jsx
+import React, { useState } from 'react'
 import {
   FaEdit,
   FaFile,
@@ -29,51 +27,41 @@ const LeftSidebar = ({ isOpen, onClose }) => {
         </button>
         <div className="left-sidebar-content">
           <div className="sidebar-section">
-            <h3>Archivos</h3>
+          <h3>Archivos</h3>
+          <ul>
+            <li>
+              <FaFile /> <a href="/agregar-archivo">Agregar Archivo</a>
+            </li>
+            <li>
+              <FaEdit /> <a href="/editar-archivo">Editar o Eliminar Archivo</a>
+            </li>
+            <li>
+              <FaHistory />{' '}
+              <a href="/historial-archivos">
+                Historial de Archivos Modificados
+              </a>
+            </li>
+            <li>
+              <FaTrash /> <a href="/archivos-eliminados">Archivos Eliminados</a>
+            </li>
+          </ul>
+        </div>
+        )}
+        {user.role === 'admin' && (
+          <div className="sidebar-section">
+            <h3>Administración</h3>
             <ul>
               <li>
-                <FaFile /> <Link to="/agregar-archivo">Agregar Archivo</Link>{' '}
-                {/* Usa Link aquí */}
+                <FaUserFriends />{' '}
+                <a href="/gestionar-empleados">Gestionar Empleados</a>
               </li>
               <li>
-                <FaEdit />{' '}
-                <Link to="/editar-archivo">Editar o Eliminar Archivo</Link>{' '}
-                {/* Usa Link aquí */}
-              </li>
-              <li>
-                <FaHistory />{' '}
-                <Link to="/historial-archivos">
-                  Historial de Archivos Modificados
-                </Link>{' '}
-                {/* Usa Link aquí */}
-              </li>
-              <li>
-                <FaTrash />{' '}
-                <Link to="/archivos-eliminados">Archivos Eliminados</Link>{' '}
-                {/* Usa Link aquí */}
+                <FaHome />{' '}
+                <a href="/editar-portada">Editar Portada e Institucional</a>
               </li>
             </ul>
           </div>
-          {user.rol === 'administrador' && (
-            <div className="sidebar-section">
-              <h3>Administración</h3>
-              <ul>
-                <li>
-                  <FaUserFriends />{' '}
-                  <Link to="/gestionar-empleados">Gestionar Empleados</Link>{' '}
-                  {/* Usa Link aquí */}
-                </li>
-                <li>
-                  <FaCog />{' '}
-                  <Link to="/editar-portada">
-                    Editar Portada e Institucional
-                  </Link>{' '}
-                  {/* Usa Link aquí */}
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </>
   )
