@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import axiosInstance from '../../api/axiosConfig'
-import UserCard from '../../components/UserCard/UserCard'
-import ConversionKeyManager from '../../components/ConversionKeyManager/ConversionKeyManager'
+import ConversionKeyManager from '../GestionarEmpleados/ConversionKeyManager/ConversionKeyManager'
+import PossibleEmployeesList from '../GestionarEmpleados/PossibleEmployeesList/PossibleEmployeesList'
 import { useNotification } from '../../hooks/useNotification'
-import './GestionarEmpleados.css'
+import '../GestionarEmpleados/GestionarEmpleados.css'
 
 export const GestionarEmpleados = () => {
   const { user, token } = useAuth()
@@ -118,24 +118,14 @@ export const GestionarEmpleados = () => {
     }
   }
   return (
-    <div className="gestionar-empleados-container">
+    <div className="gestionar-nuevos-empleados-container">
       <h2>Gestionar Nuevos Empleados</h2>
       <ConversionKeyManager />
-      <div className="employee-list">
-        {possibleEmployees.map((employee) => (
-          <div key={employee.id} className="employee-card-container">
-            <UserCard user={employee} />
-            <div className="buttons-container">
-              <button onClick={() => handleAcceptConversion(employee.id)}>
-                Aceptar
-              </button>
-              <button onClick={() => handleRejectConversion(employee.id)}>
-                Rechazar
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+      <PossibleEmployeesList
+        possibleEmployees={possibleEmployees}
+        onAccept={handleAcceptConversion}
+        onReject={handleRejectConversion}
+      />
     </div>
   )
 }
