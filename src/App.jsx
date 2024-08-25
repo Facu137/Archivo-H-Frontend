@@ -64,63 +64,38 @@ export const App = () => {
   const closeNotification = useCallback(() => {
     setNotification(null)
   }, [])
+  
 
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-        <div className="main-container">
-          <div className="content">
-            <NavBar
-              toggleSidebar={toggleSidebar}
-              toggleDarkMode={toggleDarkMode}
-              isDarkMode={isDarkMode}
-            />
-            {user && (
-              <RightSidebar
-                isOpen={isSidebarOpen.right}
-                onClose={() => toggleSidebar('right')}
-              />
-            )}
-            {user && (
-              <LeftSidebar
-                isOpen={isSidebarOpen.left}
-                onClose={() => toggleSidebar('left')}
-              />
-            )}
+        <NavBar
+          toggleSidebar={toggleSidebar}
+          toggleDarkMode={toggleDarkMode}
+          isDarkMode={isDarkMode}
+        />
+        {user && (
+          <RightSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        )}
+        {user && <LeftSidebar />}
 
-            <main>
-              <Routes>
-                {/* Rutas públicas */}
-                <Route path="/" element={<Home />} />
-                <Route path="/institucional" element={<Institucional />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/registrar" element={<Registrar />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/buscador" element={<Buscador />} />
-                <Route path="/visor" element={<VerArchivo />} />
-
-                {/* Rutas protegidas */}
-                <Route
-                  element={<AuthenticatedRoute element={MiCuenta} />}
-                  path="/cuenta"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={EditUser} />}
-                  path="/editar-usuario"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={GestionArchivo} />}
-                  path="/gestion"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={GestionarEmpleados} />}
-                  path="/gestionar-empleados"
-                />
-
-                <Route path="/*" element={<Navigate to="/" />} />
-              </Routes>
-            </main>
+        <main className="contenido">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/institucional" element={<Institucional />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registrar" element={<Registrar />} />
+            <Route path="/editar-usuario" element={<EditUser />} />
+            <Route path="/gestion" element={<GestionArchivo />} />
+            <Route path="/visor" element={<VerArchivo />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
 
             <Footer isDarkMode={isDarkMode} />
             {notification && (
