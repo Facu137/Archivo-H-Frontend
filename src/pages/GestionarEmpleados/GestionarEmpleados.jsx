@@ -1,23 +1,45 @@
 // src/pages/GestionarEmpleados/GestionarEmpleados.jsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import axiosInstance from '../../api/axiosConfig'
-import ConversionKeyManager from '../GestionarEmpleados/ConversionKeyManager/ConversionKeyManager'
-import PossibleEmployeesList from '../GestionarEmpleados/PossibleEmployeesList/PossibleEmployeesList'
+import ConversionKeyManager from './ConversionKeyManager/ConversionKeyManager'
+import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
+import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
 import { useNotification } from '../../hooks/useNotification'
 import '../GestionarEmpleados/GestionarEmpleados.css'
 
 export const GestionarEmpleados = () => {
   const { user, token } = useAuth()
+  // Estado para el indicador de carga
   const [isLoading, setIsLoading] = useState(true)
+  // Estado para la lista de posibles empleados
   const [possibleEmployees, setPossibleEmployees] = useState([])
+  // Estado para la lista de empleados actuales
+  const [currentEmployees, setCurrentEmployees] = useState([])
+  // Estado para el indicador de notificación
   const showNotification = useNotification()
 
-  useEffect(() => {
-    console.log('GestionarEmpleados: useEffect se ejecutó')
+  // Obtener la lista de empleados actuales
+  const fetchCurrentEmployees = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/admin/list-employees', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setCurrentEmployees(response.data)
+    } catch (error) {
+      console.error('Error al obtener la lista de empleados actuales:', error)
+      showNotification(
+        'Error al obtener la lista de empleados actuales',
+        'error'
+      )
+    }
+  }, [token, showNotification])
 
+  useEffect(() => {
+    // Obtener la lista de posibles empleados
     const fetchPossibleEmployees = async () => {
-      console.log('GestionarEmpleados: fetchPossibleEmployees se ejecutó')
       setIsLoading(true)
       try {
         const response = await axiosInstance.get(
@@ -50,29 +72,23 @@ export const GestionarEmpleados = () => {
 
     // Verifica el rol del usuario DESPUÉS de que se haya cargado la información
     if (user && user.rol === 'administrador') {
-      console.log('GestionarEmpleados: el usuario es administrador')
       fetchPossibleEmployees()
+      fetchCurrentEmployees()
     } else if (user) {
       // Si el usuario está cargado pero no es administrador
-      console.log('GestionarEmpleados: el usuario no es administrador')
       showNotification(
         'No tienes permiso para acceder a esta sección.',
         'error'
       )
       setIsLoading(false)
     }
-  }, [token, user, showNotification])
-
-  console.log('GestionarEmpleados: renderizando componente') // Log para el renderizado del componente
-  console.log('GestionarEmpleados: isLoading:', isLoading) // Log para el estado isLoading
-  console.log('GestionarEmpleados: possibleEmployees:', possibleEmployees) // Log para el estado possibleEmployees
+  }, [token, user, showNotification, fetchCurrentEmployees])
 
   if (isLoading) {
     return <div>Cargando empleados...</div>
   }
-
   if (possibleEmployees.length === 0) {
-    return <div>No se encontraron posibles empleados.</div>
+    return <div>No se encontraron empleados.</div>
   }
   const handleAcceptConversion = async (employeeId) => {
     try {
@@ -86,12 +102,15 @@ export const GestionarEmpleados = () => {
         }
       )
       showNotification('Empleado aceptado con éxito', 'success')
+
       // Actualizar la lista de posibles empleados
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
       )
+
+      // Actualizar la lista de empleados actuales
+      fetchCurrentEmployees() // Llama a la función aquí
     } catch (error) {
-      console.error('Error al aceptar la conversión:', error)
       showNotification('Error al aceptar la conversión', 'error')
     }
   }
@@ -125,7 +144,10 @@ export const GestionarEmpleados = () => {
         possibleEmployees={possibleEmployees}
         onAccept={handleAcceptConversion}
         onReject={handleRejectConversion}
+        onUpdateCurrentEmployees={fetchCurrentEmployees}
       />
+      <h2>Gestionar Empleados Actuales</h2>
+      <CurrentEmployeesList employees={currentEmployees} />
     </div>
   )
 }

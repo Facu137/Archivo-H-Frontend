@@ -3,9 +3,18 @@ import PropTypes from 'prop-types'
 import UserCard from '../../../components/UserCard/UserCard'
 import './PossibleEmployeesList.css'
 
-const PossibleEmployeesList = ({ possibleEmployees, onAccept, onReject }) => {
+const PossibleEmployeesList = ({
+  possibleEmployees,
+  onAccept,
+  onReject,
+  onUpdateCurrentEmployees
+}) => {
   if (possibleEmployees.length === 0) {
     return <div>No se encontraron posibles empleados.</div>
+  }
+  const handleAccept = async (employeeId) => {
+    await onAccept(employeeId) // Llama a la función onAccept que viene del padre
+    onUpdateCurrentEmployees() // Llama a la función para actualizar la lista de empleados actuales
   }
 
   return (
@@ -14,7 +23,7 @@ const PossibleEmployeesList = ({ possibleEmployees, onAccept, onReject }) => {
         <div key={employee.id} className="employee-card-container">
           <UserCard user={employee} />
           <div className="buttons-container">
-            <button onClick={() => onAccept(employee.id)}>Aceptar</button>
+            <button onClick={() => handleAccept(employee.id)}>Aceptar</button>
             <button onClick={() => onReject(employee.id)}>Rechazar</button>
           </div>
         </div>
@@ -33,7 +42,8 @@ PossibleEmployeesList.propTypes = {
     })
   ).isRequired,
   onAccept: PropTypes.func.isRequired,
-  onReject: PropTypes.func.isRequired
+  onReject: PropTypes.func.isRequired,
+  onUpdateCurrentEmployees: PropTypes.func.isRequired
 }
 
 export default PossibleEmployeesList
