@@ -147,7 +147,10 @@ export const GestionarEmpleados = () => {
         onUpdateCurrentEmployees={fetchCurrentEmployees}
       />
       <h2>Gestionar Empleados Actuales</h2>
-      <CurrentEmployeesList employees={currentEmployees} />
+      <CurrentEmployeesList
+        employees={currentEmployees}
+        setCurrentEmployees={setCurrentEmployees}
+      />
     </div>
   )
 }

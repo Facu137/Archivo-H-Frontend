@@ -1,0 +1,78 @@
+/* src/pages/GestionarEmpleados/CurrentEmployeesList/CurrentEmployeesList.css */
+
+.employee-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    /* Diseño responsivo en grilla */
+    grid-gap: 20px;
+}
+
+/* Estilos para el contenedor de la tarjeta del empleado */
+.employee-card-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Sombra suave */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centra el contenido horizontalmente */
+}
+
+/* Estilos para los botones */
+.buttons-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    /* Ocupa todo el ancho del contenedor */
+}
+
+.buttons-container button {
+    background-color: #4CAF50;
+    /* Color verde para el botón "Aceptar" */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buttons-container button:nth-child(2) {
+    /* Estilos para el botón "Rechazar" */
+    background-color: #f44336;
+    /* Color rojo para el botón "Rechazar" */
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .employee-card-container {
+    border-color: #555;
+    background-color: #222;
+}
+
+.dark-mode .buttons-container button {
+    color: #fff;
+}
+
+.employee-details {
+    margin-top: 10px;
+    text-align: left;
+    /* Alinea el texto a la izquierda */
+}
+
+.employee-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.employee-info-item strong {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.employee-permissions {
+    margin-bottom: 10px;
+}
