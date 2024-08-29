@@ -1,0 +1,16 @@
+/* src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeDetails/EmployeeDetails.css */
+.employee-details {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.employee-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.employee-info-item strong {
+    margin-right: 5px;
+    font-weight: bold;
+}
