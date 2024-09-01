@@ -81,8 +81,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
                       if (userData.permisos[backend]) {
                         return (
                           <div key={backend} className="employee-info-item">
-                            <strong>{frontend}:</strong>{' '}
-                            {/* Elimina el estilo inline */}
+                            <strong>{frontend}:</strong>
                             <span>Habilitado</span>
                           </div>
                         )

@@ -1,8 +1,8 @@
-// src\components\ConversionKeyManager\ConversionKeyManager.jsx
+// src/pages/GestionarEmpleados/ConversionKeyManager/ConversionKeyManager.jsx
 import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../context/AuthContext'
-import axiosInstance from '../../api/axiosConfig'
-import { useNotification } from '../../hooks/useNotification'
+import { useAuth } from '../../../context/AuthContext'
+import axiosInstance from '../../../api/axiosConfig'
+import { useNotification } from '../../../hooks/useNotification'
 import './ConversionKeyManager.css' // Importa el archivo CSS
 
 const ConversionKeyManager = () => {
