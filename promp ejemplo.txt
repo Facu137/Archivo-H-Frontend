@@ -31,6 +31,18 @@ src
 │   │   ├── ConversionKeyManager
 │   │   │   ├── ConversionKeyManager.css
 │   │   │   └── ConversionKeyManager.jsx
+│   │   ├── CurrentEmployeesList
+│   │   │   ├── EmployeeDetails
+│   │   │   │   ├── EmployeeDetails.css
+│   │   │   │   └── EmployeeDetails.jsx
+│   │   │   ├── EmployeeList
+│   │   │   │   ├── EmployeeList.css
+│   │   │   │   └── EmployeeList.jsx
+│   │   │   ├── SuccessorSection
+│   │   │   │   ├── SuccessorSection.css
+│   │   │   │   └── SuccessorSection.jsx
+│   │   │   ├── CurrentEmployeesList.css
+│   │   │   └── CurrentEmployeesList.jsx
 │   │   ├── PossibleEmployeesList
 │   │   │   ├── PossibleEmployeesList.css
 │   │   │   └── PossibleEmployeesList.jsx
