@@ -87,9 +87,6 @@ export const GestionarEmpleados = () => {
   if (isLoading) {
     return <div>Cargando empleados...</div>
   }
-  if (possibleEmployees.length === 0) {
-    return <div>No se encontraron empleados.</div>
-  }
   const handleAcceptConversion = async (employeeId) => {
     try {
       await axiosInstance.post(
@@ -109,7 +106,7 @@ export const GestionarEmpleados = () => {
       )
 
       // Actualizar la lista de empleados actuales
-      fetchCurrentEmployees() // Llama a la función aquí
+      fetchCurrentEmployees()
     } catch (error) {
       showNotification('Error al aceptar la conversión', 'error')
     }
