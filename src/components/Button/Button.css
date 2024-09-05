@@ -1,0 +1,22 @@
+css
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.primary {
+  background-color: blue;
+  color: white;
+}
+
+.dark-mode {
+  background-color: gray;
+  color: white;
+}
+
+.light-mode {
+  background-color: blue;
+  color: white;
+}
