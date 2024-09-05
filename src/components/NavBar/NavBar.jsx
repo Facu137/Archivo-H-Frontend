@@ -14,6 +14,8 @@ import {
 import { useAuth } from '../../context/AuthContext'
 import logo from '../../assets/logo.svg'
 import './NavBar.css'
+import Button from '../AllButton/AllButton'
+
 
 export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
   const { user } = useAuth()
@@ -92,14 +94,14 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
               {!isMobile && <span className="nav-text">Buscar</span>}
             </Link>
 
-            <button onClick={toggleDarkMode} className="nav-button">
-              <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
+
+            <AllButton onClick={toggleDarkMode} icon={isDarkMode ? faSun : faMoon}>
               {!isMobile && (
                 <span className="nav-text">
                   {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
                 </span>
               )}
-            </button>
+            </AllButton>
             <button onClick={handleAccountClick} className="nav-button">
               <FontAwesomeIcon icon={user ? faUser : faSignInAlt} />
               <span className="nav-text">
@@ -116,5 +118,8 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
 NavBar.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
   toggleDarkMode: PropTypes.func.isRequired,
-  isDarkMode: PropTypes.bool.isRequired
-}
+  isDarkMode: PropTypes.bool.isRequired,
+  isMobile: PropTypes.bool.isRequired,
+  user: PropTypes.object, // O el tipo de dato que uses para el usuario
+  handleAccountClick: PropTypes.func.isRequired,
+};

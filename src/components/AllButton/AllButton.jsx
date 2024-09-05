@@ -1,6 +1,6 @@
 import React from 'react';
 import './Button.css'; // Importa tu archivo CSS
-function Button({ children, onClick, variant }) {
+function AllButton({ children, onClick, variant }) {
   const theme = useTheme(); // Hook personalizado o contexto para obtener el tema actual
   return (
     <button 
@@ -12,4 +12,4 @@ function Button({ children, onClick, variant }) {
     </button>
   );
 }
-export default Button;
+export default AllButton;

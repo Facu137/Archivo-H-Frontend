@@ -9,10 +9,10 @@ header {
   top: 0;
   left: 0;
   z-index: 1000;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-  position: fixed;
+  transition: background-color 0.3s, color 0.3s;
+  position: fixed; 
+  background: linear-gradient(to top, #191929, #191929); /* Fondo oscuro por defecto */
+  color: white; /* Texto blanco por defecto */
 }
 
 .navbar {
@@ -115,3 +115,25 @@ header {
     display: none;
   }
 }
+
+/* Estilos específicos para modo claro */
+.light-mode .navbar { 
+  background: linear-gradient(to top, #c8cdd0, #c8cdd0);
+  color: black; 
+}
+
+.light-mode .title {
+  border-left: #000 5px solid; /* Borde oscuro en modo claro */
+}
+
+.light-mode .nav-button {
+  background-color: #f8f9fa; /* Fondo claro para botones */
+  color: black; /* Texto oscuro para botones */
+  border: 2px solid #000;
+}
+
+.light-mode .nav-button:hover {
+  background-color: #e2e6ea; /* Hover más oscuro en modo claro */
+  color: black;
+}
+
