@@ -54,12 +54,6 @@ const UserCard = ({ user, className }) => {
         </div>
         <div className="user-info">
           <div className="user-info-item">
-            <strong style={{ color: roleColor }}>Rol:</strong>
-            <Tooltip content={capitalizeFirstLetter(user.rol)}>
-              <span>{truncateString(capitalizeFirstLetter(user.rol), 14)}</span>
-            </Tooltip>
-          </div>
-          <div className="user-info-item">
             <strong style={{ color: roleColor }}>Nombres:</strong>
             <Tooltip content={user.nombre}>
               <span>{truncateString(user.nombre || '', 14)}</span>
@@ -75,6 +69,12 @@ const UserCard = ({ user, className }) => {
             <strong style={{ color: roleColor }}>Email:</strong>
             <Tooltip content={user.email}>
               <span>{truncateString(user.email || '', 14)}</span>
+            </Tooltip>
+          </div>
+          <div className="user-info-item">
+            <strong style={{ color: roleColor }}>Rol:</strong>
+            <Tooltip content={capitalizeFirstLetter(user.rol)}>
+              <span>{truncateString(capitalizeFirstLetter(user.rol), 14)}</span>
             </Tooltip>
           </div>
         </div>

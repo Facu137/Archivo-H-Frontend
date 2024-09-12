@@ -1,0 +1,76 @@
+/* src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeList/EmployeeList.css */
+.employee-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+/* Estilos para el contenedor de la tarjeta del empleado */
+.employee-card-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilos para los botones */
+.buttons-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.buttons-container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.buttons-container button:nth-child(2) {
+    background-color: #f44336;
+}
+
+/* Estilos para los botones deshabilitados */
+.buttons-container button:disabled {
+    background-color: #b0b0b0;
+    /* Color gris para botones deshabilitados */
+    cursor: not-allowed;
+    opacity: 0.6;
+    /* Opacidad reducida para indicar deshabilitado */
+}
+
+/* Hover para botones no deshabilitados */
+.buttons-container button:not(:disabled):hover {
+    background-color: #45a049;
+    /* Oscurece un poco el verde */
+}
+
+.buttons-container button:nth-child(2):not(:disabled):hover {
+    background-color: #e53935;
+    /* Oscurece un poco el rojo */
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .employee-card-container {
+    border-color: #555;
+    background-color: #222;
+}
+
+.dark-mode .buttons-container button {
+    color: #fff;
+}
+
+.dark-mode .buttons-container button:disabled {
+    background-color: #444;
+    /* Color más oscuro para el modo oscuro */
+    opacity: 0.4;
+}

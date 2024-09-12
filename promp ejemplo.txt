@@ -5,14 +5,13 @@ src
 │   └── axiosConfig.js
 ├── assets
 ├── components
-│   ├── ConversionKeyManager
 │   ├── Footer
-│   |   └── Footer.css
-│   |   └── Footer.jsx
+│   │   ├── Footer.css
+│   │   └── Footer.jsx
 │   ├── LeftSidebar
 │   ├── NavBar
-│   |   └── NavBar.css
-│   |   └── NavBar.jsx
+│   │   ├── NavBar.css
+│   │   └── NavBar.jsx
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
@@ -24,10 +23,31 @@ src
 ├── hooks
 │   └── useNotification.jsx
 ├── pages
+│   ├── Buscador
 │   ├── EditUser
 │   ├── ForgotPassword
 │   ├── GestionArchivo
 │   ├── GestionarEmpleados
+│   │   ├── ConversionKeyManager
+│   │   │   ├── ConversionKeyManager.css
+│   │   │   └── ConversionKeyManager.jsx
+│   │   ├── CurrentEmployeesList
+│   │   │   ├── EmployeeDetails
+│   │   │   │   ├── EmployeeDetails.css
+│   │   │   │   └── EmployeeDetails.jsx
+│   │   │   ├── EmployeeList
+│   │   │   │   ├── EmployeeList.css
+│   │   │   │   └── EmployeeList.jsx
+│   │   │   ├── SuccessorSection
+│   │   │   │   ├── SuccessorSection.css
+│   │   │   │   └── SuccessorSection.jsx
+│   │   │   ├── CurrentEmployeesList.css
+│   │   │   └── CurrentEmployeesList.jsx
+│   │   ├── PossibleEmployeesList
+│   │   │   ├── PossibleEmployeesList.css
+│   │   │   └── PossibleEmployeesList.jsx
+│   │   ├── GestionarEmpleados.css
+│   │   └── GestionarEmpleados.jsx
 │   ├── Home
 │   ├── Institucional
 │   ├── Login
@@ -35,25 +55,6 @@ src
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo
-│   |   └── ImageViewer.css
-│   |   └── ImageViewer.jsx
-│   |   └── PdfViewer.css
-│   |   └── PdfViewer.jsx
-│   |   └── VerArchivo.css
-│   |   └── VerArchivo.jsx
-|   └── Buscador
-|       └── AdvancedSearchForm.css
-|       └── AdvancedSearchForm.jsx
-|       └── Buscador.css
-|       └── Buscador.jsx
-|       └── ResultCard.css
-|       └── ResultCard.jsx
-|       └── ResultsContainer.css
-|       └── ResultsContainer.jsx
-|       └── SearchContainer.css
-|       └── SearchContainer.jsx
-|       └── SimpleSearchForm.css
-|       └── SimpleSearchForm.jsx
 ├── schemas
 │   └── authSchemas.js
 ├── utils

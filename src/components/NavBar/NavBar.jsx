@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBuilding,
@@ -18,12 +18,13 @@ import './NavBar.css'
 export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
   const { user } = useAuth()
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+  const navigate = useNavigate()
 
   const handleAccountClick = () => {
     if (user) {
       toggleSidebar('right')
     } else {
-      window.location.href = '/login'
+      navigate('/login')
     }
   }
 
