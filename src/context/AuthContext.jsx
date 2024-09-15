@@ -153,6 +153,7 @@ export const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
+        refreshAccessToken, // Exportar refreshAccessToken
         isLoading,
         updateUser: fetchUser,
         addFavorite,

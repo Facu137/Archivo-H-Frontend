@@ -41,11 +41,13 @@ const EmployeeList = ({
   }
 
   const handleInputChange = (event) => {
-    const { name, checked } = event.target
-    setEditedEmployeeData({
-      ...editedEmployeeData,
-      [name]: checked
-    })
+    const { name, checked } = event.target // Extraemos name y checked del evento
+    console.log(`Campo actualizado: ${name}, Valor: ${checked}`)
+    // Actualiza el estado de manera inmutable
+    setEditedEmployeeData((prevData) => ({
+      ...prevData,
+      [name]: checked // Solo se actualiza el campo del toggle switch
+    }))
   }
 
   const handleSaveChanges = async () => {

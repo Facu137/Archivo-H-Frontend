@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../context/AuthContext'
 import axiosInstance from '../../../api/axiosConfig'
 import { useNotification } from '../../../hooks/useNotification'
-import './ConversionKeyManager.css' // Importa el archivo CSS
+import ToggleSwitch from '../../../components/ToggleSwitch/ToggleSwitch'
+import './ConversionKeyManager.css'
 
 const ConversionKeyManager = () => {
   const { user, token } = useAuth()
@@ -15,7 +16,6 @@ const ConversionKeyManager = () => {
   useEffect(() => {
     const fetchConversionKey = async () => {
       try {
-        // Construye la URL con el route parameter
         const response = await axiosInstance.get(
           `/admin/get-conversion-key/${user.id}`,
           {
@@ -24,7 +24,7 @@ const ConversionKeyManager = () => {
             }
           }
         )
-        setConversionKey(response.data.claveConversion) // Actualiza solo conversionKey
+        setConversionKey(response.data.claveConversion)
       } catch (error) {
         console.error('Error al obtener la clave de conversión:', error)
         showNotification('Error al obtener la clave de conversión', 'error')
@@ -33,8 +33,6 @@ const ConversionKeyManager = () => {
 
     const fetchSearchStatus = async () => {
       try {
-        // Implementar la lógica para obtener el estado de la búsqueda (habilitada/deshabilitada)
-        // Ejemplo:
         const response = await axiosInstance.get(
           `/admin/get-search-status/${user.id}`,
           {
@@ -56,21 +54,20 @@ const ConversionKeyManager = () => {
     }
   }, [token, user, showNotification])
 
-  // Sincroniza newConversionKey con conversionKey
   useEffect(() => {
     setNewConversionKey(conversionKey)
   }, [conversionKey])
 
-  const handleSearchEnabledChange = async (event) => {
-    const isEnabled = event.target.checked
-    setIsSearchEnabled(isEnabled)
+  const handleSearchEnabledChange = async () => {
+    const newIsEnabled = !isSearchEnabled
+    setIsSearchEnabled(newIsEnabled)
 
     try {
       await axiosInstance.put(
         '/admin/update-search-new-employees',
         {
           personaId: user.id,
-          habilitarBusquedaEmpleados: isEnabled
+          habilitarBusquedaEmpleados: newIsEnabled
         },
         {
           headers: {
@@ -79,7 +76,7 @@ const ConversionKeyManager = () => {
         }
       )
       showNotification(
-        `Búsqueda de nuevos empleados ${isEnabled ? 'activada' : 'desactivada'}`,
+        `Búsqueda de nuevos empleados ${newIsEnabled ? 'activada' : 'desactivada'}`,
         'success'
       )
     } catch (error) {
@@ -118,17 +115,11 @@ const ConversionKeyManager = () => {
     <div className="conversion-key-manager">
       <div className="search-toggle">
         <label htmlFor="searchEnabled">Búsqueda de nuevos empleados:</label>
-        <span className="switch-container">
-          <label className="switch" htmlFor="searchEnabled">
-            <input
-              type="checkbox"
-              id="searchEnabled"
-              checked={isSearchEnabled}
-              onChange={handleSearchEnabledChange}
-            />
-            <span className="slider round"></span>
-          </label>
-        </span>
+        <ToggleSwitch
+          isOn={isSearchEnabled}
+          handleToggle={handleSearchEnabledChange}
+          onColor="#4BD865"
+        />
         <span className="search-status">
           {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
         </span>
@@ -141,7 +132,7 @@ const ConversionKeyManager = () => {
         <input
           type="text"
           id="conversionKey"
-          value={newConversionKey} // Vinculado a newConversionKey
+          value={newConversionKey}
           onChange={handleConversionKeyChange}
           disabled={!isSearchEnabled}
         />
