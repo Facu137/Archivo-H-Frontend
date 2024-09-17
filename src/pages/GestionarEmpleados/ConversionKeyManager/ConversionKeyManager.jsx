@@ -4,6 +4,7 @@ import { useAuth } from '../../../context/AuthContext'
 import axiosInstance from '../../../api/axiosConfig'
 import { useNotification } from '../../../hooks/useNotification'
 import ToggleSwitch from '../../../components/ToggleSwitch/ToggleSwitch'
+import searchEmployeeImage from '../../../assets/topaz-inaguracion-AH.avif'
 import './ConversionKeyManager.css'
 
 const ConversionKeyManager = () => {
@@ -115,33 +116,68 @@ const ConversionKeyManager = () => {
   }
 
   return (
-    <div className="conversion-key-manager">
-      <div className="search-toggle">
-        <label>Búsqueda de nuevos empleados:</label>
-        <ToggleSwitch
-          isOn={Boolean(isSearchEnabled)}
-          handleToggle={handleSearchEnabledChange}
-          onColor="#4BD865"
-        />
-        <span className="search-status">
-          {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
-        </span>
+    <div className="conversion-key-manager-container">
+      <div className="card-config description-card">
+        <h3>Configurar Búsqueda de Nuevos Empleados</h3> {/* Título primero */}
+        <img
+          src={searchEmployeeImage}
+          alt="Búsqueda de Empleados"
+          className="search-image"
+        />{' '}
+        {/* Luego la imagen */}
+        <p>
+          Habilita la búsqueda de nuevos empleados para que los usuarios puedan
+          solicitar unirse al equipo.
+        </p>
+        <p>
+          Define una clave secreta que los usuarios deberán ingresar para enviar
+          su solicitud.
+        </p>
       </div>
-
-      <div className="conversion-key-input">
-        <label htmlFor="conversionKey">
-          Clave para recibir nuevos empleados:
-        </label>
-        <input
-          type="text"
-          id="conversionKey"
-          value={newConversionKey}
-          onChange={handleConversionKeyChange}
-          disabled={!isSearchEnabled}
-        />
-        <button onClick={handleSaveConversionKey} disabled={!isSearchEnabled}>
-          Guardar
-        </button>
+      <div className="card-config settings-card">
+        <div className="search-config">
+          <h3 className="card-title">Habilitar Búsqueda</h3>
+          <div className="search-toggle">
+            {/* Toggle y span juntos */}
+            <label>
+              haz click para habilitar o deshabilitar la búsqueda de nuevos
+              empleados:
+            </label>
+            <div>
+              <ToggleSwitch
+                isOn={Boolean(isSearchEnabled)}
+                handleToggle={handleSearchEnabledChange}
+                onColor="#4BD865"
+              />
+              <span className="search-status">
+                {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="conversion-key-config">
+          <h3 className="card-title">Clave para nuevos empleados</h3>
+          <div className="conversion-key-input">
+            <label htmlFor="conversionKey">
+              Cambiar la clave para que los usuarios puedan solicitar ser nuevos
+              empleados:
+            </label>
+            <input
+              type="text"
+              id="conversionKey"
+              value={newConversionKey}
+              onChange={handleConversionKeyChange}
+              disabled={!isSearchEnabled}
+            />
+            <button
+              onClick={handleSaveConversionKey}
+              disabled={!isSearchEnabled}
+            >
+              Guardar Nueva Clave {/* Nuevo texto del botón */}
+            </button>{' '}
+            {/* Botón debajo del input */}
+          </div>
+        </div>
       </div>
     </div>
   )
