@@ -47,7 +47,6 @@
 
 .description-card h3, .settings-card h3 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
 }
 
 .settings-card {
@@ -59,8 +58,7 @@
 /* Estilos para los títulos de las tarjetas */
 .card-title {
     text-align: center;
-    margin-bottom: 1rem;
-    background-color: var(--bg-color);
+    background-color: #607d8b;
     border-radius: 8px;
 }
 
