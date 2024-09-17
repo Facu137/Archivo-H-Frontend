@@ -18,14 +18,17 @@
 }
 
 /* Estilos para los botones */
-.buttons-container {
+.buttons-container-current-employees {
     margin-top: 10px;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
+    display: grid;
+    /* Utiliza grid */
+    grid-template-columns: 1fr 1fr;
+    /* Dos columnas */
+    grid-gap: 5px;
+    /* Espacio entre los botones */
 }
 
-.buttons-container button {
+.buttons-container-current-employees button {
     background-color: #4CAF50;
     color: white;
     padding: 8px 16px;
@@ -35,12 +38,12 @@
     transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
-.buttons-container button:nth-child(2) {
+.buttons-container-current-employees button:nth-child(2) {
     background-color: #f44336;
 }
 
 /* Estilos para los botones deshabilitados */
-.buttons-container button:disabled {
+.buttons-container-current-employees button:disabled {
     background-color: #b0b0b0;
     /* Color gris para botones deshabilitados */
     cursor: not-allowed;
@@ -49,12 +52,12 @@
 }
 
 /* Hover para botones no deshabilitados */
-.buttons-container button:not(:disabled):hover {
+.buttons-container-current-employees button:not(:disabled):hover {
     background-color: #45a049;
     /* Oscurece un poco el verde */
 }
 
-.buttons-container button:nth-child(2):not(:disabled):hover {
+.buttons-container-current-employees button:nth-child(2):not(:disabled):hover {
     background-color: #e53935;
     /* Oscurece un poco el rojo */
 }
@@ -65,11 +68,11 @@
     background-color: #222;
 }
 
-.dark-mode .buttons-container button {
+.dark-mode .buttons-container-current-employees button {
     color: #fff;
 }
 
-.dark-mode .buttons-container button:disabled {
+.dark-mode .buttons-container-current-employees button:disabled {
     background-color: #444;
     /* Color más oscuro para el modo oscuro */
     opacity: 0.4;

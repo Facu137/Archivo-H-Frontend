@@ -55,19 +55,40 @@ export const Login = () => {
     event.preventDefault()
 
     try {
-      await login({ email, password }) // Utiliza la función login del contexto
+      await login({ email, password }) // Llama la función de inicio de sesión
       showNotification('Inicio de sesión exitoso', 'success')
-      navigate('/')
+      // Redirige al usuario a la página desde donde intentó acceder o a la página principal
+      navigate(location.state?.from || '/', { replace: true })
     } catch (error) {
-      if (error.response && error.response.status === 403) {
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            showNotification('Correo o contraseña incorrectos', 'error')
+            break
+          case 403:
+            showNotification(
+              'Por favor, verifica tu correo electrónico antes de iniciar sesión',
+              'warning'
+            )
+            break
+          case 500:
+            showNotification('Error del servidor. Inténtalo más tarde', 'error')
+            break
+          default:
+            showNotification('Error desconocido. Inténtalo más tarde', 'error')
+        }
+      } else if (error.request) {
+        // Error relacionado con la solicitud (el servidor no respondió)
         showNotification(
-          'Por favor, verifica tu correo electrónico antes de iniciar sesión',
-          'warning'
+          'No se pudo conectar con el servidor. Revisa tu conexión a internet.',
+          'error'
         )
-      } else if (error.response && error.response.status === 401) {
-        showNotification('Correo o contraseña incorrectos', 'error')
       } else {
-        showNotification('Hubo un error al intentar iniciar sesión', 'error')
+        // Otros tipos de errores
+        showNotification(
+          'Hubo un error inesperado al intentar iniciar sesión',
+          'error'
+        )
       }
     }
   }

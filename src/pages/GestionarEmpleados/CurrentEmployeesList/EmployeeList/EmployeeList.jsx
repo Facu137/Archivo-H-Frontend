@@ -152,7 +152,7 @@ const EmployeeList = ({
                 editedEmployeeData={editedEmployeeData}
                 onChange={handleInputChange}
               />
-              <div className="buttons-container">
+              <div className="buttons-container-current-employees">
                 <button onClick={handleSaveChanges}>Guardar Cambios</button>
                 <button onClick={() => handleSetSuccessor(employee.id)}>
                   Establecer Sucesor

@@ -41,7 +41,8 @@ const ConversionKeyManager = () => {
             }
           }
         )
-        setIsSearchEnabled(response.data.habilitarBusquedaEmpleados)
+        // Convertimos explícitamente a booleano
+        setIsSearchEnabled(Boolean(response.data.habilitarBusquedaEmpleados))
       } catch (error) {
         console.error('Error al obtener el estado de la búsqueda:', error)
         showNotification('Error al obtener el estado de la búsqueda', 'error')
@@ -82,6 +83,8 @@ const ConversionKeyManager = () => {
     } catch (error) {
       console.error('Error al actualizar el estado de la búsqueda:', error)
       showNotification('Error al actualizar el estado de la búsqueda', 'error')
+      // Revertimos el cambio en caso de error
+      setIsSearchEnabled(!newIsEnabled)
     }
   }
 
@@ -114,9 +117,9 @@ const ConversionKeyManager = () => {
   return (
     <div className="conversion-key-manager">
       <div className="search-toggle">
-        <label htmlFor="searchEnabled">Búsqueda de nuevos empleados:</label>
+        <label>Búsqueda de nuevos empleados:</label>
         <ToggleSwitch
-          isOn={isSearchEnabled}
+          isOn={Boolean(isSearchEnabled)}
           handleToggle={handleSearchEnabledChange}
           onColor="#4BD865"
         />
