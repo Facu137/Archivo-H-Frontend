@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './GestionArchivo.css';
 import * as zod from 'zod';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState('Mensura');
