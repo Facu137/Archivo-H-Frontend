@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './GestionArchivo.css';
 import * as zod from 'zod';
+import { useAuth } from '../../context/AuthContext';
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState('Mensura');
   const [formFields, setFormFields] = useState([]);
   const [fileUploads, setFileUploads] = useState([]);
+  const { token } = useAuth();
 
   useEffect(() => {
     const createFormFields = () => {
@@ -16,7 +18,7 @@ export const GestionArchivo = () => {
         Leyes_Decretos: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Emisor', 'Destinatario', 'Asunto', 'Fojas'],
         Gobierno: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
         Tierras_Fiscales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-        Tribunales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios']
+        Tribunales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
       };
 
       const fieldList = fields[fileType];
@@ -52,7 +54,7 @@ export const GestionArchivo = () => {
     setFileUploads(updatedFileUploads);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -86,16 +88,47 @@ export const GestionArchivo = () => {
       Asunto: zod.string().optional(),
       Tema: zod.string().optional(),
       Folios: zod.string().optional(),
-      files: zod.array(zod.instanceof(File)).nonempty()
+      files: zod.array(zod.instanceof(File)).nonempty(),
     });
 
     try {
       const validatedData = schema.parse({
         ...Object.fromEntries(formData),
-        files: fileUploads
+        files: fileUploads,
       });
-      // Aquí puedes enviar formData al servidor usando fetch o XMLHttpRequest
-      console.log(validatedData);
+
+      // Determinar la ruta del endpoint según el tipo de archivo
+      let endpoint;
+      switch (fileType) {
+        case 'Mensura':
+          endpoint = '/documents/upload/mensura';
+          break;
+        case 'Notarial':
+          endpoint = '/documents/upload/notarial';
+          break;
+        default:
+          endpoint = '/documents/upload/general';
+          break;
+      }
+
+      // Enviar la petición al backend
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+           Authorization: `Bearer ${token}`
+          // Agrega el token de autenticación si es necesario
+          // Authorization: `Bearer ${token}` 
+        },
+      });
+
+      if (response.ok) {
+        console.log('Archivo subido correctamente');
+        // Puedes mostrar un mensaje de éxito al usuario, redirigirlo a otra página, etc.
+      } else {
+        console.error('Error al subir el archivo:', response.status);
+        // Puedes mostrar un mensaje de error al usuario
+      }
     } catch (error) {
       console.error('Validation error:', error);
     }
@@ -151,7 +184,9 @@ export const GestionArchivo = () => {
           ))}
         </div>
 
-        <button type="submit" className="submit-button">Guardar</button>
+        <button type="submit" className="submit-button">
+          Guardar
+        </button>
       </form>
     </div>
   );
