@@ -29,9 +29,6 @@ const SuccessorSection = ({
 
   return (
     <div className="successor-section-card-config">
-      {' '}
-      {/* Nueva clase para la tarjeta */}
-      <h3>Sucesor del Administrador</h3>
       {successor ? (
         <div className="successor-card-container">
           <UserCard user={successor} />
@@ -44,10 +41,6 @@ const SuccessorSection = ({
           <p>No hay un sucesor asignado.</p>
         </div>
       )}
-      <p className="successor-description">
-        Es importante asignar un sucesor, ya que este empleado será quien
-        reemplace al administrador en caso de que este elimine su cuenta.
-      </p>
     </div>
   )
 }

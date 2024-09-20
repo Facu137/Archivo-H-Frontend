@@ -135,8 +135,8 @@ export const GestionarEmpleados = () => {
   }
   return (
     <>
+      <h2>Gestionar Nuevos Empleados</h2>
       <div className="gestionar-nuevos-empleados-container">
-        <h2>Gestionar Nuevos Empleados</h2>
         <ConversionKeyManager />
         <PossibleEmployeesList
           possibleEmployees={possibleEmployees}
@@ -152,7 +152,6 @@ export const GestionarEmpleados = () => {
           setCurrentEmployees={setCurrentEmployees}
         />
       </div>
-      <h2>Gestionar Empleados Actuales</h2>
     </>
   )
 }

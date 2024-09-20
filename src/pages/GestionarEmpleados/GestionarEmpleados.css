@@ -1,5 +1,11 @@
 /* src/pages/GestionarEmpleados/GestionarEmpleados.css */
 
+.gestionar-nuevos-empleados-container {
+    display: flex;
+    
+    gap: 20px;
+}
+
 .gestionar-nuevos-empleados-container .gestionar-empleados-actuales-container{
     padding: 20px;
 }

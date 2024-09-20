@@ -80,8 +80,7 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
           </ul>
         </div>
         <div className="card-config successor-data">
-          {' '}
-          {/* Nueva clase para SuccessorSection */}
+          <h3>Sucesor del Administrador</h3>
           <SuccessorSection
             successor={successor} // Pasa el estado como prop
             setSuccessor={setSuccessor} // Pasa la función para actualizar el estado
@@ -89,6 +88,10 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
             user={user}
             showNotification={showNotification}
           />
+          <p>
+            Es importante asignar un sucesor, ya que este empleado será quien
+            reemplace al administrador en caso de que este elimine su cuenta.
+          </p>
         </div>
       </div>
       <EmployeeList

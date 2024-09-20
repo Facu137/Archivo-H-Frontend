@@ -140,46 +140,60 @@ const EmployeeList = ({
   }
 
   return (
-    <div className="employee-list">
-      {employees.map((employee) => (
-        <div key={employee.id} className="employee-card-container">
-          <UserCard user={employee} />
-          {editingEmployeeId === employee.id ? (
-            <>
-              <EmployeeDetails
-                employee={employee}
-                isEditing={true}
-                editedEmployeeData={editedEmployeeData}
-                onChange={handleInputChange}
-              />
-              <div className="buttons-container-current-employees">
-                <button onClick={handleSaveChanges}>Guardar Cambios</button>
-                <button onClick={() => handleSetSuccessor(employee.id)}>
-                  Establecer Sucesor
-                </button>
-                <Tooltip content="No se puede eliminar un empleado que está activo o es sucesor.">
-                  <span>
-                    <button
-                      onClick={() => handleRemoveEmployee(employee.id)}
-                      disabled={!isRemovable(employee)}
-                    >
-                      Eliminar Empleado
+    <div className="current-employee-list-container">
+      {' '}
+      {/* Nuevo contenedor para la tarjeta */}
+      <div className="current-employee-card-config">
+        <h3>Lista de Empleados Actuales</h3> {/* Título de la sección */}
+        <p>
+          Gestiona los permisos y el estado de los empleados actuales. Puedes
+          establecer un sucesor para el administrador, modificar permisos,
+          desactivar empleados o eliminarlos del sistema.
+        </p>
+        <div className="current-employee-list">
+          {employees.map((employee) => (
+            <div key={employee.id} className="current-employee-card-container">
+              <UserCard user={employee} />
+              {editingEmployeeId === employee.id ? (
+                <>
+                  <EmployeeDetails
+                    employee={employee}
+                    isEditing={true}
+                    editedEmployeeData={editedEmployeeData}
+                    onChange={handleInputChange}
+                  />
+                  <div className="current-employee-buttons-container">
+                    <button onClick={handleSaveChanges}>Guardar Cambios</button>
+                    <button onClick={() => handleSetSuccessor(employee.id)}>
+                      Establecer Sucesor
                     </button>
-                  </span>
-                </Tooltip>
-                <button onClick={handleCancelClick}>Cancelar</button>
-              </div>
-            </>
-          ) : (
-            <>
-              <EmployeeDetails employee={employee} isEditing={false} />
-              <button onClick={() => handleEditClick(employee.id)}>
-                Modificar Empleado
-              </button>
-            </>
-          )}
+                    <Tooltip content="No se puede eliminar un empleado que está activo o es sucesor.">
+                      <span>
+                        <button
+                          onClick={() => handleRemoveEmployee(employee.id)}
+                          disabled={!isRemovable(employee)}
+                        >
+                          Eliminar Empleado
+                        </button>
+                      </span>
+                    </Tooltip>
+                    <button onClick={handleCancelClick}>Cancelar</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <EmployeeDetails employee={employee} isEditing={false} />
+                  <button onClick={() => handleEditClick(employee.id)}>
+                    Modificar Empleado
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
         </div>
-      ))}
+        <p className="scroll-hint">Desplázate horizontalmente para ver más.</p>{' '}
+        {/* Instrucciones de desplazamiento */}
+      </div>
     </div>
   )
 }

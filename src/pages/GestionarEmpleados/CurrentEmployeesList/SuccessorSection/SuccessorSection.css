@@ -1,7 +1,7 @@
 /* src/pages/GestionarEmpleados/CurrentEmployeesList/SuccessorSection/SuccessorSection.css */
 .successor-section-card-config {
     /* Nueva clase para la tarjeta */
-    background-color: #fff;
+    background-color: #ddd;
     border: none;
     border-radius: 12px;
     padding: 20px;
@@ -50,14 +50,6 @@
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
-}
-
-.successor-description {
-    /* Nueva clase para la descripción */
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 10px;
-    text-align: center;
 }
 
 /* Adaptación al modo oscuro */
