@@ -6,6 +6,7 @@ import { useAuth } from '../../../context/AuthContext'
 import axiosInstance from '../../../api/axiosConfig'
 import EmployeeList from './EmployeeList/EmployeeList'
 import SuccessorSection from './SuccessorSection/SuccessorSection'
+import manageEmployeesImage from '../../../assets/topaz-museo_historico_4.avif'
 import './CurrentEmployeesList.css'
 
 const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
@@ -54,7 +55,42 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
   }, [fetchSuccessor, user])
 
   return (
-    <>
+    <div className="current-employees-section-container">
+      {' '}
+      {/* Nuevo contenedor principal */}
+      <div className="cards-container">
+        {' '}
+        {/* Contenedor para las tarjetas */}
+        <div className="card-config description-card">
+          <h3>Gestionar Empleados Actuales</h3>
+          <img
+            src={manageEmployeesImage}
+            alt="Gestionar Empleados"
+            className="manage-employees-image"
+          />
+          <p>
+            En esta sección puedes administrar los empleados actuales del
+            sistema.
+          </p>
+          <ul>
+            <li>Visualizar el sucesor del administrador.</li>
+            <li>Modificar los estados y permisos de los empleados.</li>
+            <li>Eliminar empleados.</li>
+            <li>Establecer un nuevo sucesor para el administrador.</li>
+          </ul>
+        </div>
+        <div className="card-config successor-data">
+          {' '}
+          {/* Nueva clase para SuccessorSection */}
+          <SuccessorSection
+            successor={successor} // Pasa el estado como prop
+            setSuccessor={setSuccessor} // Pasa la función para actualizar el estado
+            token={token}
+            user={user}
+            showNotification={showNotification}
+          />
+        </div>
+      </div>
       <EmployeeList
         employees={employees}
         setCurrentEmployees={setCurrentEmployees}
@@ -65,14 +101,7 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
         successor={successor}
         fetchSuccessor={fetchSuccessor}
       />
-      <SuccessorSection
-        successor={successor} // Pasa el estado como prop
-        setSuccessor={setSuccessor} // Pasa la función para actualizar el estado
-        token={token}
-        user={user}
-        showNotification={showNotification}
-      />
-    </>
+    </div>
   )
 }
 

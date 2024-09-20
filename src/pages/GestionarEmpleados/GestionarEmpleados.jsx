@@ -134,20 +134,25 @@ export const GestionarEmpleados = () => {
     }
   }
   return (
-    <div className="gestionar-nuevos-empleados-container">
-      <h2>Gestionar Nuevos Empleados</h2>
-      <ConversionKeyManager />
-      <PossibleEmployeesList
-        possibleEmployees={possibleEmployees}
-        onAccept={handleAcceptConversion}
-        onReject={handleRejectConversion}
-        onUpdateCurrentEmployees={fetchCurrentEmployees}
-      />
+    <>
+      <div className="gestionar-nuevos-empleados-container">
+        <h2>Gestionar Nuevos Empleados</h2>
+        <ConversionKeyManager />
+        <PossibleEmployeesList
+          possibleEmployees={possibleEmployees}
+          onAccept={handleAcceptConversion}
+          onReject={handleRejectConversion}
+          onUpdateCurrentEmployees={fetchCurrentEmployees}
+        />
+      </div>
+      <div className="gestionar-empleados-actuales-container">
+        <h2>Gestionar Empleados Actuales</h2>
+        <CurrentEmployeesList
+          employees={currentEmployees}
+          setCurrentEmployees={setCurrentEmployees}
+        />
+      </div>
       <h2>Gestionar Empleados Actuales</h2>
-      <CurrentEmployeesList
-        employees={currentEmployees}
-        setCurrentEmployees={setCurrentEmployees}
-      />
-    </div>
+    </>
   )
 }

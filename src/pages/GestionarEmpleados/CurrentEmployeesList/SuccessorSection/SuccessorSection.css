@@ -1,70 +1,78 @@
 /* src/pages/GestionarEmpleados/CurrentEmployeesList/SuccessorSection/SuccessorSection.css */
-/* Adaptación al modo oscuro */
-.dark-mode .employee-card-container {
-    border-color: #555;
-    background-color: #222;
+.successor-section-card-config {
+    /* Nueva clase para la tarjeta */
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+    transition: all 0.3s ease;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
 }
 
-.dark-mode .buttons-container button {
-    color: #fff;
+.successor-section-card-config:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.dark-mode .buttons-container button:disabled {
-    background-color: #444;
-    /* Color más oscuro para el modo oscuro */
-    opacity: 0.4;
+.successor-section-card-config h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
 }
 
-/* Estilos para el contenedor de la tarjeta del empleado */
-.employee-card-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.successor-card-container {
+    /* Nueva clase para el contenedor del UserCard */
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 10px;
 }
 
-/* Estilos para los botones */
-.buttons-container {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
+.successor-card-container.no-successor {
+    /* Estilo para la tarjeta sin sucesor */
+    background-color: #f2f2f2;
+    /* Fondo gris claro */
+    border: 1px dashed #ccc;
+    /* Borde punteado */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
 }
 
-.buttons-container button {
-    background-color: #4CAF50;
+.successor-card-container button {
+    background-color: #f44336;
+    /* Color rojo */
     color: white;
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    margin-top: 10px;
 }
 
-.buttons-container button:nth-child(2) {
-    background-color: #f44336;
+.successor-description {
+    /* Nueva clase para la descripción */
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+    text-align: center;
 }
 
-/* Estilos para los botones deshabilitados */
-.buttons-container button:disabled {
-    background-color: #b0b0b0;
-    /* Color gris para botones deshabilitados */
-    cursor: not-allowed;
-    opacity: 0.6;
-    /* Opacidad reducida para indicar deshabilitado */
+/* Adaptación al modo oscuro */
+.dark-mode .successor-section-card-config {
+    /* Nueva clase para el modo oscuro */
+    background-color: #444;
+    color: #fff;
 }
 
-/* Hover para botones no deshabilitados */
-.buttons-container button:not(:disabled):hover {
-    background-color: #45a049;
-    /* Oscurece un poco el verde */
+.dark-mode .successor-card-container.no-successor {
+    background-color: #333;
+    /* Fondo gris oscuro */
+    border-color: #555;
 }
 
-.buttons-container button:nth-child(2):not(:disabled):hover {
-    background-color: #e53935;
-    /* Oscurece un poco el rojo */
+.dark-mode .successor-description {
+    color: #ccc;
 }

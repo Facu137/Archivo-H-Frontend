@@ -1,37 +1,26 @@
 /* src/pages/GestionarEmpleados/PossibleEmployeesList/PossibleEmployeesList.css */
-.possible-employees-section {
+.possible-employee-list-container {
     display: flex;
     gap: 20px;
-    margin-bottom: 20px;
-}
-
-.possible-employees-card-container {
-    /* Nuevo contenedor para las tarjetas */
-    display: flex;
-    flex-direction: row;
-    /* Orden en pantalla grande: tarjeta 2 primero */
+    margin: auto auto;
     padding: 30px;
-    gap: 20px;
-    width: 90%;
     max-width: 1200px;
-    margin: 0 auto;
-    /* Centra horizontalmente */
+    color: var(--text-color);
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    box-sizing: border-box
+    box-sizing: border-box;
 }
-
 .possible-employees-card-config {
     background-color: #fff;
     border: none;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: left;
     transition: all 0.3s ease;
-    flex: 1;
-    /* Ambas tarjetas ocupan el mismo espacio disponible */
+    max-width: 1200px;
+    /* Margen inferior */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .possible-employees-card-config:hover {
@@ -39,92 +28,53 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.description-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.possible-employees-image {
-    width: 100%;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-
-.description-card h3 {
+.possible-employees-card-config h3 {
+    text-align: center;
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0px;
+}
+.possible-employees-card-config p {
     text-align: center;
-    /* Título centrado */
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 10px;
 }
-
-.description-card p {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #666;
-}
-
-/* Lista horizontal con desplazamiento */
-.possible-employee-list-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.possible-employee-list-container h3 {
-    /* Título de la tarjeta 2 centrado */
-    text-align: center;
-}
-
 .possible-employee-list {
-    /* Cambiado el nombre de la clase */
     display: flex;
     gap: 30px;
     overflow-x: auto;
     scroll-behavior: smooth;
-    /* Para un desplazamiento suave */
     padding-bottom: 10px;
-    /* Espacio inferior para la barra de desplazamiento */
 }
 
 /* Estilos para la barra de desplazamiento */
 .possible-employee-list::-webkit-scrollbar {
     height: 24px;
-    /* Altura de la barra de desplazamiento */
-    background-color: #f0f0f0;
-    /* Color de fondo de la barra */
+    background-color: #607d8a;
     border-radius: 6px;
-    /* Borde redondeado */
 }
 
 .possible-employee-list::-webkit-scrollbar-track {
-    background: #607d8a;
-    /* Color del fondo de la barra de desplazamiento */
+    background: #bbb
 }
 
 .possible-employee-list::-webkit-scrollbar-thumb {
-    background-color: #ddd;
-    /* Color del pulgar */
+    background-color: #607d8a;
     border-radius: 8px;
-    /* Borde redondeado del pulgar */
 }
 
 .possible-employee-list::-webkit-scrollbar-thumb:hover {
-    background-color: #bbb;
-    /* Color del pulgar al pasar el mouse */
+    background-color: rgb(51, 87, 255);
 }
 
 .possible-employee-listcard-container {
-    border: 1px solid rgb(96 125 138);
+    border: 1px solid rgb(96, 125, 138);
     padding: 0px 15px;
     border-radius: 10px;
     display: inline-flex;
-    /* Permite que las tarjetas se ajusten al contenido */
     flex-direction: column;
     align-items: center;
-    /* Ancho mínimo para las tarjetas */
     flex-shrink: 0;
-    /* Evita que las tarjetas se encojan */
 }
 
 .buttons-container {
@@ -147,13 +97,7 @@
     background-color: #f44336;
 }
 
-.scroll-hint {
-    /* Estilos para el texto de desplazamiento */
-    text-align: center;
-    font-size: 0.8rem;
-    color: #888;
-    margin-top: 10px;
-}
+
 
 /* Adaptación al modo oscuro */
 .dark-mode .possible-employees-card-config {
@@ -169,24 +113,6 @@
     color: #fff;
 }
 
-.dark-mode .scroll-hint {
-    color: #ccc;
-}
-
 .dark-mode .possible-employee-list::-webkit-scrollbar-track {
     background: #333;
-    /* Color del fondo de la barra de desplazamiento */
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .possible-employees-section {
-        flex-direction: column-reverse;
-        /* Tarjeta 1 primero en modo móvil */
-    }
-
-    .possible-employees-card-container {
-        flex-direction: column-reverse;
-        /* Orden en modo móvil: tarjeta 1 primero */
-    }
 }

@@ -1,10 +1,10 @@
 /* src/pages/GestionarEmpleados/GestionarEmpleados.css */
 
-.gestionar-nuevos-empleados-container {
+.gestionar-nuevos-empleados-container .gestionar-empleados-actuales-container{
     padding: 20px;
 }
 
 /* Adaptación al modo oscuro */
-.dark-mode .gestionar-nuevos-empleados-container {
+.dark-mode .gestionar-nuevos-empleados-container .gestionar-empleados-actuales-container{
     color: #fff;
 }

@@ -1,1 +1,78 @@
 /* src/pages/GestionarEmpleados/CurrentEmployeesList/CurrentEmployeesList.css */
+.current-employees-section-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cards-container {
+    display: flex;
+    gap: 20px;
+}
+
+.card-config {
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.card-config:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.description-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.manage-employees-image {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.description-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.description-card p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #666;
+}
+
+.description-card ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .card-config {
+    background-color: #222;
+    color: #fff;
+}
+
+.dark-mode .description-card p,
+.dark-mode .description-card li {
+    color: #ccc;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .cards-container {
+        flex-direction: column;
+    }
+}
