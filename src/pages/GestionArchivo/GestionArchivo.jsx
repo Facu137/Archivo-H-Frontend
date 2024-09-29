@@ -1,151 +1,280 @@
-import React, { useState, useEffect } from 'react';
-import './GestionArchivo.css';
-import * as zod from 'zod';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState, useEffect, useCallback } from 'react'
+import './GestionArchivo.css'
+import { validateFileUpload } from '../../schemas/fileSchema'
+import { validateMensuraUpload } from '../../schemas/mensuraSchema'
+import { validateNotarialUpload } from '../../schemas/notarialSchema'
+import { useAuth } from '../../context/AuthContext'
+import { ZodError } from 'zod'
+
+const FILE_TYPES = {
+  Mensura: 'Mensura',
+  Notarial: 'Notarial',
+  Correspondencia: 'Correspondencia',
+  Leyes_Decretos: 'Leyes y Decretos',
+  Gobierno: 'Gobierno',
+  Tierras_Fiscales: 'Tierras Fiscales',
+  Tribunales: 'Tribunales'
+}
+
+const FORM_FIELDS = {
+  Mensura: [
+    'legajoNumero',
+    'legajoEsBis',
+    'expedienteNumero',
+    'expedienteEsBis',
+    'DepartamentoAntiguo',
+    'DepartamentoActual',
+    'Lugar',
+    'dia',
+    'mes',
+    'anio',
+    'Titular',
+    'caratulaAsuntoExtracto',
+    'Propiedad',
+    'Fojas'
+  ],
+  Notarial: [
+    'Escribano',
+    'Registro',
+    'Protocolo',
+    'MesInicio',
+    'MesFin',
+    'dia',
+    'mes',
+    'anio',
+    'EscrituraNº',
+    'Iniciador',
+    'caratulaAsuntoExtracto',
+    'NegocioJuridico',
+    'Folio'
+  ],
+  Correspondencia: [
+    'legajoNumero',
+    'legajoEsBis',
+    'expedienteNumero',
+    'expedienteEsBis',
+    'dia',
+    'mes',
+    'anio',
+    'Emisor',
+    'Destinatario',
+    'caratulaAsuntoExtracto',
+    'Fojas'
+  ],
+  Leyes_Decretos: [
+    'legajoNumero',
+    'legajoEsBis',
+    'expedienteNumero',
+    'expedienteEsBis',
+    'dia',
+    'mes',
+    'anio',
+    'Emisor',
+    'Destinatario',
+    'caratulaAsuntoExtracto',
+    'Fojas'
+  ],
+  Gobierno: [
+    'legajoNumero',
+    'legajoEsBis',
+    'expedienteNumero',
+    'expedienteEsBis',
+    'dia',
+    'mes',
+    'anio',
+    'Iniciador',
+    'caratulaAsuntoExtracto',
+    'Tema',
+    'Folios'
+  ],
+  Tierras_Fiscales: [
+    'legajoNumero',
+    'legajoEsBis',
+    'expedienteNumero',
+    'expedienteEsBis',
+    'dia',
+    'mes',
+    'anio',
+    'Iniciador',
+    'caratulaAsuntoExtracto',
+    'Tema',
+    'Folios'
+  ],
+  Tribunales: [
+    'legajoNumero',
+    'legajoEsBis',
+    'expedienteNumero',
+    'expedienteEsBis',
+    'dia',
+    'mes',
+    'anio',
+    'Iniciador',
+    'caratulaAsuntoExtracto',
+    'Tema',
+    'Folios'
+  ]
+}
+
+const PERSON_FIELDS = [
+  'Iniciador',
+  'Titular',
+  'Escribano',
+  'Emisor',
+  'Destinatario'
+]
 
 export const GestionArchivo = () => {
-  const [fileType, setFileType] = useState('Mensura');
-  const [formFields, setFormFields] = useState([]);
-  const [fileUploads, setFileUploads] = useState([]);
-  const { token } = useAuth();
+  const [fileType, setFileType] = useState(FILE_TYPES.Mensura)
+  const [formFields, setFormFields] = useState([])
+  const [fileUploads, setFileUploads] = useState([])
+  const [errors, setErrors] = useState({})
+  const { token } = useAuth()
+
+  const numericFields = [
+    'legajoNumero',
+    'expedienteNumero',
+    'anio',
+    'mes',
+    'dia',
+    'Fojas',
+    'Folios',
+    'creadorId'
+  ]
+
+  const createFormFields = useCallback(() => {
+    const fieldList = FORM_FIELDS[fileType]
+    const newFormFields = fieldList.map((field) => ({
+      id: field,
+      value: '',
+      isPersonField: PERSON_FIELDS.includes(field)
+    }))
+    setFormFields(newFormFields)
+  }, [fileType])
 
   useEffect(() => {
-    const createFormFields = () => {
-      const fields = {
-        Mensura: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'DepartamentoAntiguo', 'DepartamentoActual', 'Lugar', 'dia', 'mes', 'año', 'Titular', 'Carátula', 'Propiedad', 'Fojas'],
-        Notarial: ['Escribano', 'Registro', 'Protocolo', 'MesInicio', 'MesFin', 'dia', 'mes', 'año', 'EscrituraNº', 'Iniciador', 'Extracto', 'NegocioJuridico', 'Folio'],
-        Correspondencia: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Emisor', 'Destinatario', 'Asunto', 'Fojas'],
-        Leyes_Decretos: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Emisor', 'Destinatario', 'Asunto', 'Fojas'],
-        Gobierno: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-        Tierras_Fiscales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-        Tribunales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-      };
-
-      const fieldList = fields[fileType];
-      const newFormFields = fieldList.map((field) => ({
-        id: field,
-        value: '',
-        isPersonField: ['Iniciador', 'Titular', 'Escribano', 'Emisor', 'Destinatario'].includes(field),
-      }));
-      setFormFields(newFormFields);
-    };
-
-    createFormFields();
-  }, [fileType]);
+    createFormFields()
+  }, [createFormFields])
 
   const handleFileTypeChange = (e) => {
-    setFileType(e.target.value);
-  };
+    setFileType(e.target.value)
+  }
 
   const handleFormFieldChange = (id, value) => {
-    const updatedFields = formFields.map((field) =>
-      field.id === id ? { ...field, value } : field
-    );
-    setFormFields(updatedFields);
-  };
+    setFormFields((prevFields) =>
+      prevFields.map((field) => (field.id === id ? { ...field, value } : field))
+    )
+  }
 
   const handleFileUpload = (e) => {
-    setFileUploads([...fileUploads, ...e.target.files]);
-  };
+    setFileUploads((prevUploads) => [...prevUploads, ...e.target.files])
+  }
 
   const handleFileRemove = (index) => {
-    const updatedFileUploads = [...fileUploads];
-    updatedFileUploads.splice(index, 1);
-    setFileUploads(updatedFileUploads);
-  };
+    setFileUploads((prevUploads) => prevUploads.filter((_, i) => i !== index))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
+    e.preventDefault()
+    const formData = new FormData(e.target)
 
-    const schema = zod.object({
-      numeroLegajo: zod.string().nonempty(),
-      legajoBis: zod.string().optional(),
-      numeroExpediente: zod.string().nonempty(),
-      expedienteBis: zod.string().optional(),
-      DepartamentoAntiguo: zod.string().optional(),
-      DepartamentoActual: zod.string().optional(),
-      Lugar: zod.string().optional(),
-      dia: zod.number().int().positive(),
-      mes: zod.number().int().positive().max(12),
-      año: zod.number().int().positive().min(1900).max(new Date().getFullYear()),
-      Titular: zod.string().nonempty(),
-      Carátula: zod.string().optional(),
-      Propiedad: zod.string().optional(),
-      Fojas: zod.number().int().positive().optional(),
-      Escribano: zod.string().optional(),
-      Registro: zod.string().optional(),
-      Protocolo: zod.string().optional(),
-      MesInicio: zod.string().optional(),
-      MesFin: zod.string().optional(),
-      EscrituraNº: zod.string().optional(),
-      Iniciador: zod.string().nonempty(),
-      Extracto: zod.string().optional(),
-      NegocioJuridico: zod.string().optional(),
-      Folio: zod.string().optional(),
-      Emisor: zod.string().nonempty(),
-      Destinatario: zod.string().nonempty(),
-      Asunto: zod.string().optional(),
-      Tema: zod.string().optional(),
-      Folios: zod.string().optional(),
-      files: zod.array(zod.instanceof(File)).nonempty(),
-    });
+    // Asegúrate de que los campos booleanos se envíen como booleanos
+    formData.set('legajoEsBis', formData.get('legajoEsBis') === 'true')
+    formData.set('expedienteEsBis', formData.get('expedienteEsBis') === 'true')
+    formData.set('esPublico', formData.get('esPublico') === 'true')
+
+    // Convertir campos numéricos a números
+    numericFields.forEach((field) => {
+      const value = formData.get(field)
+      if (value !== null && value !== undefined) {
+        formData.set(field, parseInt(value, 10))
+      }
+    })
+
+    // Adjunta los archivos al formData
+    fileUploads.forEach((file, index) => {
+      formData.append('file', file)
+    })
+
+    let schema
+    let endpoint
+
+    switch (fileType) {
+      case FILE_TYPES.Mensura:
+        schema = validateMensuraUpload
+        endpoint = '/documents/upload/mensura'
+        break
+      case FILE_TYPES.Notarial:
+        schema = validateNotarialUpload
+        endpoint = '/documents/upload/notarial'
+        break
+      default:
+        schema = validateFileUpload
+        endpoint = '/documents/upload/general'
+        break
+    }
 
     try {
-      const validatedData = schema.parse({
-        ...Object.fromEntries(formData),
-        files: fileUploads,
-      });
+      // Imprime los datos antes de la validación
+      console.log('Data to validate:', Object.fromEntries(formData))
 
-      // Determinar la ruta del endpoint según el tipo de archivo
-      let endpoint;
-      switch (fileType) {
-        case 'Mensura':
-          endpoint = '/documents/upload/mensura';
-          break;
-        case 'Notarial':
-          endpoint = '/documents/upload/notarial';
-          break;
-        default:
-          endpoint = '/documents/upload/general';
-          break;
+      // Validación en el frontend
+      const dataToValidate = {
+        ...Object.fromEntries(formData),
+        tipoDocumento: fileType, // Asegúrate de que tipoDocumento sea el valor correcto
+        file: {
+          ...fileUploads[0],
+          size: parseInt(fileUploads[0].size, 10) // Convertir fileSize a número
+        }
       }
 
-      // Enviar la petición al backend
+      const validatedData = schema(dataToValidate) // Descomenta esta línea
+
       const response = await fetch(endpoint, {
         method: 'POST',
-        body: formData,
+        body: JSON.stringify(validatedData), // Enviar validatedData como JSON
         headers: {
-           Authorization: `Bearer ${token}`
-          // Agrega el token de autenticación si es necesario
-          // Authorization: `Bearer ${token}` 
-        },
-      });
+          'Content-Type': 'application/json', // Indicar que el body es JSON
+          Authorization: `Bearer ${token}`
+        }
+      })
 
       if (response.ok) {
-        console.log('Archivo subido correctamente');
-        // Puedes mostrar un mensaje de éxito al usuario, redirigirlo a otra página, etc.
+        console.log('Archivo subido correctamente')
+        // Handle successful upload (e.g., show success message, reset form)
       } else {
-        console.error('Error al subir el archivo:', response.status);
-        // Puedes mostrar un mensaje de error al usuario
+        console.error('Error al subir el archivo:', response.status)
+        // Handle error (e.g., show error message)
       }
     } catch (error) {
-      console.error('Validation error:', error);
+      if (error instanceof ZodError) {
+        console.error('Validation error:', error.issues)
+        // Manejar el error de validación, mostrar mensajes al usuario, etc.
+        const errorMessages = error.issues.reduce((acc, issue) => {
+          acc[issue.path[0]] = issue.message
+          return acc
+        }, {})
+        setErrors(errorMessages)
+      } else {
+        console.error('Error:', error)
+      }
     }
-  };
+  }
 
   return (
     <div className="main-content">
       <form id="fileForm" onSubmit={handleSubmit}>
         <label htmlFor="fileType">Seleccionar Tipo de Archivo:</label>
-        <select id="fileType" name="fileType" value={fileType} onChange={handleFileTypeChange}>
-          <option value="Mensura">Mensura</option>
-          <option value="Notarial">Notarial</option>
-          <option value="Correspondencia">Correspondencia</option>
-          <option value="Leyes_Decretos">Leyes y Decretos</option>
-          <option value="Gobierno">Gobierno</option>
-          <option value="Tierras_Fiscales">Tierras Fiscales</option>
-          <option value="Tribunales">Tribunales</option>
+        <select
+          id="fileType"
+          name="fileType"
+          value={fileType}
+          onChange={handleFileTypeChange}
+        >
+          {Object.entries(FILE_TYPES).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
         </select>
 
         <div id="formFields">
@@ -153,19 +282,36 @@ export const GestionArchivo = () => {
             <div key={field.id}>
               <label htmlFor={field.id}>{field.id}:</label>
               <input
-                type="text"
+                type={numericFields.includes(field.id) ? 'number' : 'text'}
                 id={field.id}
                 name={field.id}
                 value={field.value}
-                onChange={(e) => handleFormFieldChange(field.id, e.target.value)}
+                onChange={(e) =>
+                  handleFormFieldChange(field.id, e.target.value)
+                }
               />
               {field.isPersonField && (
                 <div className="person-type">
-                  <label>Física</label>
-                  <input type="radio" name={`${field.id}Type`} value="Física" />
-                  <label>Jurídica</label>
-                  <input type="radio" name={`${field.id}Type`} value="Jurídica" />
+                  <label>
+                    <input
+                      type="radio"
+                      name={`${field.id}Type`}
+                      value="Física"
+                    />
+                    Física
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name={`${field.id}Type`}
+                      value="Jurídica"
+                    />
+                    Jurídica
+                  </label>
                 </div>
+              )}
+              {errors[field.id] && (
+                <div className="error-message">{errors[field.id]}</div>
               )}
             </div>
           ))}
@@ -173,7 +319,13 @@ export const GestionArchivo = () => {
 
         <div id="fileUploads">
           <label htmlFor="files">Archivos (imágenes o PDFs):</label>
-          <input type="file" id="files" name="files" multiple onChange={handleFileUpload} />
+          <input
+            type="file"
+            id="files"
+            name="files"
+            multiple
+            onChange={handleFileUpload}
+          />
           {fileUploads.map((file, index) => (
             <div key={index}>
               {file.name}
@@ -189,5 +341,5 @@ export const GestionArchivo = () => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
