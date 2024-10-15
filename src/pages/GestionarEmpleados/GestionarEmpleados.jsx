@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import axiosInstance from '../../api/axiosConfig'
-import ConversionKeyManager from './ConversionKeyManager/ConversionKeyManager'
 import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
 import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
 import { useNotification } from '../../hooks/useNotification'
@@ -134,10 +133,9 @@ export const GestionarEmpleados = () => {
     }
   }
   return (
-    <>
-      <h2>Gestionar Nuevos Empleados</h2>
-      <div className="gestionar-nuevos-empleados-container">
-        <ConversionKeyManager />
+    <div className="gestion-main-conteiner">
+      <div className="gestion-section-container">
+        <h2>Gestionar Nuevos Empleados</h2>
         <PossibleEmployeesList
           possibleEmployees={possibleEmployees}
           onAccept={handleAcceptConversion}
@@ -145,13 +143,13 @@ export const GestionarEmpleados = () => {
           onUpdateCurrentEmployees={fetchCurrentEmployees}
         />
       </div>
-      <div className="gestionar-empleados-actuales-container">
+      <div className="gestion-section-container">
         <h2>Gestionar Empleados Actuales</h2>
         <CurrentEmployeesList
           employees={currentEmployees}
           setCurrentEmployees={setCurrentEmployees}
         />
       </div>
-    </>
+    </div>
   )
 }

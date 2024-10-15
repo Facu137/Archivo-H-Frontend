@@ -1,15 +1,4 @@
 /* src/pages/GestionarEmpleados/CurrentEmployeesList/CurrentEmployeesList.css */
-.current-employees-section-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
-    width: 90%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .cards-container {
     display: flex;
     gap: 20px;

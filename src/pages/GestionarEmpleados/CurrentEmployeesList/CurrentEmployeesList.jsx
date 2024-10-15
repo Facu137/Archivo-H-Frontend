@@ -55,7 +55,7 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
   }, [fetchSuccessor, user])
 
   return (
-    <div className="current-employees-section-container">
+    <div className="employees-section-container">
       {' '}
       {/* Nuevo contenedor principal */}
       <div className="cards-container">

@@ -1,10 +1,10 @@
 // src/pages/GestionarEmpleados/ConversionKeyManager/ConversionKeyManager.jsx
 import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../../context/AuthContext'
-import axiosInstance from '../../../api/axiosConfig'
-import { useNotification } from '../../../hooks/useNotification'
-import ToggleSwitch from '../../../components/ToggleSwitch/ToggleSwitch'
-import searchEmployeeImage from '../../../assets/topaz-inaguracion-AH.avif'
+import { useAuth } from '../../../../context/AuthContext'
+import axiosInstance from '../../../../api/axiosConfig'
+import { useNotification } from '../../../../hooks/useNotification'
+import ToggleSwitch from '../../../../components/ToggleSwitch/ToggleSwitch'
+import searchEmployeeImage from '../../../../assets/topaz-inaguracion-AH.avif'
 import './ConversionKeyManager.css'
 
 const ConversionKeyManager = () => {

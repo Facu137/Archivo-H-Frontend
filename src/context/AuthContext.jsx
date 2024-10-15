@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` }
       })
       setUser(response.data)
+      
     } catch (error) {
       console.error('Fetch user error:', error)
       logout()

@@ -15,6 +15,7 @@ src
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
+│   ├── ToggleSwitch
 │   ├── Tooltip
 │   ├── UserCard
 │   └── AuthenticatedRoute.jsx

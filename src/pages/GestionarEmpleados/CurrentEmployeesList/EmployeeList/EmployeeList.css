@@ -1,88 +1,10 @@
 /* src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeList/EmployeeList.css */
-.current-employee-list-container {
-    display: flex;
-    gap: 20px;
-    margin: auto auto;
-    max-width: 1200px;
-    color: var(--text-color);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
 
-.current-employee-card-config {
-    background-color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 20px;
-    transition: all 0.3s ease;
-    max-width: 1200px;
-    /* Margen inferior */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.current-employee-card-config:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.current-employee-card-config h3 {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 0px;
-}
-
-.current-employee-card-config p {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #888;
-    margin-top: 10px;
-}
-
-.current-employee-list {
-    display: flex;
-    gap: 30px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 10px;
-}
-
-/* Estilos para la barra de desplazamiento */
-.current-employee-list::-webkit-scrollbar {
-    height: 24px;
-    background-color: #607d8a;
-    border-radius: 6px;
-}
-
-.current-employee-list::-webkit-scrollbar-track {
-    background: #bbb
-}
-
-.current-employee-list::-webkit-scrollbar-thumb {
-    background-color: #607d8a;
-    border-radius: 8px;
-}
-
-.current-employee-list::-webkit-scrollbar-thumb:hover {
-    background-color: rgb(51, 87, 255);
-}
-
-.current-employee-card-container {
-    border: 1px solid rgb(96, 125, 138);
-    padding: 0px 15px;
-    border-radius: 10px;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-}
-
+/* Estilos para los botones */
 .current-employee-buttons-container {
     margin-top: 10px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 5px;
 }
 
@@ -100,42 +22,34 @@
     background-color: #f44336;
 }
 
+.current-employee-buttons-container button:nth-child(3) {
+    background-color: #b0b0b0;
+}
+
+
 /* Estilos para los botones deshabilitados */
 .current-employee-buttons-container button:disabled {
     background-color: #b0b0b0;
-    /* Color gris para botones deshabilitados */
     cursor: not-allowed;
     opacity: 0.6;
-    /* Opacidad reducida para indicar deshabilitado */
 }
 
 /* Hover para botones no deshabilitados */
 .current-employee-buttons-container button:not(:disabled):hover {
     background-color: #45a049;
-    /* Oscurece un poco el verde */
 }
 
 .current-employee-buttons-container button:nth-child(2):not(:disabled):hover {
     background-color: #e53935;
-    /* Oscurece un poco el rojo */
 }
 
-/* Adaptación al modo oscuro */
-.dark-mode .current-employee-card-config {
-    background-color: #222;
+
+/* Adaptación al modo oscuro para botones */
+.dark-mode .current-employee-buttons-container button {
     color: #fff;
 }
 
-.dark-mode .current-employee-card-container {
-    background-color: #222;
-}
-
-.dark-mode .buttons-container-current-employees button {
-    color: #fff;
-}
-
-.dark-mode .buttons-container-current-employees button:disabled {
+.dark-mode .current-employee-buttons-container button:disabled {
     background-color: #444;
-    /* Color más oscuro para el modo oscuro */
     opacity: 0.4;
 }

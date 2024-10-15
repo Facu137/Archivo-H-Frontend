@@ -1,6 +1,7 @@
 // src/pages/GestionarEmpleados/PossibleEmployeesList/PossibleEmployeesList.jsx
 import PropTypes from 'prop-types'
-import UserCard from '../../../components/UserCard/UserCard'
+import ScrollableCardList from '../../../components/ScrollableCardList/ScrollableCardList'
+import ConversionKeyManager from './ConversionKeyManager/ConversionKeyManager'
 import './PossibleEmployeesList.css'
 
 const PossibleEmployeesList = ({
@@ -13,37 +14,29 @@ const PossibleEmployeesList = ({
     return <div>No se encontraron posibles empleados.</div>
   }
 
-  const handleAccept = async (employeeId) => {
-    await onAccept(employeeId)
-    onUpdateCurrentEmployees()
-  }
-
   return (
-    <div className="possible-employee-list-container">
-      <div className="possible-employees-card-config">
-        <h3>Solicitudes de Nuevos Empleados</h3>
-        <p>
-          Aquí puedes aceptar o rechazar las solicitudes de nuevos empleados. En
-          ambos casos, los usuarios serán notificados por correo electrónico.
-        </p>
-        <div className="possible-employee-list">
-          {possibleEmployees.map((employee) => (
-            <div
-              key={employee.id}
-              className="possible-employee-listcard-container"
-            >
-              <UserCard user={employee} />
-              <div className="buttons-container">
-                <button onClick={() => handleAccept(employee.id)}>
-                  Aceptar
-                </button>
-                <button onClick={() => onReject(employee.id)}>Rechazar</button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p>Desplázate horizontalmente para ver más.</p>
-      </div>
+    <div className="possible-employees-section-container">
+      <ConversionKeyManager />
+      <ScrollableCardList
+        title="Solicitudes de Nuevos Empleados"
+        description="Aquí puedes aceptar o rechazar las solicitudes de nuevos empleados. En ambos casos, los usuarios serán notificados por correo electrónico."
+        items={possibleEmployees}
+        cardClassName="possible-employees-list-card"
+        listClassName="possible-employee-list"
+        itemClassName="possible-employee-listcard-container"
+        onAccept={onAccept} // Pasa la función onAccept como prop
+        onReject={onReject} // Pasa la función onReject como prop
+        onUpdateCurrentEmployees={onUpdateCurrentEmployees} // Pasa onUpdateCurrentEmployees como prop
+      >
+        {(
+          item // Pasa una función como children
+        ) => (
+          <div className="buttons-container">
+            <button onClick={() => onAccept(item.id)}>Aceptar</button>
+            <button onClick={() => onReject(item.id)}>Rechazar</button>
+          </div>
+        )}
+      </ScrollableCardList>
     </div>
   )
 }
