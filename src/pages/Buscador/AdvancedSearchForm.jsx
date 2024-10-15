@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './AdvancedSearchForm.css'
 import axios from 'axios'
+import PropTypes from 'prop-types'
 
 const AdvancedSearchForm = ({ onSearch }) => {
   const [categoria, setCategoria] = useState('mensura')
@@ -208,6 +209,10 @@ const AdvancedSearchForm = ({ onSearch }) => {
       <button type="submit">Buscar</button>
     </form>
   )
+}
+
+AdvancedSearchForm.propTypes = {
+  onSearch: PropTypes.func.isRequired
 }
 
 export default AdvancedSearchForm

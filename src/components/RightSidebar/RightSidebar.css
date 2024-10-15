@@ -75,10 +75,6 @@
     justify-content: center;
 }
 
-.edit-button svg {
-    margin-right: 10px;
-}
-
 /* Estilos para la tarjeta del empleado */
 .employee-card {
     max-width: 250px;

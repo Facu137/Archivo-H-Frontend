@@ -3,13 +3,37 @@ import './SearchContainer.css'
 import AdvancedSearchForm from './AdvancedSearchForm'
 import SimpleSearchForm from './SimpleSearchForm'
 import ResultsContainer from './ResultsContainer'
+import PropTypes from 'prop-types'
 
-const SearchContainer = () => {
+const SearchContainer = ({ onSearch, onEdit, onDelete }) => {
   const [searchType, setSearchType] = useState('simple')
   const [searchResults, setSearchResults] = useState([])
+  const [visibleResults, setVisibleResults] = useState(20)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
+  const [currentSearchTerm, setCurrentSearchTerm] = useState('')
 
-  const handleSearch = (results) => {
-    setSearchResults(results)
+  const handleSearch = (data) => {
+    setSearchResults(data.results)
+    setTotalCount(data.totalCount)
+    setCurrentPage(data.page)
+    setVisibleResults(data.pageSize)
+  }
+
+  const handleSimpleSearch = (data) => {
+    setCurrentSearchTerm(data.search)
+    handleSearch(data)
+  }
+
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1)
+
+    // Realiza una nueva petición al backend con la nueva página
+    onSearch({
+      search: currentSearchTerm,
+      page: currentPage + 1,
+      pageSize: 100
+    })
   }
 
   return (
@@ -33,13 +57,30 @@ const SearchContainer = () => {
         <label htmlFor="advanced-search">Avanzada</label>
       </div>
       {searchType === 'simple' ? (
-        <SimpleSearchForm onSearch={handleSearch} />
+        <SimpleSearchForm onSearch={handleSimpleSearch} />
       ) : (
         <AdvancedSearchForm onSearch={handleSearch} />
       )}
-      <ResultsContainer results={searchResults} />
+
+      {/* Mostrar solo las tarjetas visibles */}
+      <ResultsContainer
+        results={searchResults.slice(0, visibleResults)}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+
+      {/* Botón "Cargar más" */}
+      {visibleResults < totalCount && (
+        <button onClick={handleLoadMore}>Cargar más</button>
+      )}
     </div>
   )
+}
+
+SearchContainer.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 }
 
 export default SearchContainer
