@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import './GestionArchivo.css'
-import { validateFileUpload } from '../../schemas/fileSchema'
-import { validateMensuraUpload } from '../../schemas/mensuraSchema'
-import { validateNotarialUpload } from '../../schemas/notarialSchema'
 import { useAuth } from '../../context/AuthContext'
-import { ZodError } from 'zod'
+import axiosInstance from '../../api/axiosConfig' // Asegúrate de que la ruta sea correcta
 
 const FILE_TYPES = {
   Mensura: 'Mensura',
@@ -127,7 +124,7 @@ export const GestionArchivo = () => {
   const [fileType, setFileType] = useState(FILE_TYPES.Mensura)
   const [formFields, setFormFields] = useState([])
   const [fileUploads, setFileUploads] = useState([])
-  const [errors, setErrors] = useState({})
+  const [message, setMessage] = useState('')
   const { token } = useAuth()
 
   const numericFields = [
@@ -195,68 +192,40 @@ export const GestionArchivo = () => {
       formData.append('file', file)
     })
 
-    let schema
     let endpoint
 
     switch (fileType) {
       case FILE_TYPES.Mensura:
-        schema = validateMensuraUpload
-        endpoint = '/documents/upload/mensura'
+        endpoint = 'api/documents/upload/mensura'
         break
       case FILE_TYPES.Notarial:
-        schema = validateNotarialUpload
-        endpoint = '/documents/upload/notarial'
+        endpoint = 'api/documents/upload/notarial'
         break
       default:
-        schema = validateFileUpload
-        endpoint = '/documents/upload/general'
+        endpoint = 'api/documents/upload/general'
         break
     }
 
     try {
-      // Imprime los datos antes de la validación
-      console.log('Data to validate:', Object.fromEntries(formData))
-
-      // Validación en el frontend
-      const dataToValidate = {
-        ...Object.fromEntries(formData),
-        tipoDocumento: fileType, // Asegúrate de que tipoDocumento sea el valor correcto
-        file: {
-          ...fileUploads[0],
-          size: parseInt(fileUploads[0].size, 10) // Convertir fileSize a número
-        }
-      }
-
-      const validatedData = schema(dataToValidate) // Descomenta esta línea
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(validatedData), // Enviar validatedData como JSON
+      const response = await axiosInstance.post(endpoint, formData, {
         headers: {
-          'Content-Type': 'application/json', // Indicar que el body es JSON
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
         }
       })
 
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
+        setMessage('Archivo subido correctamente')
         console.log('Archivo subido correctamente')
         // Handle successful upload (e.g., show success message, reset form)
       } else {
+        setMessage(`Error al subir el archivo: ${response.status}`)
         console.error('Error al subir el archivo:', response.status)
         // Handle error (e.g., show error message)
       }
     } catch (error) {
-      if (error instanceof ZodError) {
-        console.error('Validation error:', error.issues)
-        // Manejar el error de validación, mostrar mensajes al usuario, etc.
-        const errorMessages = error.issues.reduce((acc, issue) => {
-          acc[issue.path[0]] = issue.message
-          return acc
-        }, {})
-        setErrors(errorMessages)
-      } else {
-        console.error('Error:', error)
-      }
+      setMessage('Error al procesar la solicitud')
+      console.error('Error:', error)
     }
   }
 
@@ -310,9 +279,6 @@ export const GestionArchivo = () => {
                   </label>
                 </div>
               )}
-              {errors[field.id] && (
-                <div className="error-message">{errors[field.id]}</div>
-              )}
             </div>
           ))}
         </div>
@@ -340,6 +306,15 @@ export const GestionArchivo = () => {
           Guardar
         </button>
       </form>
+      {message && (
+        <div
+          className={
+            message.includes('Error') ? 'error-message' : 'success-message'
+          }
+        >
+          {message}
+        </div>
+      )}
     </div>
   )
 }
