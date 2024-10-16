@@ -22,6 +22,7 @@ header {
 
 .dark-mode header {
   background: linear-gradient(to top, #191929, #191929);
+  color: white; /* Asegúrate de que el texto del header sea legible en modo oscuro */
 }
 
 .light-mode header {
@@ -82,15 +83,23 @@ header {
   border: none;
   background: none;
   cursor: pointer;
-
-  background-color: #0a0a0a;
   border-radius: 20px;
   border-width: 2px;
   border-style: solid;
+  background-color: transparent; /* Fondo transparente por defecto */
+}
+
+.dark-mode .nav-button {
+  background-color: #0a0a0a; /* Fondo oscuro solo en modo oscuro */
+  color: white; /* Asegúrate de que el texto sea legible */
+}
+
+.light-mode .nav-button {
+  color: black; /* Puedes agregar un estilo específico para el modo claro si lo deseas */
 }
 
 .nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1); /* Hover sigue siendo claro */
 }
 
 .nav-text {
