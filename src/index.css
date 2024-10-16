@@ -4,7 +4,6 @@ Este este archivo se encarga de la configuración de los estilos globales.*/
 :root {
   --font-family-primary: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
   --font-size-base: 1rem;
-  /* 1rem = 16px por defecto */
   --line-height-base: 1.618;
   --font-weight-normal: 400;
   --font-weight-bold: 700;
@@ -16,88 +15,32 @@ body {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
+  transition: background-color 0.3s, color 0.3s; /* Transición suave para el cambio de modo */
+  display: flex; /* Añadido para sticky footer */
+  flex-direction: column; /* Añadido para sticky footer */
+  min-height: 100vh; /* Añadido para sticky footer */
+  margin: 0;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-span,
-b,
-i,
-strong,
-em,
-ul,
-ol,
-li,
-a,
-code {
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, span, b, i, strong, em, ul, ol, li, a, code {
   font-family: var(--font-family-primary);
   line-height: var(--line-height-base);
 }
 
-/* Tamaños de fuente basados en la proporción áurea */
-h1 {
-  font-size: 2.44rem;
-}
+h1 { font-size: 2.44rem; }
+h2 { font-size: 2.06rem; }
+h3 { font-size: 1.87rem; }
+h4 { font-size: 1.69rem; }
+h5 { font-size: 1.5rem; }
+h6 { font-size: 1.31rem; }
 
-/* 39px */
-h2 {
-  font-size: 2.06rem;
-}
+p, ul, ol, li { font-size: 1.1rem; }
+blockquote { font-size: 1.3rem; }
+pre { font-size: 1.19rem; }
 
-/* 33px */
-h3 {
-  font-size: 1.87rem;
-}
-
-/* 30px */
-h4 {
-  font-size: 1.69rem;
-}
-
-/* 27px */
-h5 {
-  font-size: 1.5rem;
-}
-
-/* 24px */
-h6 {
-  font-size: 1.31rem;
-}
-
-p,
-ul,
-ol,
-li {
-  font-size: 1.1rem;
-}
-
-blockquote {
-  font-size: 1.3rem;
-}
-
-/* 30px */
-pre {
-  font-size: 1.19rem;
-}
-
-span,
-b,
-i,
-strong,
-em,
-a,
-code {
+span, b, i, strong, em, a, code {
   font-size: 0.75em;
-  /* Usar unidades relativas para spans */
   font-size-adjust: 0.5;
-  /* Ajustar el tamaño de la fuente para mejorar la legibilidad */
 }
 
 /* 16px */
@@ -299,20 +242,13 @@ code {
 }
 
 /* Estilos globales */
-* {
-  min-width: 0;
-  /* Evita problemas con el desbordamiento en Flexbox y Grid. */
-}
+** { min-width: 0; }
 
-img,
-video,
-svg {
+
+img, video, svg {
   display: block;
-  /* Cambia estos elementos a bloque, ocuparán todo el ancho disponible de su contenedor. */
   height: auto;
-  /* Asegura que la altura del elemento se escale proporcionalmente a su ancho. */
   max-width: 100%;
-  /* Impide que estos elementos se extiendan más allá del ancho de su contenedor. */
 }
 
 /* Nuevos estilos */
@@ -327,15 +263,10 @@ body {
   /* Agrega una transición suave para el cambio de modo. */
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-wrap: balance;
-  /* Distribuye el texto de los encabezados de manera más equilibrada. */
-}
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+p { text-wrap: pretty; }
+/* Estilos para balancear texto en encabezados y párrafos */
+
 
 p {
   text-wrap: pretty;
@@ -343,8 +274,8 @@ p {
 }
 
 .dark-mode {
-  background-color: #121212;
-  color: #ffffff;
+  background-color: #121212;   color: #ffffff;
+
 }
 
 .light-mode {
@@ -398,21 +329,18 @@ p {
 }
 
 .main-container {
-  margin-top: 87px; /* Altura de la barra de navegación */
-
+  margin-top: 87px;
   @media screen and (max-width: 1200px) {
     margin-top: 70px;
   }
   min-height: 100vh;
   background-image: url('./assets/entrada.avif');
-  /* Ruta relativa a la imagen en la carpeta assets */
   background-size: cover;
   background-position: center;
   position: relative;
   overflow: hidden;
-  /* Asegura que el pseudo-elemento no se desborde */
   z-index: 1;
-  /* Asegura que el contenedor principal esté por encima del pseudo-elemento */
+  flex: 1; /* IMPORTANTE para sticky footer */
 }
 
 .main-container::before {
@@ -439,4 +367,16 @@ p {
   /* Asegura que el contenido esté por encima del pseudo-elemento */
   z-index: 2;
   /* Asegura que el contenido esté por encima del pseudo-elemento */
+}
+
+/* Estilos para el contenedor principal y el footer */
+#root {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* IMPORTANTE para sticky footer */
+}
+
+footer {
+  /* Tus estilos de footer (color, padding, etc.) */
+  margin-top: auto; /* IMPORTANTE para sticky footer */
 }
