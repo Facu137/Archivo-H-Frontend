@@ -29,9 +29,6 @@ src
 │   ├── ForgotPassword
 │   ├── GestionArchivo
 │   ├── GestionarEmpleados
-│   │   ├── ConversionKeyManager
-│   │   │   ├── ConversionKeyManager.css
-│   │   │   └── ConversionKeyManager.jsx
 │   │   ├── CurrentEmployeesList
 │   │   │   ├── EmployeeDetails
 │   │   │   │   ├── EmployeeDetails.css
@@ -45,6 +42,9 @@ src
 │   │   │   ├── CurrentEmployeesList.css
 │   │   │   └── CurrentEmployeesList.jsx
 │   │   ├── PossibleEmployeesList
+│   │   │   ├── ConversionKeyManager
+│   │   │   │   ├── ConversionKeyManager.css
+│   │   │   │   └── ConversionKeyManager.jsx
 │   │   │   ├── PossibleEmployeesList.css
 │   │   │   └── PossibleEmployeesList.jsx
 │   │   ├── GestionarEmpleados.css

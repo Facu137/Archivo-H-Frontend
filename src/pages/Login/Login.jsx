@@ -8,7 +8,7 @@ import { useNotification } from '../../hooks/useNotification'
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { login, logout } = useAuth()
+  const { login, logout } = useAuth() // Importa logout
   const navigate = useNavigate()
   const location = useLocation()
   const showNotification = useNotification()
@@ -46,47 +46,26 @@ export const Login = () => {
     } else if (searchParams.get('accountDeleted') === 'true') {
       showNotification('Tu cuenta ha sido eliminada con éxito.', 'success')
       if (searchParams.get('logout') === 'true') {
-        logout()
+        logout() // Llamar a logout solo en esta condición
+        navigate('/', { replace: true }) // Redireccionar al home
       }
     }
-  }, [location, logout, showNotification])
+  }, [location, showNotification, logout, navigate]) // Agregar logout como dependencia
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
     try {
-      await login({ email, password }) // Llama la función de inicio de sesión
-      showNotification('Inicio de sesión exitoso', 'success')
-      // Redirige al usuario a la página desde donde intentó acceder o a la página principal
-      navigate(location.state?.from || '/', { replace: true })
+      await login({ email, password })
+      // El login exitoso se maneja en el interceptor de Axios y el contexto
+      navigate(location.state?.from || '/', { replace: true }) // Redirecciona después del login
     } catch (error) {
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-            showNotification('Correo o contraseña incorrectos', 'error')
-            break
-          case 403:
-            showNotification(
-              'Por favor, verifica tu correo electrónico antes de iniciar sesión',
-              'warning'
-            )
-            break
-          case 500:
-            showNotification('Error del servidor. Inténtalo más tarde', 'error')
-            break
-          default:
-            showNotification('Error desconocido. Inténtalo más tarde', 'error')
-        }
-      } else if (error.request) {
-        // Error relacionado con la solicitud (el servidor no respondió)
-        showNotification(
-          'No se pudo conectar con el servidor. Revisa tu conexión a internet.',
-          'error'
-        )
+      // Manejo de errores (mostrar notificaciones al usuario)
+      if (error.response && error.response.data) {
+        showNotification(error.response.data.message, 'error')
       } else {
-        // Otros tipos de errores
         showNotification(
-          'Hubo un error inesperado al intentar iniciar sesión',
+          'Hubo un error al iniciar sesión, inténtelo de nuevo más tarde.',
           'error'
         )
       }

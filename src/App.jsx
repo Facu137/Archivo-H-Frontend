@@ -13,14 +13,13 @@ import AuthenticatedRoute from './components/AuthenticatedRoute'
 import { Home } from './pages/Home/Home'
 import { Institucional } from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
-import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
-import Buscador from './pages/Buscador/Buscador' // Importa el nuevo componente de búsqueda
+import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
 
 import './index.css'
@@ -101,22 +100,22 @@ export const App = () => {
                 <Route path="/visor" element={<VerArchivo />} />
 
                 {/* Rutas protegidas */}
+                <Route element={<AuthenticatedRoute />}>
+                  <Route path="/editar-usuario" element={<EditUser />} />
+                  <Route path="/gestion" element={<GestionArchivo />} />
+                </Route>
+
+                {/* Ruta protegida para administradores */}
                 <Route
-                  element={<AuthenticatedRoute element={MiCuenta} />}
-                  path="/cuenta"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={EditUser} />}
-                  path="/editar-usuario"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={GestionArchivo} />}
-                  path="/gestion"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={GestionarEmpleados} />}
-                  path="/gestionar-empleados"
-                />
+                  element={
+                    <AuthenticatedRoute allowedRoles={['administrador']} />
+                  }
+                >
+                  <Route
+                    path="/gestionar-empleados"
+                    element={<GestionarEmpleados />}
+                  />
+                </Route>
 
                 <Route path="/*" element={<Navigate to="/" />} />
               </Routes>
@@ -137,4 +136,5 @@ export const App = () => {
     </NotificationProvider>
   )
 }
+
 export default App

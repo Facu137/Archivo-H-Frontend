@@ -86,10 +86,10 @@
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+    margin: 20px 0;
     /* Margen superior para separar de UserCard */
     display: flex;
-    align-items: center;
+    justify-content: center;
 }
 
 .employee-card-content {

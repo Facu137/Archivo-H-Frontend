@@ -1,7 +1,7 @@
 // src/components/LeftSidebar/LeftSidebar.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom' // Importa Link
+import { Link } from 'react-router-dom'
 import {
   FaEdit,
   FaFile,
@@ -17,7 +17,13 @@ const LeftSidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth()
 
   if (!user || (user.rol !== 'empleado' && user.rol !== 'administrador')) {
-    return null
+    return null // No mostrar el sidebar si no es empleado ni administrador
+  }
+
+  const hasPermission = (permission) => {
+    if (user.rol === 'administrador') return true
+    if (!user.permisos) return false
+    return user.permisos[permission]
   }
 
   return (
@@ -31,44 +37,53 @@ const LeftSidebar = ({ isOpen, onClose }) => {
           <div className="sidebar-section">
             <h3>Archivos</h3>
             <ul>
-              <li>
-                <FaFile /> <Link to="/agregar-archivo">Agregar Archivo</Link>{' '}
-                {/* Usa Link aquí */}
+              {/* Agregar Archivo (permiso_crear) */}
+              <li className={hasPermission('crear') ? '' : 'disabled'}>
+                <FaFile /> <Link to="/agregar-archivo">Agregar Archivo</Link>
               </li>
-              <li>
+
+              {/* Editar o Eliminar Archivo (permiso_editar O permiso_eliminar) */}
+              <li
+                className={
+                  hasPermission('editar') || hasPermission('eliminar')
+                    ? ''
+                    : 'disabled'
+                }
+              >
                 <FaEdit />{' '}
-                <Link to="/editar-archivo">Editar o Eliminar Archivo</Link>{' '}
-                {/* Usa Link aquí */}
+                <Link to="/editar-archivo">Editar o Eliminar Archivo</Link>
               </li>
-              <li>
+
+              {/* Historial de Archivos Modificados (permiso_editar) */}
+              <li className={hasPermission('editar') ? '' : 'disabled'}>
                 <FaHistory />{' '}
                 <Link to="/historial-archivos">
                   Historial de Archivos Modificados
-                </Link>{' '}
-                {/* Usa Link aquí */}
+                </Link>
               </li>
-              <li>
+
+              {/* Archivos Eliminados (permiso_eliminar) */}
+              <li className={hasPermission('eliminar') ? '' : 'disabled'}>
                 <FaTrash />{' '}
-                <Link to="/archivos-eliminados">Archivos Eliminados</Link>{' '}
-                {/* Usa Link aquí */}
+                <Link to="/archivos-eliminados">Archivos Eliminados</Link>
               </li>
             </ul>
           </div>
+
+          {/* Sección de Administración (solo para administradores) */}
           {user.rol === 'administrador' && (
             <div className="sidebar-section">
               <h3>Administración</h3>
               <ul>
                 <li>
                   <FaUserFriends />{' '}
-                  <Link to="/gestionar-empleados">Gestionar Empleados</Link>{' '}
-                  {/* Usa Link aquí */}
+                  <Link to="/gestionar-empleados">Gestionar Empleados</Link>
                 </li>
                 <li>
                   <FaCog />{' '}
                   <Link to="/editar-portada">
                     Editar Portada e Institucional
-                  </Link>{' '}
-                  {/* Usa Link aquí */}
+                  </Link>
                 </li>
               </ul>
             </div>

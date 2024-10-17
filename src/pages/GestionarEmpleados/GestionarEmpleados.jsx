@@ -8,24 +8,35 @@ import { useNotification } from '../../hooks/useNotification'
 import '../GestionarEmpleados/GestionarEmpleados.css'
 
 export const GestionarEmpleados = () => {
-  const { user, token } = useAuth()
-  // Estado para el indicador de carga
-  const [isLoading, setIsLoading] = useState(true)
-  // Estado para la lista de posibles empleados
+  const { user, isLoading: authLoading } = useAuth() // Obtener user, token e isLoading del contexto
+  const [isLoading, setIsLoading] = useState(true) // Estado de carga para las peticiones
   const [possibleEmployees, setPossibleEmployees] = useState([])
-  // Estado para la lista de empleados actuales
   const [currentEmployees, setCurrentEmployees] = useState([])
-  // Estado para el indicador de notificación
   const showNotification = useNotification()
 
-  // Obtener la lista de empleados actuales
+  const fetchPossibleEmployees = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const response = await axiosInstance.get('/admin/list-possible-employees') // El token se maneja en el interceptor
+      setPossibleEmployees(response.data)
+    } catch (error) {
+      console.error('Error fetching possible employees:', error)
+      if (error.response && error.response.status === 403) {
+        showNotification(
+          'No tienes permiso para acceder a esta sección.',
+          'error'
+        )
+      } else {
+        showNotification('Error al obtener la lista de empleados.', 'error')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [showNotification])
+
   const fetchCurrentEmployees = useCallback(async () => {
     try {
-      const response = await axiosInstance.get('/admin/list-employees', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const response = await axiosInstance.get('/admin/list-employees') // El token se maneja en el interceptor
       setCurrentEmployees(response.data)
     } catch (error) {
       console.error('Error al obtener la lista de empleados actuales:', error)
@@ -34,77 +45,42 @@ export const GestionarEmpleados = () => {
         'error'
       )
     }
-  }, [token, showNotification])
+  }, [showNotification])
 
   useEffect(() => {
-    // Obtener la lista de posibles empleados
-    const fetchPossibleEmployees = async () => {
-      setIsLoading(true)
-      try {
-        const response = await axiosInstance.get(
-          '/admin/list-possible-employees',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        console.log('GestionarEmpleados: respuesta del backend:', response.data)
-        setPossibleEmployees(response.data)
-      } catch (error) {
-        console.error(
-          'GestionarEmpleados: Error al obtener la lista de empleados:',
-          error
-        )
-        if (error.response && error.response.status === 403) {
-          showNotification(
-            'No tienes permiso para acceder a esta sección.',
-            'error'
-          )
-        } else {
-          showNotification('Error al obtener la lista de empleados.', 'error')
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    // Verifica el rol del usuario DESPUÉS de que se haya cargado la información
-    if (user && user.rol === 'administrador') {
+    if (!authLoading && user && user.rol === 'administrador') {
+      // Verificar el rol solo después de que el usuario se haya cargado
       fetchPossibleEmployees()
-      fetchCurrentEmployees()
-    } else if (user) {
-      // Si el usuario está cargado pero no es administrador
-      showNotification(
-        'No tienes permiso para acceder a esta sección.',
-        'error'
-      )
-      setIsLoading(false)
+      fetchCurrentEmployees() // Llamar a fetchCurrentEmployees aquí
+    } else if (!authLoading && user && user.rol !== 'administrador') {
+      showNotification('No tienes permisos para acceder a esta página', 'error')
     }
-  }, [token, user, showNotification, fetchCurrentEmployees])
+  }, [
+    user,
+    authLoading,
+    fetchPossibleEmployees,
+    fetchCurrentEmployees,
+    showNotification
+  ])
 
-  if (isLoading) {
-    return <div>Cargando empleados...</div>
+  if (authLoading || isLoading) {
+    // Mostrar la carga mientras se obtiene la información del usuario y los empleados
+    return <div>Cargando...</div>
   }
+
+  if (!user || user.rol !== 'administrador') {
+    return <div>No tienes permisos para acceder a esta página.</div>
+  }
+
   const handleAcceptConversion = async (employeeId) => {
     try {
-      await axiosInstance.post(
-        '/admin/convert-to-employee',
-        { userId: employeeId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await axiosInstance.post('/admin/convert-to-employee', {
+        userId: employeeId
+      })
       showNotification('Empleado aceptado con éxito', 'success')
-
-      // Actualizar la lista de posibles empleados
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
       )
-
-      // Actualizar la lista de empleados actuales
       fetchCurrentEmployees()
     } catch (error) {
       showNotification('Error al aceptar la conversión', 'error')
@@ -113,17 +89,10 @@ export const GestionarEmpleados = () => {
 
   const handleRejectConversion = async (employeeId) => {
     try {
-      await axiosInstance.put(
-        '/admin/cancel-employee-conversion',
-        { userId: employeeId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await axiosInstance.put('/admin/cancel-employee-conversion', {
+        userId: employeeId
+      })
       showNotification('Conversión rechazada con éxito', 'success')
-      // Actualizar la lista de posibles empleados
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
       )
@@ -132,8 +101,9 @@ export const GestionarEmpleados = () => {
       showNotification('Error al rechazar la conversión', 'error')
     }
   }
+
   return (
-    <div className="gestion-main-conteiner">
+    <div className="gestion-main-container">
       <div className="gestion-section-container">
         <h2>Gestionar Nuevos Empleados</h2>
         <PossibleEmployeesList

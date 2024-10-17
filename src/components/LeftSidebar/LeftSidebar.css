@@ -88,3 +88,16 @@
 .dark-mode .sidebar-section a:hover {
     background-color: #444;
 }
+
+/* Estilos para los elementos deshabilitados */
+.left-sidebar .disabled {
+    pointer-events: none;
+    /* Evita que se pueda hacer clic */
+    opacity: 0.5;
+    /* Reduce la opacidad */
+    /* Puedes añadir más estilos para indicar visualmente la deshabilitación */
+}
+
+.left-sidebar .disabled a {
+    color: #756f6f;
+}
