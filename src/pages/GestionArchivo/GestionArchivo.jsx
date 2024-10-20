@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import './GestionArchivo.css'
 import { useAuth } from '../../context/AuthContext'
-import axiosInstance from '../../api/axiosConfig' // Asegúrate de que la ruta sea correcta
+import axiosInstance from '../../api/axiosConfig'
+import { z } from 'zod'
 
 const FILE_TYPES = {
   Mensura: 'Mensura',
@@ -120,32 +121,41 @@ const PERSON_FIELDS = [
   'Destinatario'
 ]
 
+const formSchema = z.object({
+  legajoNumero: z.string().min(1, 'El número de legajo es requerido'),
+  legajoEsBis: z.boolean(),
+  expedienteNumero: z.string().min(1, 'El número de expediente es requerido'),
+  expedienteEsBis: z.boolean(),
+  tipoDocumento: z.enum(Object.keys(FILE_TYPES)),
+  anio: z.number().int().min(1800).max(new Date().getFullYear()),
+  mes: z.number().int().min(1).max(12).optional(),
+  dia: z.number().int().min(1).max(31).optional(),
+  caratulaAsuntoExtracto: z
+    .string()
+    .min(1, 'La carátula/asunto/extracto es requerido'),
+  tema: z.string().min(1, 'El tema es requerido'),
+  folios: z.number().int().positive('El número de folios debe ser positivo'),
+  esPublico: z.boolean(),
+  personaNombre: z.string().min(1, 'El nombre de la persona es requerido'),
+  personaTipo: z.enum(['Persona Física', 'Persona Jurídica']),
+  personaRol: z.enum(PERSON_FIELDS)
+})
+
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState(FILE_TYPES.Mensura)
-  const [formFields, setFormFields] = useState([])
+  const [formData, setFormData] = useState({})
   const [fileUploads, setFileUploads] = useState([])
   const [message, setMessage] = useState('')
-  const { token } = useAuth()
-
-  const numericFields = [
-    'legajoNumero',
-    'expedienteNumero',
-    'anio',
-    'mes',
-    'dia',
-    'Fojas',
-    'Folios',
-    'creadorId'
-  ]
+  const [errors, setErrors] = useState({})
+  const { token, user } = useAuth()
 
   const createFormFields = useCallback(() => {
     const fieldList = FORM_FIELDS[fileType]
-    const newFormFields = fieldList.map((field) => ({
-      id: field,
-      value: '',
-      isPersonField: PERSON_FIELDS.includes(field)
-    }))
-    setFormFields(newFormFields)
+    const newFormData = {}
+    fieldList.forEach((field) => {
+      newFormData[field] = ''
+    })
+    setFormData(newFormData)
   }, [fileType])
 
   useEffect(() => {
@@ -157,75 +167,109 @@ export const GestionArchivo = () => {
   }
 
   const handleFormFieldChange = (id, value) => {
-    setFormFields((prevFields) =>
-      prevFields.map((field) => (field.id === id ? { ...field, value } : field))
-    )
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value
+    }))
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: ''
+    }))
   }
 
   const handleFileUpload = (e) => {
-    setFileUploads((prevUploads) => [...prevUploads, ...e.target.files])
+    const maxFileSize = 20 * 1024 * 1024 // 20 MB limit
+    const validFileTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/png',
+      'image/tiff'
+    ]
+
+    const files = Array.from(e.target.files)
+    const validFiles = files.filter(
+      (file) => validFileTypes.includes(file.type) && file.size <= maxFileSize
+    )
+
+    if (validFiles.length !== files.length) {
+      setMessage('Algunos archivos fueron rechazados por tipo o tamaño.')
+    }
+
+    setFileUploads((prevUploads) => [...prevUploads, ...validFiles])
   }
 
   const handleFileRemove = (index) => {
     setFileUploads((prevUploads) => prevUploads.filter((_, i) => i !== index))
   }
 
+  const validateForm = () => {
+    try {
+      formSchema.parse(formData)
+      return true
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors = {}
+        error.errors.forEach((err) => {
+          newErrors[err.path[0]] = err.message
+        })
+        setErrors(newErrors)
+      }
+      return false
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const formData = new FormData(e.target)
 
-    // Asegúrate de que los campos booleanos se envíen como booleanos
-    formData.set('legajoEsBis', formData.get('legajoEsBis') === 'true')
-    formData.set('expedienteEsBis', formData.get('expedienteEsBis') === 'true')
-    formData.set('esPublico', formData.get('esPublico') === 'true')
-
-    // Convertir campos numéricos a números
-    numericFields.forEach((field) => {
-      const value = formData.get(field)
-      if (value !== null && value !== undefined) {
-        formData.set(field, parseInt(value, 10))
-      }
-    })
-
-    // Adjunta los archivos al formData
-    fileUploads.forEach((file, index) => {
-      formData.append('file', file)
-    })
-
-    let endpoint
-
-    switch (fileType) {
-      case FILE_TYPES.Mensura:
-        endpoint = 'api/documents/upload/mensura'
-        break
-      case FILE_TYPES.Notarial:
-        endpoint = 'api/documents/upload/notarial'
-        break
-      default:
-        endpoint = 'api/documents/upload/general'
-        break
+    if (!validateForm()) {
+      setMessage('Por favor, corrija los errores en el formulario.')
+      return
     }
 
+    const formDataToSend = new FormData()
+
+    // Añadir todos los campos del formulario
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key])
+    })
+
+    // Añadir archivos
+    fileUploads.forEach((file) => {
+      formDataToSend.append('archivo', file)
+    })
+
+    // Añadir campos adicionales
+    formDataToSend.append('tipoDocumento', fileType)
+    formDataToSend.append('creadorId', user.id || 0)
+
     try {
-      const response = await axiosInstance.post(endpoint, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
+      const response = await axiosInstance.post(
+        `api/documents/upload/${fileType.toLowerCase()}`,
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
 
       if (response.status === 200 || response.status === 201) {
         setMessage('Archivo subido correctamente')
-        console.log('Archivo subido correctamente')
-        // Handle successful upload (e.g., show success message, reset form)
+        createFormFields() // Reset form
+        setFileUploads([])
       } else {
         setMessage(`Error al subir el archivo: ${response.status}`)
-        console.error('Error al subir el archivo:', response.status)
-        // Handle error (e.g., show error message)
       }
     } catch (error) {
-      setMessage('Error al procesar la solicitud')
-      console.error('Error:', error)
+      console.error('Error al subir el archivo:', error)
+      if (error.response && error.response.data) {
+        setMessage(
+          `Error: ${error.response.data.message || 'Error desconocido'}`
+        )
+      } else {
+        setMessage('Error al procesar la solicitud')
+      }
     }
   }
 
@@ -247,74 +291,104 @@ export const GestionArchivo = () => {
         </select>
 
         <div id="formFields">
-          {formFields.map((field) => (
-            <div key={field.id}>
-              <label htmlFor={field.id}>{field.id}:</label>
-              <input
-                type={numericFields.includes(field.id) ? 'number' : 'text'}
-                id={field.id}
-                name={field.id}
-                value={field.value}
-                onChange={(e) =>
-                  handleFormFieldChange(field.id, e.target.value)
-                }
-              />
-              {field.isPersonField && (
-                <div className="person-type">
-                  <label>
-                    <input
-                      type="radio"
-                      name={`${field.id}Type`}
-                      value="Física"
-                    />
-                    Física
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name={`${field.id}Type`}
-                      value="Jurídica"
-                    />
-                    Jurídica
-                  </label>
+          {Object.keys(formData).map((field) => (
+            <div key={field}>
+              <label htmlFor={field}>{field}:</label>
+              {PERSON_FIELDS.includes(field) ? (
+                <div>
+                  <input
+                    type="text"
+                    id={`${field}Nombre`}
+                    name={`${field}Nombre`}
+                    value={formData[`${field}Nombre`] || ''}
+                    onChange={(e) =>
+                      handleFormFieldChange(`${field}Nombre`, e.target.value)
+                    }
+                    placeholder="Nombre"
+                  />
+                  <div className="person-type">
+                    <label>
+                      <input
+                        type="radio"
+                        name={`${field}Tipo`}
+                        value="Persona Física"
+                        checked={formData[`${field}Tipo`] === 'Persona Física'}
+                        onChange={() =>
+                          handleFormFieldChange(
+                            `${field}Tipo`,
+                            'Persona Física'
+                          )
+                        }
+                      />
+                      Persona Física
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name={`${field}Tipo`}
+                        value="Persona Jurídica"
+                        checked={
+                          formData[`${field}Tipo`] === 'Persona Jurídica'
+                        }
+                        onChange={() =>
+                          handleFormFieldChange(
+                            `${field}Tipo`,
+                            'Persona Jurídica'
+                          )
+                        }
+                      />
+                      Persona Jurídica
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    id={`${field}Rol`}
+                    name={`${field}Rol`}
+                    value={formData[`${field}Rol`] || ''}
+                    onChange={(e) =>
+                      handleFormFieldChange(`${field}Rol`, e.target.value)
+                    }
+                    placeholder="Rol"
+                  />
                 </div>
+              ) : (
+                <input
+                  type="text"
+                  id={field}
+                  name={field}
+                  value={formData[field] || ''}
+                  onChange={(e) => handleFormFieldChange(field, e.target.value)}
+                />
               )}
+              {errors[field] && <p className="error">{errors[field]}</p>}
             </div>
           ))}
         </div>
 
         <div id="fileUploads">
-          <label htmlFor="files">Archivos (imágenes o PDFs):</label>
+          <label htmlFor="fileUpload">Subir Archivos:</label>
           <input
             type="file"
-            id="files"
-            name="files"
+            id="fileUpload"
+            name="archivo"
             multiple
             onChange={handleFileUpload}
           />
-          {fileUploads.map((file, index) => (
-            <div key={index}>
-              {file.name}
-              <button type="button" onClick={() => handleFileRemove(index)}>
-                Eliminar
-              </button>
-            </div>
-          ))}
+          <div className="file-list">
+            {fileUploads.map((file, index) => (
+              <div key={index}>
+                {file.name}{' '}
+                <button type="button" onClick={() => handleFileRemove(index)}>
+                  Eliminar
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <button type="submit" className="submit-button">
-          Guardar
-        </button>
+        <button type="submit">Enviar</button>
+        {message && <p className="message">{message}</p>}
       </form>
-      {message && (
-        <div
-          className={
-            message.includes('Error') ? 'error-message' : 'success-message'
-          }
-        >
-          {message}
-        </div>
-      )}
     </div>
   )
 }

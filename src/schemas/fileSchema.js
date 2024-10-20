@@ -3,24 +3,12 @@ import { z } from 'zod'
 
 export const fileSchema = z.object({
   // Datos del legajo
-  legajoNumero: z.coerce
-    .number()
-    .int()
-    .min(1, 'El número de legajo es requerido'),
-  legajoEsBis: z.preprocess(
-    (val) => val === 'true' || val === true || val === 1,
-    z.boolean()
-  ),
+  legajoNumero: z.string().min(1, 'El número de legajo es requerido'),
+  legajoEsBis: z.coerce.number().int().min(0).max(100),
 
   // Datos del expediente
-  expedienteNumero: z.coerce
-    .number()
-    .int()
-    .min(1, 'El número de expediente es requerido'),
-  expedienteEsBis: z.preprocess(
-    (val) => val === 'true' || val === true || val === 1,
-    z.boolean()
-  ),
+  expedienteNumero: z.string().min(1, 'El número de expediente es requerido'),
+  expedienteEsBis: z.coerce.number().int().min(0).max(100),
 
   // Datos del documento
   tipoDocumento: z.enum(
@@ -35,7 +23,7 @@ export const fileSchema = z.object({
     ],
     'Tipo de documento no válido'
   ),
-  anio: z.coerce.number().int().min(1800).max(new Date().getFullYear()),
+  anio: z.coerce.number().int().max(new Date().getFullYear()),
   mes: z.coerce.number().int().min(1).max(12).optional(),
   dia: z.coerce.number().int().min(1).max(31).optional(),
   caratulaAsuntoExtracto: z
@@ -76,15 +64,20 @@ export const fileSchema = z.object({
         .string()
         .refine(
           (mime) =>
-            ['image/jpeg', 'image/png', 'application/pdf'].includes(mime),
+            [
+              'image/tiff',
+              'image/jpg',
+              'image/jpeg',
+              'application/pdf'
+            ].includes(mime),
           {
-            message: 'Tipo de archivo no soportado. Use JPEG, PNG o PDF.'
+            message: 'Tipo de archivo no soportado. Use TIFF, JPG, JPEG o PDF.'
           }
         ),
       destination: z.string(),
       filename: z.string(),
       path: z.string(),
-      size: z.number().max(5000000, 'El archivo no debe superar los 5MB')
+      size: z.number().max(20000000, 'El archivo no debe superar los 20MB')
     })
     .optional()
 })

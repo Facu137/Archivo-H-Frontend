@@ -4,20 +4,14 @@ import { fileSchema } from './fileSchema.js' // Importa fileSchema
 
 const baseSchema = z.object({
   // Datos del legajo
-  legajoNumero: z.coerce
-    .number()
-    .int()
-    .min(1, 'El número de legajo es requerido'),
+  legajoNumero: z.string().min(1, 'El número de legajo es requerido'),
   legajoEsBis: z.preprocess(
     (val) => val === 'true' || val === true || val === 1,
     z.boolean()
   ),
 
   // Datos del expediente
-  expedienteNumero: z.coerce
-    .number()
-    .int()
-    .min(1, 'El número de expediente es requerido'),
+  expedienteNumero: z.string().min(1, 'El número de expediente es requerido'),
   expedienteEsBis: z.preprocess(
     (val) => val === 'true' || val === true || val === 1,
     z.boolean()
@@ -25,7 +19,7 @@ const baseSchema = z.object({
 
   // Datos del documento
   tipoDocumento: z.literal('Mensura'),
-  anio: z.coerce.number().int().min(1800).max(new Date().getFullYear()),
+  anio: z.coerce.number().int().max(new Date().getFullYear()),
   mes: z.coerce.number().int().min(1).max(12).optional(),
   dia: z.coerce.number().int().min(1).max(31).optional(),
   caratulaAsuntoExtracto: z
