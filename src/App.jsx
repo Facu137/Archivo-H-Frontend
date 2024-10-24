@@ -9,7 +9,7 @@ import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
 import { Home } from './pages/Home/Home'
-import Institucional from './pages/Institucional/Institucional' // Importación corregida
+import Institucional from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
 import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
@@ -20,6 +20,7 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+import ContactDev from './pages/Desarrolladores/ContactDev' // Importa ContactDev
 import './index.css'
 import { NotificationProvider } from './hooks/useNotification'
 
@@ -95,6 +96,7 @@ export const App = () => {
                 <Route path="/buscador" element={<Buscador />} />
                 <Route path="/visor" element={<VerArchivo />} />
                 <Route path="/agregar-archivo" element={<GestionArchivo />} />
+                <Route path="/desarrolladores" element={<ContactDev />} />
 
                 <Route
                   element={<AuthenticatedRoute element={MiCuenta} />}

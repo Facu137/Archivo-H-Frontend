@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FaMapMarkerAlt, FaPhone, FaFacebookF } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 import './Footer.css'
 
 export const Footer = ({ isDarkMode }) => {
@@ -35,8 +36,11 @@ export const Footer = ({ isDarkMode }) => {
         </div>
       </div>
       <div className="footer-copyright">
-        &copy; {new Date().getFullYear()} Archivo Histórico de Santiago del
-        Estero. Todos los derechos reservados.
+        © {new Date().getFullYear()} Archivo Histórico de Santiago del Estero.
+        Todos los derechos reservados.
+        <Link to="/desarrolladores" className="contact-button">
+          Contacto
+        </Link>
       </div>
     </footer>
   )

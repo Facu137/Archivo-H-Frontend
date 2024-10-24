@@ -1,0 +1,25 @@
+.contact-dev-container {
+  /* Estilos para el contenedor principal */
+  padding: 20px;
+  text-align: center;
+}
+
+.contact-dev-container ul {
+  /* Estilos para la lista de enlaces */
+  list-style: none;
+  padding: 0;
+}
+
+.contact-dev-container li {
+  margin-bottom: 10px;
+}
+
+.contact-dev-container a {
+  /* Estilos para los enlaces */
+  color: #d13333; /* O el color que prefieras */
+  text-decoration: none;
+}
+
+.contact-dev-container a:hover {
+  text-decoration: underline;
+}
