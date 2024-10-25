@@ -1,0 +1,45 @@
+/* src/components/NetworkStatus.css */
+
+.network-status-bar {
+  position: fixed;
+  top: 80%; /* Posición fija en la parte superior */
+  left: 50%;
+  transform: translateX(-50%); /* Centrar horizontalmente */
+  width: 95%; /* Ajusta el ancho según sea necesario */
+  max-width: 600px; /* Ancho máximo para pantallas grandes */
+  padding: 10px;
+  text-align: center; /* Centrar el texto */
+  z-index: 1500; /* Asegúrate de que esté por encima de otros elementos */
+  border-radius: 5px;
+  transition: opacity 0.3s ease-in-out; /* Transición suave para la opacidad */
+}
+
+
+
+.dark-mode .network-status-bar {
+  background-color: #DC3545; /* Rojo oscuro */
+  color: #fff; /* Texto blanco */
+}
+
+.light-mode .network-status-bar {
+  background-color: #DC3545; /* Rojo */
+  color: #fff; /* Texto blanco */
+}
+
+
+.network-status-bar.hidden {
+  opacity: 0; /* Ocultar con opacidad 0 */
+}
+
+.no-connection{
+    font-weight: bolder;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .network-status-bar {
+    width: 90%;
+    padding: 8px; /* Reduce el padding en pantallas pequeñas */
+    font-size: 0.9rem; /* Reduce el tamaño de fuente en pantallas pequeñas */
+  }
+}

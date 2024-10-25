@@ -1,9 +1,8 @@
 // src/api/axiosConfig.js
 import axios from 'axios'
-import { useAuth } from '../context/AuthContext'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000', // URL del backend
+  baseURL: 'http://localhost:3000',
   withCredentials: true
 })
 
@@ -19,7 +18,6 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    const { logout, setToken } = useAuth() // Accede a la función logout y setToken del contexto
 
     if (
       error.response &&
@@ -30,21 +28,23 @@ axiosInstance.interceptors.response.use(
       try {
         const response = await axiosInstance.post('/auth/refresh-token')
         const newToken = response.data.accessToken
-        localStorage.setItem('accessToken', newToken) // Guarda el nuevo token
+        localStorage.setItem('accessToken', newToken)
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${newToken}`
-        setToken(newToken) // Actualiza el token en el contexto AuthContext
-        // Vuelve a intentar la solicitud original
-        return axiosInstance(originalRequest)
+        // NO llames a logout ni setToken aquí.  Eso se manejará en el componente.
+        return axiosInstance(originalRequest) // Reintenta la solicitud
       } catch (refreshError) {
-        console.error('Failed to refresh token:', refreshError)
-        logout()
-        // Redirige al login o muestra un mensaje de error
-        return Promise.reject(refreshError) // Importante: rechazar la promesa para indicar el fallo
+        // Maneja el error de actualización del token (redireccionar al login, etc.)
+        return Promise.reject(refreshError) // Rechaza la promesa para que el componente sepa que hubo un error
       }
-    } else if (error.response && error.response.status === 403) {
+    }
+    if (error.response?.status === 403) {
       console.error('Permiso denegado:', error.response.data.message)
-      // Puedes manejar el error 403 aquí, por ejemplo, mostrando un mensaje al usuario
-      // O redirigiendo a una página de "Acceso Denegado".
+    } else if (error.message === 'Network Error') {
+      console.error(
+        'Error de red. La aplicación no se encuentra conectada a internet.'
+      )
+    } else if (error.message.includes('offline')) {
+      console.error('Estás trabajando sin conexión')
     }
 
     return Promise.reject(error) // Rechaza la promesa para otros errores

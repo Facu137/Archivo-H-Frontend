@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext'
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
+import NetworkStatus from './components/NetworkStatus/NetworkStatus'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
@@ -67,6 +68,7 @@ export const App = () => {
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+        <NetworkStatus />
         <div className="main-container">
           <div className="content">
             <NavBar

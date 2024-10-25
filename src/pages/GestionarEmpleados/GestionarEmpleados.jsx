@@ -21,7 +21,15 @@ export const GestionarEmpleados = () => {
       setPossibleEmployees(response.data)
     } catch (error) {
       console.error('Error fetching possible employees:', error)
-      if (error.response && error.response.status === 403) {
+      if (
+        error.message === 'Network Error' ||
+        error.message.includes('offline')
+      ) {
+        showNotification(
+          'Error de red. Verifica tu conexión a internet.',
+          'error'
+        )
+      } else if (error.response && error.response.status === 403) {
         showNotification(
           'No tienes permiso para acceder a esta sección.',
           'error'
@@ -40,10 +48,20 @@ export const GestionarEmpleados = () => {
       setCurrentEmployees(response.data)
     } catch (error) {
       console.error('Error al obtener la lista de empleados actuales:', error)
-      showNotification(
-        'Error al obtener la lista de empleados actuales',
-        'error'
-      )
+      if (
+        error.message === 'Network Error' ||
+        error.message.includes('offline')
+      ) {
+        showNotification(
+          'Error de red. Verifica tu conexión a internet.',
+          'error'
+        )
+      } else {
+        showNotification(
+          'Error al obtener la lista de empleados actuales',
+          'error'
+        )
+      }
     }
   }, [showNotification])
 
