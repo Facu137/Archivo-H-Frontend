@@ -14,75 +14,61 @@ export const GestionarEmpleados = () => {
   const [currentEmployees, setCurrentEmployees] = useState([])
   const showNotification = useNotification()
 
+  const handleError = useCallback((error, showNotification) => {
+    if (error.code === 'NETWORK_ERROR') {
+      showNotification(
+        'Error de red. Verifica tu conexión a internet.',
+        'error'
+      )
+    } else if (error.code === 'FORBIDDEN_ERROR') {
+      showNotification(
+        'No tienes permiso para acceder a esta sección.',
+        'error'
+      )
+    } else {
+      showNotification('Error al obtener la lista de empleados.', 'error')
+    }
+  }, []) // handleError ya no tiene dependencias
+
   const fetchPossibleEmployees = useCallback(async () => {
     setIsLoading(true)
     try {
-      const response = await axiosInstance.get('/admin/list-possible-employees') // El token se maneja en el interceptor
+      const response = await axiosInstance.get('/admin/list-possible-employees')
       setPossibleEmployees(response.data)
     } catch (error) {
       console.error('Error fetching possible employees:', error)
-      if (
-        error.message === 'Network Error' ||
-        error.message.includes('offline')
-      ) {
-        showNotification(
-          'Error de red. Verifica tu conexión a internet.',
-          'error'
-        )
-      } else if (error.response && error.response.status === 403) {
-        showNotification(
-          'No tienes permiso para acceder a esta sección.',
-          'error'
-        )
-      } else {
-        showNotification('Error al obtener la lista de empleados.', 'error')
-      }
+      handleError(error, showNotification) // Pasa showNotification a handleError
     } finally {
       setIsLoading(false)
     }
-  }, [showNotification])
+  }, [showNotification, handleError]) // showNotification ya no es una dependencia
 
   const fetchCurrentEmployees = useCallback(async () => {
     try {
-      const response = await axiosInstance.get('/admin/list-employees') // El token se maneja en el interceptor
+      const response = await axiosInstance.get('/admin/list-employees')
       setCurrentEmployees(response.data)
     } catch (error) {
       console.error('Error al obtener la lista de empleados actuales:', error)
-      if (
-        error.message === 'Network Error' ||
-        error.message.includes('offline')
-      ) {
-        showNotification(
-          'Error de red. Verifica tu conexión a internet.',
-          'error'
-        )
-      } else {
-        showNotification(
-          'Error al obtener la lista de empleados actuales',
-          'error'
-        )
-      }
+      handleError(error, showNotification) // Pasa showNotification a handleError
     }
-  }, [showNotification])
+  }, [showNotification, handleError]) // showNotification ya no es una dependencia
 
   useEffect(() => {
     if (!authLoading && user && user.rol === 'administrador') {
-      // Verificar el rol solo después de que el usuario se haya cargado
       fetchPossibleEmployees()
-      fetchCurrentEmployees() // Llamar a fetchCurrentEmployees aquí
+      fetchCurrentEmployees()
     } else if (!authLoading && user && user.rol !== 'administrador') {
       showNotification('No tienes permisos para acceder a esta página', 'error')
     }
   }, [
     user,
     authLoading,
+    showNotification,
     fetchPossibleEmployees,
-    fetchCurrentEmployees,
-    showNotification
+    fetchCurrentEmployees
   ])
 
   if (authLoading || isLoading) {
-    // Mostrar la carga mientras se obtiene la información del usuario y los empleados
     return <div>Cargando...</div>
   }
 
@@ -101,7 +87,7 @@ export const GestionarEmpleados = () => {
       )
       fetchCurrentEmployees()
     } catch (error) {
-      showNotification('Error al aceptar la conversión', 'error')
+      handleError(error, showNotification) // Pasa showNotification a handleError
     }
   }
 
@@ -116,7 +102,7 @@ export const GestionarEmpleados = () => {
       )
     } catch (error) {
       console.error('Error al rechazar la conversión:', error)
-      showNotification('Error al rechazar la conversión', 'error')
+      handleError(error, showNotification) // Pasa showNotification a handleError
     }
   }
 

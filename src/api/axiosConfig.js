@@ -30,24 +30,29 @@ axiosInstance.interceptors.response.use(
         const newToken = response.data.accessToken
         localStorage.setItem('accessToken', newToken)
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${newToken}`
-        // NO llames a logout ni setToken aquí.  Eso se manejará en el componente.
         return axiosInstance(originalRequest) // Reintenta la solicitud
       } catch (refreshError) {
-        // Maneja el error de actualización del token (redireccionar al login, etc.)
         return Promise.reject(refreshError) // Rechaza la promesa para que el componente sepa que hubo un error
       }
     }
-    if (error.response?.status === 403) {
-      console.error('Permiso denegado:', error.response.data.message)
-    } else if (error.message === 'Network Error') {
-      console.error(
-        'Error de red. La aplicación no se encuentra conectada a internet.'
-      )
-    } else if (error.message.includes('offline')) {
-      console.error('Estás trabajando sin conexión')
+
+    // Manejo de errores comunes
+    if (
+      error.message === 'Network Error' ||
+      error.message.includes('offline')
+    ) {
+      const networkError = new Error('Network Error')
+      networkError.code = 'NETWORK_ERROR'
+      return Promise.reject(networkError)
     }
 
-    return Promise.reject(error) // Rechaza la promesa para otros errores
+    if (error.response?.status === 403) {
+      const forbiddenError = new Error('Forbidden Error')
+      forbiddenError.code = 'FORBIDDEN_ERROR'
+      return Promise.reject(forbiddenError)
+    }
+
+    return Promise.reject(error) // Rechaza otros errores normalmente
   }
 )
 
