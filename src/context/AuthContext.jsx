@@ -7,7 +7,8 @@ import {
   useCallback
 } from 'react'
 import axiosInstance from '../api/axiosConfig'
-import PropTypes from 'prop-types' // Asegúrate de importar PropTypes
+import PropTypes from 'prop-types'
+import localforage from 'localforage' // Importa localforage
 
 const AuthContext = createContext()
 export const useAuth = () => useContext(AuthContext)
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('accessToken')
       setToken(null)
       setUser(null)
+      await localforage.removeItem('user') // Eliminar usuario de localforage
     } catch (error) {
       console.error('Logout error:', error)
       // Manejar el error, por ejemplo, mostrando una notificación al usuario.
@@ -34,6 +36,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axiosInstance.get('/auth/me')
       setUser(response.data)
+      await localforage.setItem('user', response.data) // Guardar usuario en localforage
     } catch (error) {
       console.error('Error fetching user:', error)
       logout() // Cerrar sesión si hay un error al obtener la información del usuario
@@ -63,13 +66,24 @@ export const AuthProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken')
-    if (storedToken) {
-      setToken(storedToken) // Guardar el token en el estado
-      fetchUser() // Obtener la información del usuario si hay un token
-    } else {
-      setIsLoading(false)
+    const initializeAuth = async () => {
+      // Función asíncrona para usar await
+      const storedToken = localStorage.getItem('accessToken')
+      const localUser = await localforage.getItem('user') // Recuperar de localforage
+      if (storedToken) {
+        setToken(storedToken)
+        if (localUser) {
+          setUser(localUser) // Si hay un usuario en localforage, úsalo
+          setIsLoading(false)
+        } else {
+          fetchUser() // Si no hay usuario en localforage, obtenerlo del servidor
+        }
+      } else {
+        setIsLoading(false)
+      }
     }
+
+    initializeAuth() // Llamar a la función asíncrona
   }, [fetchUser])
 
   return (

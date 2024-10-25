@@ -15,6 +15,7 @@ src
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
+│   ├── ScrollableCardList
 │   ├── ToggleSwitch
 │   ├── Tooltip
 │   ├── UserCard
@@ -52,7 +53,6 @@ src
 │   ├── Home
 │   ├── Institucional
 │   ├── Login
-│   ├── MiCuenta
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo

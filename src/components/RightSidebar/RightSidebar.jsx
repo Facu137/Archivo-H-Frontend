@@ -1,15 +1,26 @@
 // src/components/RightSidebar/RightSidebar.jsx
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FaSignOutAlt, FaEdit } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
 import UserCard from '../UserCard/UserCard'
 import './RightSidebar.css'
+import localforage from 'localforage' // Importa localforage
 
 const RightSidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth() // Usar el contexto directamente
   const navigate = useNavigate()
+  const [localUser, setLocalUser] = useState(null)
+
+  useEffect(() => {
+    const getLocalUser = async () => {
+      const storedUser = await localforage.getItem('user')
+      setLocalUser(storedUser)
+    }
+
+    getLocalUser()
+  }, [])
 
   const handleLogout = () => {
     logout()
@@ -17,14 +28,19 @@ const RightSidebar = ({ isOpen, onClose }) => {
     navigate('/')
   }
 
-  if (!user) {
-    return null // No mostrar nada si no hay usuario
+  if (!user && !localUser) {
+    // Comprobar localUser si user es null
+    return null
   }
+
+  const displayUser = user || localUser
 
   // Filtrar los permisos para mostrar solo los habilitados (valor 1)
   const permisosHabilitados =
-    user.rol === 'empleado'
-      ? Object.keys(user.permisos).filter((permiso) => user.permisos[permiso])
+    displayUser.rol === 'empleado'
+      ? Object.keys(displayUser.permisos).filter(
+          (permiso) => displayUser.permisos[permiso]
+        )
       : [] // Array vacío si no es empleado
 
   return (
@@ -38,17 +54,17 @@ const RightSidebar = ({ isOpen, onClose }) => {
         <div className="user-card-container">
           {' '}
           {/* Agregar un contenedor para la tarjeta */}
-          <UserCard user={user} className="user-card" />{' '}
+          <UserCard user={displayUser} className="user-card" />{' '}
           {/* Usar UserCard para mostrar la información del usuario */}
         </div>
 
-        {user.rol === 'empleado' && (
+        {displayUser.rol === 'empleado' && (
           <div className="employee-card">
             <div className="employee-card-content">
               <div className="employee-info-item">
                 <strong>Estado:</strong>
                 <span>
-                  {user.activo
+                  {displayUser.activo
                     ? 'Empleado Habilitado'
                     : 'Empleado Sin Habilitar'}
                 </span>
