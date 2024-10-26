@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../../context/AuthContext'
 import { useNotification } from '../../../../hooks/useNotification'
+import { useNetwork } from '../../../../context/NetworkContext'
 import ToggleSwitch from '../../../../components/ToggleSwitch/ToggleSwitch'
 import searchEmployeeImage from '../../../../assets/topaz-inaguracion-AH.avif'
 import './ConversionKeyManager.css'
@@ -13,6 +14,7 @@ const ConversionKeyManager = () => {
   const [newConversionKey, setNewConversionKey] = useState('')
   const [error, setError] = useState(null) // Estado para el mensaje de error
   const showNotification = useNotification()
+  const isOnline = useNetwork()
 
   useEffect(() => {
     let ignore = false // Para evitar actualizaciones de estado en componentes desmontados
@@ -46,20 +48,29 @@ const ConversionKeyManager = () => {
       }
     }
 
-    if (user && user.rol === 'administrador') {
+    if (user && user.rol === 'administrador' && isOnline) {
+      // Verifica si hay conexión
       fetchKeyAndStatus()
     }
 
     return () => {
       ignore = true // Limpieza para evitar memory leaks
     }
-  }, [user, token, showNotification]) // Añade user y token como dependencias
+  }, [user, token, showNotification, isOnline]) // Añade user, token y isOnline como dependencias
 
   useEffect(() => {
     setNewConversionKey(conversionKey)
   }, [conversionKey])
 
   const handleSearchEnabledChange = async () => {
+    if (!isOnline) {
+      showNotification(
+        'No hay conexión a internet. No se pueden guardar los cambios.',
+        'error'
+      )
+      return
+    }
+
     const newIsEnabled = !isSearchEnabled
     setIsSearchEnabled(newIsEnabled)
 
@@ -93,6 +104,14 @@ const ConversionKeyManager = () => {
   }
 
   const handleSaveConversionKey = async () => {
+    if (!isOnline) {
+      showNotification(
+        'No hay conexión a internet. No se pueden guardar los cambios.',
+        'error'
+      )
+      return
+    }
+
     try {
       await window.axiosInstance.put(
         '/admin/update-conversion-key',

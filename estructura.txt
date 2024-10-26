@@ -1,9 +1,13 @@
 Tengo esta estructura en React Vite:
 
+node_modules
+public
+└── favicon.svg
 src
 ├── api
-│   └── axiosConfig.js
+│   └── AxiosConfig.jsx
 ├── assets
+│   └── files
 ├── components
 │   ├── Footer
 │   │   ├── Footer.css
@@ -12,6 +16,7 @@ src
 │   ├── NavBar
 │   │   ├── NavBar.css
 │   │   └── NavBar.jsx
+│   ├── NetworkStatus
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
@@ -21,7 +26,8 @@ src
 │   ├── UserCard
 │   └── AuthenticatedRoute.jsx
 ├── context
-│   └── AuthContext.jsx
+│   ├── AuthContext.jsx
+│   └── NetworkContext.jsx
 ├── hooks
 │   └── useNotification.jsx
 ├── pages
@@ -66,6 +72,7 @@ src
 .gitattributes
 .gitignore
 .prettierrc
+estructura.txt
 index.html
 package-lock.json
 package.json

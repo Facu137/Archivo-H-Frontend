@@ -5,6 +5,7 @@ import { App } from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { NetworkProvider } from './context/NetworkContext'
 import { NotificationProvider } from './hooks/useNotification'
 
 const showNotification = (message) => {
@@ -15,11 +16,13 @@ const showNotification = (message) => {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <React.StrictMode>
-      <AuthProvider>
-        <NotificationProvider showNotification={showNotification}>
-          <App />
-        </NotificationProvider>
-      </AuthProvider>
+      <NetworkProvider>
+        <AuthProvider>
+          <NotificationProvider showNotification={showNotification}>
+            <App />
+          </NotificationProvider>
+        </AuthProvider>
+      </NetworkProvider>
     </React.StrictMode>
   </BrowserRouter>
 )

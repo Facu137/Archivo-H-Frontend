@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
 import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
+import { useNetwork } from '../../context/NetworkContext'
 import { useNotification } from '../../hooks/useNotification'
 import '../GestionarEmpleados/GestionarEmpleados.css'
 
@@ -13,6 +14,7 @@ export const GestionarEmpleados = () => {
   const [currentEmployees, setCurrentEmployees] = useState([])
   const [error, setError] = useState(null)
   const showNotification = useNotification()
+  const isOnline = useNetwork()
 
   const handleError = useCallback(
     (error) => {
@@ -45,6 +47,15 @@ export const GestionarEmpleados = () => {
   )
 
   const fetchData = useCallback(async () => {
+    if (!isOnline) {
+      // Verifica si hay conexión
+      showNotification(
+        'No hay conexión a internet. No se pueden cargar los datos.',
+        'error'
+      )
+      return // No intentes hacer la petición
+    }
+
     setIsLoading(true)
     try {
       const [possibleEmpResponse, currentEmpResponse] = await Promise.all([
@@ -59,7 +70,7 @@ export const GestionarEmpleados = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [handleError])
+  }, [handleError, isOnline, showNotification])
 
   const fetchCurrentEmployees = useCallback(async () => {
     // Movida fuera de fetchData
