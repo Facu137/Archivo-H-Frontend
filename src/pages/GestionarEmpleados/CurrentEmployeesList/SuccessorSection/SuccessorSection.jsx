@@ -2,7 +2,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import UserCard from '../../../../components/UserCard/UserCard'
-import axiosInstance from '../../../../api/axiosConfig'
 import './SuccessorSection.css'
 
 const SuccessorSection = ({
@@ -14,7 +13,7 @@ const SuccessorSection = ({
 }) => {
   const handleRemoveSuccessor = async () => {
     try {
-      await axiosInstance.delete(`/admin/remove-successor/${user.id}`, {
+      await window.axiosInstance.delete(`/admin/remove-successor/${user.id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

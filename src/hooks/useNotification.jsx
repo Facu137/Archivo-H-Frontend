@@ -2,7 +2,7 @@
 import React, { useContext, createContext } from 'react'
 import PropTypes from 'prop-types'
 
-const NotificationContext = createContext()
+export const NotificationContext = createContext() // Agrega "export" aquí
 
 export const NotificationProvider = ({ children, showNotification }) => (
   <NotificationContext.Provider value={showNotification}>

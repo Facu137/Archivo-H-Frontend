@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useNotification } from '../../../hooks/useNotification'
 import { useAuth } from '../../../context/AuthContext'
-import axiosInstance from '../../../api/axiosConfig'
 import EmployeeList from './EmployeeList/EmployeeList'
 import SuccessorSection from './SuccessorSection/SuccessorSection'
 import manageEmployeesImage from '../../../assets/topaz-museo_historico_4.avif'
@@ -15,9 +14,10 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
   const [successor, setSuccessor] = useState(null)
   const fetchSuccessor = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(
+      const response = await window.axiosInstance.get(
         `/admin/get-successor/${user.id}`,
         {
+          // Usa window.axiosInstance
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -33,7 +33,8 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
   // Obtener la lista de empleados actuales
   const fetchCurrentEmployees = useCallback(async () => {
     try {
-      const response = await axiosInstance.get('/admin/list-employees', {
+      const response = await window.axiosInstance.get('/admin/list-employees', {
+        // Usa window.axiosInstance
         headers: {
           Authorization: `Bearer ${token}`
         }

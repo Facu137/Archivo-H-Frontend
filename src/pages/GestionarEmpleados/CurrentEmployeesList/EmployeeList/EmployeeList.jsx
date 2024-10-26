@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import Tooltip from '../../../../components/Tooltip/Tooltip'
 import ScrollableCardList from '../../../../components/ScrollableCardList/ScrollableCardList'
 import EmployeeDetails from '../EmployeeDetails/EmployeeDetails'
-import axiosInstance from '../../../../api/axiosConfig'
 import './EmployeeList.css'
 
 const EmployeeList = ({
@@ -58,7 +57,7 @@ const EmployeeList = ({
         dataToUpdate[field] = editedEmployeeData[field]
       })
 
-      await axiosInstance.put(
+      await window.axiosInstance.put(
         `/admin/update-employee/${editingEmployeeId}`,
         dataToUpdate,
         {
@@ -80,7 +79,7 @@ const EmployeeList = ({
 
   const handleSetSuccessor = async (employeeId) => {
     try {
-      await axiosInstance.post(
+      await window.axiosInstance.post(
         '/admin/set-successor',
         {
           adminId: user.id,
@@ -109,11 +108,14 @@ const EmployeeList = ({
 
   const handleRemoveEmployee = async (employeeId) => {
     try {
-      await axiosInstance.delete(`/admin/remove-employee/${employeeId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      await window.axiosInstance.delete(
+        `/admin/remove-employee/${employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       showNotification('Empleado eliminado correctamente', 'success')
       fetchCurrentEmployees()
     } catch (error) {

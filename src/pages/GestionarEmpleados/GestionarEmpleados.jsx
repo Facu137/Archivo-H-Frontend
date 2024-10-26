@@ -1,7 +1,6 @@
 // src/pages/GestionarEmpleados/GestionarEmpleados.jsx
 import React, { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import axiosInstance from '../../api/axiosConfig'
 import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
 import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
 import { useNotification } from '../../hooks/useNotification'
@@ -33,7 +32,9 @@ export const GestionarEmpleados = () => {
   const fetchPossibleEmployees = useCallback(async () => {
     setIsLoading(true)
     try {
-      const response = await axiosInstance.get('/admin/list-possible-employees')
+      const response = await window.axiosInstance.get(
+        '/admin/list-possible-employees'
+      ) // Usa window.axiosInstance
       setPossibleEmployees(response.data)
     } catch (error) {
       console.error('Error fetching possible employees:', error)
@@ -45,7 +46,7 @@ export const GestionarEmpleados = () => {
 
   const fetchCurrentEmployees = useCallback(async () => {
     try {
-      const response = await axiosInstance.get('/admin/list-employees')
+      const response = await window.axiosInstance.get('/admin/list-employees') // Usa window.axiosInstance
       setCurrentEmployees(response.data)
     } catch (error) {
       console.error('Error al obtener la lista de empleados actuales:', error)
@@ -78,7 +79,8 @@ export const GestionarEmpleados = () => {
 
   const handleAcceptConversion = async (employeeId) => {
     try {
-      await axiosInstance.post('/admin/convert-to-employee', {
+      await window.axiosInstance.post('/admin/convert-to-employee', {
+        // Usa window.axiosInstance
         userId: employeeId
       })
       showNotification('Empleado aceptado con éxito', 'success')
@@ -93,7 +95,8 @@ export const GestionarEmpleados = () => {
 
   const handleRejectConversion = async (employeeId) => {
     try {
-      await axiosInstance.put('/admin/cancel-employee-conversion', {
+      await window.axiosInstance.put('/admin/cancel-employee-conversion', {
+        // Usa window.axiosInstance
         userId: employeeId
       })
       showNotification('Conversión rechazada con éxito', 'success')

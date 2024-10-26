@@ -1,7 +1,6 @@
 // src/pages/GestionarEmpleados/ConversionKeyManager/ConversionKeyManager.jsx
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../../context/AuthContext'
-import axiosInstance from '../../../../api/axiosConfig'
 import { useNotification } from '../../../../hooks/useNotification'
 import ToggleSwitch from '../../../../components/ToggleSwitch/ToggleSwitch'
 import searchEmployeeImage from '../../../../assets/topaz-inaguracion-AH.avif'
@@ -17,7 +16,7 @@ const ConversionKeyManager = () => {
   useEffect(() => {
     const fetchConversionKey = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await window.axiosInstance.get(
           `/admin/get-conversion-key/${user.id}`,
           {
             headers: {
@@ -34,7 +33,7 @@ const ConversionKeyManager = () => {
 
     const fetchSearchStatus = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await window.axiosInstance.get(
           `/admin/get-search-status/${user.id}`,
           {
             headers: {
@@ -65,7 +64,7 @@ const ConversionKeyManager = () => {
     setIsSearchEnabled(newIsEnabled)
 
     try {
-      await axiosInstance.put(
+      await window.axiosInstance.put(
         '/admin/update-search-new-employees',
         {
           personaId: user.id,
@@ -95,7 +94,7 @@ const ConversionKeyManager = () => {
 
   const handleSaveConversionKey = async () => {
     try {
-      await axiosInstance.put(
+      await window.axiosInstance.put(
         '/admin/update-conversion-key',
         {
           personaId: user.id,

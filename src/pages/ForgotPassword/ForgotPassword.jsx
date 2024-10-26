@@ -1,8 +1,6 @@
 // src/pages/ForgotPassword/ForgotPassword.jsx
 import React, { useState } from 'react'
 import './ForgotPassword.css'
-import axiosInstance from '../../api/axiosConfig'
-
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
@@ -12,9 +10,12 @@ export const ForgotPassword = () => {
     e.preventDefault()
 
     try {
-      const response = await axiosInstance.post('/auth/forgot-password', {
-        email
-      })
+      const response = await window.axiosInstance.post(
+        '/auth/forgot-password',
+        {
+          email
+        }
+      )
       if (response.status === 200) {
         setSuccess(
           'Correo de recuperación de contraseña enviado con éxito. Por favor, verifica tu correo electrónico.'

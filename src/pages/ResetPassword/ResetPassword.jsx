@@ -1,7 +1,6 @@
 // src/pages/ResetPassword/ResetPassword.jsx
 import React, { useState } from 'react'
 import './ResetPassword.css'
-import axiosInstance from '../../api/axiosConfig'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
@@ -40,7 +39,7 @@ export const ResetPassword = () => {
     try {
       resetPasswordSchema.parse({ token, password, confirmPassword })
 
-      const response = await axiosInstance.post('/auth/reset-password', {
+      const response = await window.axiosInstance.post('/auth/reset-password', {
         token,
         password
       })

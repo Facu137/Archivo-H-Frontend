@@ -1,6 +1,6 @@
 // src/App.jsx
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAuth } from './context/AuthContext'
 // components
 import { NavBar } from './components/NavBar/NavBar'
@@ -22,10 +22,15 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+// hooks
+import {
+  NotificationProvider,
+  NotificationContext
+} from './hooks/useNotification'
+// api
+import AxiosConfig from './api/AxiosConfig' // Asegúrate de importar el componente
 
 import './index.css'
-// hooks
-import { NotificationProvider } from './hooks/useNotification'
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState({
@@ -65,10 +70,15 @@ export const App = () => {
     setNotification(null)
   }, [])
 
+  const showNotificationFromContext =
+    useContext(NotificationContext) || (() => {}) // RENOMBRADA
+
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
         <NetworkStatus />
+        <AxiosConfig notificationHandler={showNotificationFromContext} />{' '}
+        {/*  showNotificationFromContext */}
         <div className="main-container">
           <div className="content">
             <NavBar

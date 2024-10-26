@@ -1,7 +1,6 @@
 // src/pages/EditUser/EditUser.jsx
 import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import axiosInstance from '../../api/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../schemas/authSchema'
 import { useNotification } from '../../hooks/useNotification'
@@ -55,7 +54,7 @@ export const EditUser = () => {
         confirmPassword: formData.confirmPassword || undefined // Convierte '' a undefined
       })
 
-      await axiosInstance.put('/auth/edit-user', validatedData) // Elimina la asignación a 'response'
+      await window.axiosInstance.put('/auth/edit-user', validatedData) // Elimina la asignación a 'response'
 
       // Muestra la notificación de éxito y redirige
       showNotification(
@@ -86,7 +85,9 @@ export const EditUser = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await axiosInstance.post('/auth/init-acc-deletion', { email: user.email })
+      await window.axiosInstance.post('/auth/init-acc-deletion', {
+        email: user.email
+      })
       showNotification(
         'Se ha enviado un correo para confirmar la eliminación de la cuenta.',
         'info'

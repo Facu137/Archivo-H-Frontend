@@ -6,9 +6,8 @@ import {
   useEffect,
   useCallback
 } from 'react'
-import axiosInstance from '../api/axiosConfig'
 import PropTypes from 'prop-types'
-import localforage from 'localforage' // Importa localforage
+import localforage from 'localforage'
 
 const AuthContext = createContext()
 export const useAuth = () => useContext(AuthContext)
@@ -20,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await axiosInstance.post('/auth/logout') // Realizar logout en backend también
+      await window.axiosInstance.post('/auth/logout')
       localStorage.removeItem('accessToken')
       setToken(null)
       setUser(null)
@@ -34,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUser = useCallback(async () => {
     setIsLoading(true)
     try {
-      const response = await axiosInstance.get('/auth/me')
+      const response = await window.axiosInstance.get('/auth/me')
       setUser(response.data)
       await localforage.setItem('user', response.data) // Guardar usuario en localforage
     } catch (error) {
@@ -49,7 +48,10 @@ export const AuthProvider = ({ children }) => {
     async (userData) => {
       setIsLoading(true)
       try {
-        const response = await axiosInstance.post('/auth/login', userData)
+        const response = await window.axiosInstance.post(
+          '/auth/login',
+          userData
+        )
         const { accessToken } = response.data
         localStorage.setItem('accessToken', accessToken)
         setToken(accessToken) // Guardar el token en el estado
@@ -67,23 +69,26 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      // Función asíncrona para usar await
       const storedToken = localStorage.getItem('accessToken')
-      const localUser = await localforage.getItem('user') // Recuperar de localforage
+      const localUser = await localforage.getItem('user')
       if (storedToken) {
         setToken(storedToken)
+
+        // Configura el token en los headers de axios en este punto
+        window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${storedToken}`
+
         if (localUser) {
-          setUser(localUser) // Si hay un usuario en localforage, úsalo
+          setUser(localUser)
           setIsLoading(false)
         } else {
-          fetchUser() // Si no hay usuario en localforage, obtenerlo del servidor
+          fetchUser()
         }
       } else {
         setIsLoading(false)
       }
     }
 
-    initializeAuth() // Llamar a la función asíncrona
+    initializeAuth()
   }, [fetchUser])
 
   return (
