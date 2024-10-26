@@ -8,7 +8,11 @@ import SuccessorSection from './SuccessorSection/SuccessorSection'
 import manageEmployeesImage from '../../../assets/topaz-museo_historico_4.avif'
 import './CurrentEmployeesList.css'
 
-const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
+const CurrentEmployeesList = ({
+  employees,
+  setCurrentEmployees,
+  fetchCurrentEmployees
+}) => {
   const { token, user } = useAuth()
   const showNotification = useNotification()
   const [successor, setSuccessor] = useState(null)
@@ -19,7 +23,6 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
       const response = await window.axiosInstance.get(
         `/admin/get-successor/${user.id}`,
         {
-          // Usa window.axiosInstance
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -28,55 +31,31 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
       setSuccessor(response.data.sucesor)
     } catch (error) {
       console.error('Error al obtener el sucesor:', error)
-      throw error // Lanza el error para que pueda ser capturado en el useEffect
+      throw error
     }
   }, [token, user])
 
-  const fetchCurrentEmployees = useCallback(async () => {
-    try {
-      const response = await window.axiosInstance.get('/admin/list-employees', {
-        // Usa window.axiosInstance
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      setCurrentEmployees(response.data)
-    } catch (error) {
-      console.error('Error al obtener la lista de empleados actuales:', error)
-      showNotification(
-        'Error al obtener la lista de empleados actuales',
-        'error'
-      )
-    }
-  }, [token, showNotification, setCurrentEmployees])
-
   useEffect(() => {
     if (user && user.rol === 'administrador') {
-      fetchSuccessor()
-        .catch((error) => {
-          setSuccessorError(error) // Guardar el error en el estado
-          showNotification(
-            'Hubo un error al obtener el sucesor del administrador.',
-            'error'
-          )
-        })
-        .finally(() => {
-          fetchCurrentEmployees()
-        })
+      fetchCurrentEmployees() // Llama a fetchCurrentEmployees directamente (usando la prop)
+      fetchSuccessor().catch((error) => {
+        setSuccessorError(error)
+        showNotification(
+          'Hubo un error al obtener el sucesor del administrador.',
+          'error'
+        )
+      })
     }
-  }, [fetchSuccessor, fetchCurrentEmployees, user, showNotification])
+  }, [fetchSuccessor, fetchCurrentEmployees, user, showNotification]) // fetchCurrentEmployees como dependencia.
 
   if (successorError) {
-    return <div className="error-message">Error: {successorError.message}</div>
+    return <div className="error-message">Error: {successorError.message}</div> // Manejo de error del sucesor.
   }
 
+  // Si no hay error del sucesor, renderiza el componente normal. No necesitas verificar fetchError.
   return (
     <div className="employees-section-container">
-      {' '}
-      {/* Nuevo contenedor principal */}
       <div className="cards-container">
-        {' '}
-        {/* Contenedor para las tarjetas */}
         <div className="card-config description-card">
           <h3>Gestionar Empleados Actuales</h3>
           <img
@@ -98,8 +77,8 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
         <div className="card-config successor-data">
           <h3>Sucesor del Administrador</h3>
           <SuccessorSection
-            successor={successor} // Pasa el estado como prop
-            setSuccessor={setSuccessor} // Pasa la función para actualizar el estado
+            successor={successor}
+            setSuccessor={setSuccessor}
             token={token}
             user={user}
             showNotification={showNotification}
@@ -126,7 +105,8 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
 
 CurrentEmployeesList.propTypes = {
   employees: PropTypes.array.isRequired,
-  setCurrentEmployees: PropTypes.func.isRequired
+  setCurrentEmployees: PropTypes.func.isRequired,
+  fetchCurrentEmployees: PropTypes.func.isRequired
 }
 
 export default CurrentEmployeesList

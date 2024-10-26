@@ -7,44 +7,54 @@ import { useNotification } from '../../hooks/useNotification'
 import '../GestionarEmpleados/GestionarEmpleados.css'
 
 export const GestionarEmpleados = () => {
-  const { user, isLoading: authLoading } = useAuth() // Obtener user, token e isLoading del contexto
-  const [isLoading, setIsLoading] = useState(true) // Estado de carga para las peticiones
+  const { user, isLoading: authLoading } = useAuth()
+  const [isLoading, setIsLoading] = useState(true)
   const [possibleEmployees, setPossibleEmployees] = useState([])
   const [currentEmployees, setCurrentEmployees] = useState([])
-  const [error, setError] = useState(null) // Estado para el mensaje de error
+  const [error, setError] = useState(null)
   const showNotification = useNotification()
 
   const handleError = useCallback(
     (error) => {
-      if (error.message === 'Network Error') {
-        setError('Error de red. Verifica tu conexión a internet.')
+      // Simplificado: Mostrar solo una notificación genérica de error de red.
+      if (error.message === 'Network Error' || error.response?.status >= 500) {
+        // O error del servidor
         showNotification(
-          'Error de red. Verifica tu conexión a internet.',
+          'Error de red o servidor. Por favor, inténtalo de nuevo más tarde.',
           'error'
         )
       } else if (error.response?.status === 403) {
-        setError('No tienes permiso para acceder a esta sección.')
         showNotification(
           'No tienes permiso para acceder a esta sección.',
           'error'
         )
       } else {
-        setError('Error al obtener la lista de empleados.')
-        showNotification('Error al obtener la lista de empleados.', 'error')
+        showNotification(
+          'Hubo un error al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.',
+          'error'
+        )
       }
+
+      console.error('Detalles del error para depuración:', error) // Log para desarrollo.
+
+      setError(
+        'Hubo un error. Por favor, verifica tu conexión e inténtalo de nuevo.'
+      )
     },
     [showNotification]
   )
 
-  const fetchPossibleEmployees = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true)
     try {
-      const response = await window.axiosInstance.get(
-        '/admin/list-possible-employees'
-      ) // Usa window.axiosInstance
-      setPossibleEmployees(response.data)
+      const [possibleEmpResponse, currentEmpResponse] = await Promise.all([
+        window.axiosInstance.get('/admin/list-possible-employees'),
+        window.axiosInstance.get('/admin/list-employees')
+      ])
+      setPossibleEmployees(possibleEmpResponse.data)
+      setCurrentEmployees(currentEmpResponse.data)
+      setError(null) // Limpia cualquier error previo si las peticiones son exitosas.
     } catch (error) {
-      console.error('Error fetching possible employees:', error)
       handleError(error)
     } finally {
       setIsLoading(false)
@@ -52,41 +62,30 @@ export const GestionarEmpleados = () => {
   }, [handleError])
 
   const fetchCurrentEmployees = useCallback(async () => {
+    // Movida fuera de fetchData
     try {
-      const response = await window.axiosInstance.get('/admin/list-employees') // Usa window.axiosInstance
+      const response = await window.axiosInstance.get('/admin/list-employees')
       setCurrentEmployees(response.data)
+      setError(null)
     } catch (error) {
-      console.error('Error al obtener la lista de empleados actuales:', error)
       handleError(error)
     }
   }, [handleError])
 
   useEffect(() => {
     if (!authLoading && user && user.rol === 'administrador') {
-      setIsLoading(true) // Activar el indicador de carga
-      Promise.all([fetchPossibleEmployees(), fetchCurrentEmployees()])
-        .catch((err) => {
-          handleError(err)
-        })
-        .finally(() => setIsLoading(false)) // Desactivar el indicador de carga, independientemente del resultado
+      fetchData()
     } else if (!authLoading && user && user.rol !== 'administrador') {
       showNotification('No tienes permisos para acceder a esta página', 'error')
     }
-  }, [
-    user,
-    authLoading,
-    showNotification,
-    fetchPossibleEmployees,
-    fetchCurrentEmployees,
-    handleError
-  ])
+  }, [user, authLoading, showNotification, fetchData])
 
   if (authLoading || isLoading) {
     return <div>Cargando...</div>
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>
+    return <div className="error-message">{error}</div> // Muestra un mensaje de error genérico.
   }
 
   if (!user || user.rol !== 'administrador') {
@@ -96,7 +95,6 @@ export const GestionarEmpleados = () => {
   const handleAcceptConversion = async (employeeId) => {
     try {
       await window.axiosInstance.post('/admin/convert-to-employee', {
-        // Usa window.axiosInstance
         userId: employeeId
       })
       showNotification('Empleado aceptado con éxito', 'success')
@@ -112,7 +110,6 @@ export const GestionarEmpleados = () => {
   const handleRejectConversion = async (employeeId) => {
     try {
       await window.axiosInstance.put('/admin/cancel-employee-conversion', {
-        // Usa window.axiosInstance
         userId: employeeId
       })
       showNotification('Conversión rechazada con éxito', 'success')
@@ -133,7 +130,7 @@ export const GestionarEmpleados = () => {
           possibleEmployees={possibleEmployees}
           onAccept={handleAcceptConversion}
           onReject={handleRejectConversion}
-          onUpdateCurrentEmployees={fetchCurrentEmployees}
+          onUpdateCurrentEmployees={fetchCurrentEmployees} // Pasa fetchCurrentEmployees como prop
         />
       </div>
       <div className="gestion-section-container">
@@ -141,6 +138,7 @@ export const GestionarEmpleados = () => {
         <CurrentEmployeesList
           employees={currentEmployees}
           setCurrentEmployees={setCurrentEmployees}
+          fetchCurrentEmployees={fetchCurrentEmployees} // Pasa fetchCurrentEmployees como prop
         />
       </div>
     </div>
