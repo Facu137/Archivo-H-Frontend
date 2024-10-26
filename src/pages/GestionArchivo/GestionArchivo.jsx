@@ -1,62 +1,158 @@
-import React, { useState, useEffect } from 'react';
-import './GestionArchivo.css';
-import * as zod from 'zod';
-import { useAuth } from '../../context/AuthContext';
+// src/pages/GestionArchivo/GestionArchivo.jsx
+import React, { useState, useEffect } from 'react'
+import './GestionArchivo.css'
+import * as zod from 'zod'
+import { useAuth } from '../../context/AuthContext'
 
 export const GestionArchivo = () => {
-  const [fileType, setFileType] = useState('Mensura');
-  const [formFields, setFormFields] = useState([]);
-  const [fileUploads, setFileUploads] = useState([]);
-  const { token } = useAuth();
+  const [fileType, setFileType] = useState('Mensura')
+  const [formFields, setFormFields] = useState([])
+  const [fileUploads, setFileUploads] = useState([])
+  const { token } = useAuth()
 
   useEffect(() => {
     const createFormFields = () => {
       const fields = {
-        Mensura: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'DepartamentoAntiguo', 'DepartamentoActual', 'Lugar', 'dia', 'mes', 'año', 'Titular', 'Carátula', 'Propiedad', 'Fojas'],
-        Notarial: ['Escribano', 'Registro', 'Protocolo', 'MesInicio', 'MesFin', 'dia', 'mes', 'año', 'EscrituraNº', 'Iniciador', 'Extracto', 'NegocioJuridico', 'Folio'],
-        Correspondencia: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Emisor', 'Destinatario', 'Asunto', 'Fojas'],
-        Leyes_Decretos: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Emisor', 'Destinatario', 'Asunto', 'Fojas'],
-        Gobierno: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-        Tierras_Fiscales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-        Tribunales: ['numeroLegajo', 'legajoBis', 'numeroExpediente', 'expedienteBis', 'dia', 'mes', 'año', 'Iniciador', 'Carátula', 'Tema', 'Folios'],
-      };
+        Mensura: [
+          'numeroLegajo',
+          'legajoBis',
+          'numeroExpediente',
+          'expedienteBis',
+          'DepartamentoAntiguo',
+          'DepartamentoActual',
+          'Lugar',
+          'dia',
+          'mes',
+          'año',
+          'Titular',
+          'Carátula',
+          'Propiedad',
+          'Fojas'
+        ],
+        Notarial: [
+          'Escribano',
+          'Registro',
+          'Protocolo',
+          'MesInicio',
+          'MesFin',
+          'dia',
+          'mes',
+          'año',
+          'EscrituraNº',
+          'Iniciador',
+          'Extracto',
+          'NegocioJuridico',
+          'Folio'
+        ],
+        Correspondencia: [
+          'numeroLegajo',
+          'legajoBis',
+          'numeroExpediente',
+          'expedienteBis',
+          'dia',
+          'mes',
+          'año',
+          'Emisor',
+          'Destinatario',
+          'Asunto',
+          'Fojas'
+        ],
+        Leyes_Decretos: [
+          'numeroLegajo',
+          'legajoBis',
+          'numeroExpediente',
+          'expedienteBis',
+          'dia',
+          'mes',
+          'año',
+          'Emisor',
+          'Destinatario',
+          'Asunto',
+          'Fojas'
+        ],
+        Gobierno: [
+          'numeroLegajo',
+          'legajoBis',
+          'numeroExpediente',
+          'expedienteBis',
+          'dia',
+          'mes',
+          'año',
+          'Iniciador',
+          'Carátula',
+          'Tema',
+          'Folios'
+        ],
+        Tierras_Fiscales: [
+          'numeroLegajo',
+          'legajoBis',
+          'numeroExpediente',
+          'expedienteBis',
+          'dia',
+          'mes',
+          'año',
+          'Iniciador',
+          'Carátula',
+          'Tema',
+          'Folios'
+        ],
+        Tribunales: [
+          'numeroLegajo',
+          'legajoBis',
+          'numeroExpediente',
+          'expedienteBis',
+          'dia',
+          'mes',
+          'año',
+          'Iniciador',
+          'Carátula',
+          'Tema',
+          'Folios'
+        ]
+      }
 
-      const fieldList = fields[fileType];
+      const fieldList = fields[fileType]
       const newFormFields = fieldList.map((field) => ({
         id: field,
         value: '',
-        isPersonField: ['Iniciador', 'Titular', 'Escribano', 'Emisor', 'Destinatario'].includes(field),
-      }));
-      setFormFields(newFormFields);
-    };
+        isPersonField: [
+          'Iniciador',
+          'Titular',
+          'Escribano',
+          'Emisor',
+          'Destinatario'
+        ].includes(field)
+      }))
+      setFormFields(newFormFields)
+    }
 
-    createFormFields();
-  }, [fileType]);
+    createFormFields()
+  }, [fileType])
 
   const handleFileTypeChange = (e) => {
-    setFileType(e.target.value);
-  };
+    setFileType(e.target.value)
+  }
 
   const handleFormFieldChange = (id, value) => {
     const updatedFields = formFields.map((field) =>
       field.id === id ? { ...field, value } : field
-    );
-    setFormFields(updatedFields);
-  };
+    )
+    setFormFields(updatedFields)
+  }
 
   const handleFileUpload = (e) => {
-    setFileUploads([...fileUploads, ...e.target.files]);
-  };
+    setFileUploads([...fileUploads, ...e.target.files])
+  }
 
   const handleFileRemove = (index) => {
-    const updatedFileUploads = [...fileUploads];
-    updatedFileUploads.splice(index, 1);
-    setFileUploads(updatedFileUploads);
-  };
+    const updatedFileUploads = [...fileUploads]
+    updatedFileUploads.splice(index, 1)
+    setFileUploads(updatedFileUploads)
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
+    e.preventDefault()
+    const formData = new FormData(e.target)
 
     const schema = zod.object({
       numeroLegajo: zod.string().nonempty(),
@@ -68,7 +164,12 @@ export const GestionArchivo = () => {
       Lugar: zod.string().optional(),
       dia: zod.number().int().positive(),
       mes: zod.number().int().positive().max(12),
-      año: zod.number().int().positive().min(1900).max(new Date().getFullYear()),
+      año: zod
+        .number()
+        .int()
+        .positive()
+        .min(1900)
+        .max(new Date().getFullYear()),
       Titular: zod.string().nonempty(),
       Carátula: zod.string().optional(),
       Propiedad: zod.string().optional(),
@@ -88,27 +189,27 @@ export const GestionArchivo = () => {
       Asunto: zod.string().optional(),
       Tema: zod.string().optional(),
       Folios: zod.string().optional(),
-      files: zod.array(zod.instanceof(File)).nonempty(),
-    });
+      files: zod.array(zod.instanceof(File)).nonempty()
+    })
 
     try {
       const validatedData = schema.parse({
         ...Object.fromEntries(formData),
-        files: fileUploads,
-      });
+        files: fileUploads
+      })
 
       // Determinar la ruta del endpoint según el tipo de archivo
-      let endpoint;
+      let endpoint
       switch (fileType) {
         case 'Mensura':
-          endpoint = '/documents/upload/mensura';
-          break;
+          endpoint = '/documents/upload/mensura'
+          break
         case 'Notarial':
-          endpoint = '/documents/upload/notarial';
-          break;
+          endpoint = '/documents/upload/notarial'
+          break
         default:
-          endpoint = '/documents/upload/general';
-          break;
+          endpoint = '/documents/upload/general'
+          break
       }
 
       // Enviar la petición al backend
@@ -116,29 +217,42 @@ export const GestionArchivo = () => {
         method: 'POST',
         body: formData,
         headers: {
-           Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`
           // Agrega el token de autenticación si es necesario
-          // Authorization: `Bearer ${token}` 
-        },
-      });
+          // Authorization: `Bearer ${token}`
+        }
+      })
 
       if (response.ok) {
-        console.log('Archivo subido correctamente');
+        console.log('Archivo subido correctamente')
         // Puedes mostrar un mensaje de éxito al usuario, redirigirlo a otra página, etc.
       } else {
-        console.error('Error al subir el archivo:', response.status);
+        console.error('Error al subir el archivo:', response.status)
         // Puedes mostrar un mensaje de error al usuario
       }
     } catch (error) {
-      console.error('Validation error:', error);
+      console.error('Validation error:', error)
     }
-  };
+  }
 
   return (
-    <div className="main-content">
-      <form id="fileForm" onSubmit={handleSubmit}>
+    <div className="gestion-archivo-main-content">
+      {' '}
+      {/* Agrega el prefijo */}
+      <form
+        id="fileForm"
+        onSubmit={handleSubmit}
+        className="gestion-archivo-form"
+      >
+        {' '}
+        {/* Agrega el prefijo */}
         <label htmlFor="fileType">Seleccionar Tipo de Archivo:</label>
-        <select id="fileType" name="fileType" value={fileType} onChange={handleFileTypeChange}>
+        <select
+          id="fileType"
+          name="fileType"
+          value={fileType}
+          onChange={handleFileTypeChange}
+        >
           <option value="Mensura">Mensura</option>
           <option value="Notarial">Notarial</option>
           <option value="Correspondencia">Correspondencia</option>
@@ -147,7 +261,6 @@ export const GestionArchivo = () => {
           <option value="Tierras_Fiscales">Tierras Fiscales</option>
           <option value="Tribunales">Tribunales</option>
         </select>
-
         <div id="formFields">
           {formFields.map((field) => (
             <div key={field.id}>
@@ -157,23 +270,38 @@ export const GestionArchivo = () => {
                 id={field.id}
                 name={field.id}
                 value={field.value}
-                onChange={(e) => handleFormFieldChange(field.id, e.target.value)}
+                onChange={(e) =>
+                  handleFormFieldChange(field.id, e.target.value)
+                }
               />
               {field.isPersonField && (
-                <div className="person-type">
+                <div className="gestion-archivo-person-type">
+                  {' '}
+                  {/* Agrega el prefijo */}
                   <label>Física</label>
                   <input type="radio" name={`${field.id}Type`} value="Física" />
                   <label>Jurídica</label>
-                  <input type="radio" name={`${field.id}Type`} value="Jurídica" />
+                  <input
+                    type="radio"
+                    name={`${field.id}Type`}
+                    value="Jurídica"
+                  />
                 </div>
               )}
             </div>
           ))}
         </div>
-
-        <div id="fileUploads">
+        <div id="fileUploads" className="gestion-archivo-file-upload">
+          {' '}
+          {/* Agrega el prefijo */}
           <label htmlFor="files">Archivos (imágenes o PDFs):</label>
-          <input type="file" id="files" name="files" multiple onChange={handleFileUpload} />
+          <input
+            type="file"
+            id="files"
+            name="files"
+            multiple
+            onChange={handleFileUpload}
+          />
           {fileUploads.map((file, index) => (
             <div key={index}>
               {file.name}
@@ -183,11 +311,12 @@ export const GestionArchivo = () => {
             </div>
           ))}
         </div>
-
-        <button type="submit" className="submit-button">
+        <button type="submit" className="gestion-archivo-submit-button">
+          {' '}
+          {/* Agrega el prefijo */}
           Guardar
         </button>
       </form>
     </div>
-  );
-};
+  )
+}

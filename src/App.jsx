@@ -28,7 +28,6 @@ import {
 import AxiosConfig from './api/AxiosConfig' // Asegúrate de importar el componente
 import './index.css'
 
-
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState({
     left: false,
@@ -75,7 +74,6 @@ export const App = () => {
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
         <AxiosConfig notificationHandler={showNotificationFromContext} />{' '}
         {/*  showNotificationFromContext */}
-
         <div className="main-container">
           <div className="content">
             <NavBar
