@@ -1,17 +1,16 @@
 // src/pages/EditUser/EditUser.jsx
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import axiosInstance from '../../api/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../schemas/authSchema'
-import { useNotification } from '../../hooks/useNotification' // Importa useNotification
+import { useNotification } from '../../hooks/useNotification'
 import RequestEmployeeCard from '../../components/RequestEmployeeCard/RequestEmployeeCard'
 import './EditUser.css'
 
 export const EditUser = () => {
-  const { user, updateUser, logout } = useAuth()
+  const { user, logout } = useAuth() // Accede a user desde el contexto
   const navigate = useNavigate()
-  const showNotification = useNotification() // Usa useNotification
+  const showNotification = useNotification()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,18 +19,24 @@ export const EditUser = () => {
     apellido: ''
   })
   const [error, setError] = useState('')
+  const [serverError, setServerError] = useState('') // Nuevo estado para errores del servidor
+
+  // useCallback para evitar dependencias innecesarias en useEffect
+  const fetchUserData = useCallback(() => {
+    setFormData({
+      email: user.email,
+      password: '',
+      confirmPassword: '',
+      nombre: user.nombre,
+      apellido: user.apellido
+    })
+  }, [user])
 
   useEffect(() => {
     if (user) {
-      setFormData({
-        email: user.email,
-        password: '',
-        confirmPassword: '',
-        nombre: user.name,
-        apellido: user.lastName
-      })
+      fetchUserData() // Llama a la función para establecer los datos del formulario
     }
-  }, [user])
+  }, [user, fetchUserData]) // Incluye fetchUserData en el array de dependencias
 
   const handleChange = (e) => {
     setFormData({
@@ -41,34 +46,48 @@ export const EditUser = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault() // Previene el comportamiento por defecto del formulario
+    e.preventDefault()
     try {
       const validatedData = updateUserSchema.parse({
         ...formData,
         password: formData.password || undefined, // Convierte '' a undefined
         confirmPassword: formData.confirmPassword || undefined // Convierte '' a undefined
       })
-      await updateUser(validatedData)
+
+      await window.axiosInstance.put('/auth/edit-user', validatedData) // Elimina la asignación a 'response'
+
+      // Muestra la notificación de éxito y redirige
       showNotification(
         'Cambios guardados correctamente. Por favor, vuelva a iniciar sesión para ver los cambios.',
         'success'
       )
-      logout()
-      navigate('/login')
+      logout() // Cerrar sesión después de actualizar los datos
+      navigate('/login', { replace: true }) // Redirigir al login después de cerrar sesión
     } catch (error) {
+      // Maneja los errores de validación como antes
       if (error.issues) {
         setError(error.issues.map((issue) => issue.message).join(', '))
+      } else if (error.response) {
+        // Maneja los errores del servidor
+        setServerError(error.response.data.message)
+        showNotification(
+          'Error del servidor: ' + error.response.data.message,
+          'error'
+        )
       } else {
+        // Otros tipos de errores
         setError('Error updating user')
+        showNotification('Hubo un error inesperado', 'error')
         console.error('Error updating user:', error)
       }
-      showNotification('Error al guardar los cambios', 'error')
     }
   }
 
   const handleDeleteAccount = async () => {
     try {
-      await axiosInstance.post('/auth/init-acc-deletion', { email: user.email })
+      await window.axiosInstance.post('/auth/init-acc-deletion', {
+        email: user.email
+      })
       showNotification(
         'Se ha enviado un correo para confirmar la eliminación de la cuenta.',
         'info'
@@ -80,7 +99,7 @@ export const EditUser = () => {
   }
 
   if (!user) {
-    return <div>Cargando...</div>
+    return <div>Cargando...</div> // o un spinner
   }
 
   return (
@@ -90,6 +109,8 @@ export const EditUser = () => {
         <div className="edit-user-form">
           <h2>Editar Usuario</h2>
           {error && <div className="error-message">{error}</div>}
+          {serverError && <p className="error-message">{serverError}</p>}{' '}
+          {/* Mostrar el error del servidor si existe */}
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Email:</label>

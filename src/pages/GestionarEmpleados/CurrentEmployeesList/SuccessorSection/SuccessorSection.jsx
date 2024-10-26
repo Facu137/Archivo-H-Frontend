@@ -1,8 +1,7 @@
-// src/pages/GestionarEmpleados/CurrentEmployeesList/SuccessorSection.jsx
-import React, { useState } from 'react' // Importa useEffect
-import PropTypes from 'prop-types' // Importa PropTypes
+// src/pages/GestionarEmpleados/CurrentEmployeesList/SuccessorSection/SuccessorSection.jsx
+import React from 'react'
+import PropTypes from 'prop-types'
 import UserCard from '../../../../components/UserCard/UserCard'
-import axiosInstance from '../../../../api/axiosConfig'
 import './SuccessorSection.css'
 
 const SuccessorSection = ({
@@ -12,17 +11,15 @@ const SuccessorSection = ({
   user,
   showNotification
 }) => {
-  const [showSuccessor, setShowSuccessor] = useState(false)
-
   const handleRemoveSuccessor = async () => {
     try {
-      await axiosInstance.delete(`/admin/remove-successor/${user.id}`, {
+      await window.axiosInstance.delete(`/admin/remove-successor/${user.id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
       showNotification('Sucesor eliminado correctamente', 'success')
-      setSuccessor(null) // Actualiza el estado del sucesor en el componente padre
+      setSuccessor(null)
     } catch (error) {
       console.error('Error al eliminar sucesor:', error)
       showNotification('Error al eliminar sucesor', 'error')
@@ -30,18 +27,19 @@ const SuccessorSection = ({
   }
 
   return (
-    <div className="successor-container">
-      <h2>Sucesor del Administrador</h2>
-      <button onClick={() => setShowSuccessor(!showSuccessor)}>
-        {showSuccessor ? 'Ocultar Sucesor' : 'Mostrar Sucesor'}
-      </button>
-      {showSuccessor && successor && (
-        <div className="employee-card-container">
+    <div className="successor-section-card-config">
+      {successor ? (
+        <div className="successor-card-container">
           <UserCard user={successor} />
           <button onClick={handleRemoveSuccessor}>Quitar Sucesor</button>
         </div>
+      ) : (
+        <div className="successor-card-container no-successor">
+          {' '}
+          {/* Nueva clase para la tarjeta sin sucesor */}
+          <p>No hay un sucesor asignado.</p>
+        </div>
       )}
-      {!successor && <p>No hay un sucesor asignado.</p>}
     </div>
   )
 }

@@ -2,13 +2,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '../../../../components/Tooltip/Tooltip'
-import UserCard from '../../../../components/UserCard/UserCard'
+import ScrollableCardList from '../../../../components/ScrollableCardList/ScrollableCardList'
 import EmployeeDetails from '../EmployeeDetails/EmployeeDetails'
-import axiosInstance from '../../../../api/axiosConfig'
 import './EmployeeList.css'
 
 const EmployeeList = ({
   employees,
+  setCurrentEmployees,
   token,
   user,
   showNotification,
@@ -41,11 +41,13 @@ const EmployeeList = ({
   }
 
   const handleInputChange = (event) => {
-    const { name, checked } = event.target
-    setEditedEmployeeData({
-      ...editedEmployeeData,
-      [name]: checked
-    })
+    const { name, checked } = event.target // Extraemos name y checked del evento
+    console.log(`Campo actualizado: ${name}, Valor: ${checked}`)
+    // Actualiza el estado de manera inmutable
+    setEditedEmployeeData((prevData) => ({
+      ...prevData,
+      [name]: checked // Solo se actualiza el campo del toggle switch
+    }))
   }
 
   const handleSaveChanges = async () => {
@@ -55,7 +57,7 @@ const EmployeeList = ({
         dataToUpdate[field] = editedEmployeeData[field]
       })
 
-      await axiosInstance.put(
+      await window.axiosInstance.put(
         `/admin/update-employee/${editingEmployeeId}`,
         dataToUpdate,
         {
@@ -77,7 +79,7 @@ const EmployeeList = ({
 
   const handleSetSuccessor = async (employeeId) => {
     try {
-      await axiosInstance.post(
+      await window.axiosInstance.post(
         '/admin/set-successor',
         {
           adminId: user.id,
@@ -106,11 +108,14 @@ const EmployeeList = ({
 
   const handleRemoveEmployee = async (employeeId) => {
     try {
-      await axiosInstance.delete(`/admin/remove-employee/${employeeId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      await window.axiosInstance.delete(
+        `/admin/remove-employee/${employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       showNotification('Empleado eliminado correctamente', 'success')
       fetchCurrentEmployees()
     } catch (error) {
@@ -138,28 +143,36 @@ const EmployeeList = ({
   }
 
   return (
-    <div className="employee-list">
-      {employees.map((employee) => (
-        <div key={employee.id} className="employee-card-container">
-          <UserCard user={employee} />
-          {editingEmployeeId === employee.id ? (
+    <ScrollableCardList
+      title="Lista de Empleados Actuales"
+      description="Gestiona los permisos y el estado de los empleados actuales. Puedes establecer un sucesor para el administrador, modificar permisos, desactivar empleados o eliminarlos del sistema."
+      items={employees}
+      cardClassName="current-employee-list-card" // Nueva clase para la tarjeta
+      listClassName="current-employee-list"
+      itemClassName="current-employee-card-container"
+    >
+      {(
+        item // Pasa una función como children
+      ) => (
+        <>
+          {editingEmployeeId === item.id ? (
             <>
               <EmployeeDetails
-                employee={employee}
+                employee={item} // Usa "item" en lugar de "employee"
                 isEditing={true}
                 editedEmployeeData={editedEmployeeData}
                 onChange={handleInputChange}
               />
-              <div className="buttons-container">
+              <div className="current-employee-buttons-container">
                 <button onClick={handleSaveChanges}>Guardar Cambios</button>
-                <button onClick={() => handleSetSuccessor(employee.id)}>
+                <button onClick={() => handleSetSuccessor(item.id)}>
                   Establecer Sucesor
                 </button>
                 <Tooltip content="No se puede eliminar un empleado que está activo o es sucesor.">
                   <span>
                     <button
-                      onClick={() => handleRemoveEmployee(employee.id)}
-                      disabled={!isRemovable(employee)}
+                      onClick={() => handleRemoveEmployee(item.id)}
+                      disabled={!isRemovable(item)}
                     >
                       Eliminar Empleado
                     </button>
@@ -170,15 +183,18 @@ const EmployeeList = ({
             </>
           ) : (
             <>
-              <EmployeeDetails employee={employee} isEditing={false} />
-              <button onClick={() => handleEditClick(employee.id)}>
+              <EmployeeDetails employee={item} isEditing={false} />{' '}
+              {/* Usa "item" en lugar de "employee" */}
+              <button onClick={() => handleEditClick(item.id)}>
+                {' '}
+                {/* Usa "item" en lugar de "employee" */}
                 Modificar Empleado
               </button>
             </>
           )}
-        </div>
-      ))}
-    </div>
+        </>
+      )}
+    </ScrollableCardList>
   )
 }
 

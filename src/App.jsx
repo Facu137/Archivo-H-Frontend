@@ -1,6 +1,6 @@
 // src/App.jsx
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAuth } from './context/AuthContext'
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
@@ -11,7 +11,6 @@ import AuthenticatedRoute from './components/AuthenticatedRoute'
 import { Home } from './pages/Home/Home'
 import Institucional from './pages/Institucional/Institucional' // Importación corregida
 import { Login } from './pages/Login/Login'
-import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
@@ -20,8 +19,15 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+// hooks
+import {
+  NotificationProvider,
+  NotificationContext
+} from './hooks/useNotification'
+// api
+import AxiosConfig from './api/AxiosConfig' // Asegúrate de importar el componente
 import './index.css'
-import { NotificationProvider } from './hooks/useNotification'
+
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState({
@@ -61,9 +67,15 @@ export const App = () => {
     setNotification(null)
   }, [])
 
+  const showNotificationFromContext =
+    useContext(NotificationContext) || (() => {}) // RENOMBRADA
+
   return (
     <NotificationProvider showNotification={showNotification}>
-      <div id="root" className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+      <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+        <AxiosConfig notificationHandler={showNotificationFromContext} />{' '}
+        {/*  showNotificationFromContext */}
+
         <div className="main-container">
           <div className="content">
             <NavBar
@@ -96,22 +108,24 @@ export const App = () => {
                 <Route path="/visor" element={<VerArchivo />} />
                 <Route path="/agregar-archivo" element={<GestionArchivo />} />
 
+                {/* Rutas protegidas */}
+                <Route element={<AuthenticatedRoute />}>
+                  <Route path="/editar-usuario" element={<EditUser />} />
+                  <Route path="/gestion" element={<GestionArchivo />} />
+                </Route>
+
+                {/* Ruta protegida para administradores */}
+
                 <Route
-                  element={<AuthenticatedRoute element={MiCuenta} />}
-                  path="/cuenta"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={EditUser} />}
-                  path="/editar-usuario"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={GestionArchivo} />}
-                  path="/gestion"
-                />
-                <Route
-                  element={<AuthenticatedRoute element={GestionarEmpleados} />}
-                  path="/gestionar-empleados"
-                />
+                  element={
+                    <AuthenticatedRoute allowedRoles={['administrador']} />
+                  }
+                >
+                  <Route
+                    path="/gestionar-empleados"
+                    element={<GestionarEmpleados />}
+                  />
+                </Route>
 
                 <Route path="/*" element={<Navigate to="/" />} />
               </Routes>

@@ -8,7 +8,7 @@ import { useNotification } from '../../hooks/useNotification'
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { login, logout } = useAuth()
+  const { login, logout } = useAuth() // Importa logout
   const navigate = useNavigate()
   const location = useLocation()
   const showNotification = useNotification()
@@ -46,28 +46,28 @@ export const Login = () => {
     } else if (searchParams.get('accountDeleted') === 'true') {
       showNotification('Tu cuenta ha sido eliminada con éxito.', 'success')
       if (searchParams.get('logout') === 'true') {
-        logout()
+        logout() // Llamar a logout solo en esta condición
+        navigate('/', { replace: true }) // Redireccionar al home
       }
     }
-  }, [location, logout, showNotification])
+  }, [location, showNotification, logout, navigate]) // Agregar logout como dependencia
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
     try {
-      await login({ email, password }) // Utiliza la función login del contexto
-      showNotification('Inicio de sesión exitoso', 'success')
-      navigate('/')
+      await login({ email, password })
+      // El login exitoso se maneja en el interceptor de Axios y el contexto
+      navigate(location.state?.from || '/', { replace: true }) // Redirecciona después del login
     } catch (error) {
-      if (error.response && error.response.status === 403) {
-        showNotification(
-          'Por favor, verifica tu correo electrónico antes de iniciar sesión',
-          'warning'
-        )
-      } else if (error.response && error.response.status === 401) {
-        showNotification('Correo o contraseña incorrectos', 'error')
+      // Manejo de errores (mostrar notificaciones al usuario)
+      if (error.response && error.response.data) {
+        showNotification(error.response.data.message, 'error')
       } else {
-        showNotification('Hubo un error al intentar iniciar sesión', 'error')
+        showNotification(
+          'Hubo un error al iniciar sesión, inténtelo de nuevo más tarde.',
+          'error'
+        )
       }
     }
   }

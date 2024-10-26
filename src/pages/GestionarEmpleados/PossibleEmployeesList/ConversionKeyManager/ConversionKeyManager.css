@@ -1,0 +1,189 @@
+/* src/pages/GestionarEmpleados/PossibleEmployeesList/ConversionKeyManager/ConversionKeyManager.css */
+.conversion-key-manager-container {
+    display: flex;
+    gap: 20px;
+    margin: auto auto;
+    max-width: 1200px;
+    color: var(--text-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.card-config {
+    background-color: var(--bg-color);
+    border: none;
+    /* Sin borde */
+    border-radius: 12px;
+    /* Borde más redondeado */
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    text-align: left;
+    transition: all 0.3s ease;
+    /* Transición para hover */
+}
+
+.card-config:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.description-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-image {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.description-card h3, .settings-card h3 {
+    font-size: 1.5rem;
+}
+
+.settings-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Estilos para los títulos de las tarjetas */
+.card-title {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.search-config,
+.conversion-key-config {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #ddd;
+    /* Fondo diferenciador */
+}
+
+.dark-mode .search-config,
+.dark-mode .conversion-key-config {
+    background-color: #333;
+    /* Fondo diferenciador en modo oscuro */
+}
+
+.search-toggle {
+    display: flex;
+    flex-direction: column;
+    /* Apila la etiqueta y el ToggleSwitch */
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.search-toggle label {
+    margin-bottom: 0.5rem;
+    /* Espacio entre la etiqueta y el ToggleSwitch */
+}
+
+.search-toggle>div {
+    /* Centra el ToggleSwitch */
+    display: flex;
+    align-items: center;
+}
+
+.search-status {
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.conversion-key-input {
+    display: flex;
+    flex-direction: column;
+    /* Apila los elementos verticalmente */
+    margin-top: 1rem;
+}
+
+.conversion-key-input label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.conversion-key-input input {
+    padding: 0.8rem;
+    /* Más padding */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    /* Borde más redondeado */
+    font-size: 1rem;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+
+.conversion-key-input button {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    /* Más padding */
+    border: none;
+    border-radius: 8px;
+    /* Borde más redondeado */
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    /* Margen superior */
+    transition: background-color 0.3s, opacity 0.3s;
+    align-self: flex-start;
+    /* Alinea el botón a la izquierda */
+}
+
+.search-status {
+    font-weight: 600;
+    /* Texto en negrita */
+    margin-left: 1rem;
+    /* Espacio a la izquierda */
+}
+
+/* Estilos para el input y el botón deshabilitados */
+.conversion-key-input input:disabled {
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.conversion-key-input button:disabled {
+    background-color: #ccc;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .card-config {
+    background-color: #222;
+    color: #fff;
+}
+
+.dark-mode .conversion-key-input input {
+    border-color: #555;
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .conversion-key-input button {
+    background-color: #007bff;
+}
+
+.dark-mode .description-card p {
+    color: #ccc;
+    /* Color del texto descriptivo en modo oscuro */
+}
+
+.dark-mode .card-title {
+    background-color: #607d8b;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .conversion-key-manager-container {
+        flex-direction: column;
+    }
+}

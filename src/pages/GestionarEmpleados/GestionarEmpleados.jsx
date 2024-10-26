@@ -1,153 +1,157 @@
 // src/pages/GestionarEmpleados/GestionarEmpleados.jsx
 import React, { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import axiosInstance from '../../api/axiosConfig'
-import ConversionKeyManager from './ConversionKeyManager/ConversionKeyManager'
 import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
 import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
+import { useNetwork } from '../../context/NetworkContext'
 import { useNotification } from '../../hooks/useNotification'
 import '../GestionarEmpleados/GestionarEmpleados.css'
 
 export const GestionarEmpleados = () => {
-  const { user, token } = useAuth()
-  // Estado para el indicador de carga
+  const { user, isLoading: authLoading } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
-  // Estado para la lista de posibles empleados
   const [possibleEmployees, setPossibleEmployees] = useState([])
-  // Estado para la lista de empleados actuales
   const [currentEmployees, setCurrentEmployees] = useState([])
-  // Estado para el indicador de notificación
+  const [error, setError] = useState(null)
   const showNotification = useNotification()
+  const isOnline = useNetwork()
 
-  // Obtener la lista de empleados actuales
-  const fetchCurrentEmployees = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get('/admin/list-employees', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      setCurrentEmployees(response.data)
-    } catch (error) {
-      console.error('Error al obtener la lista de empleados actuales:', error)
-      showNotification(
-        'Error al obtener la lista de empleados actuales',
-        'error'
-      )
-    }
-  }, [token, showNotification])
-
-  useEffect(() => {
-    // Obtener la lista de posibles empleados
-    const fetchPossibleEmployees = async () => {
-      setIsLoading(true)
-      try {
-        const response = await axiosInstance.get(
-          '/admin/list-possible-employees',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+  const handleError = useCallback(
+    (error) => {
+      // Simplificado: Mostrar solo una notificación genérica de error de red.
+      if (error.message === 'Network Error' || error.response?.status >= 500) {
+        // O error del servidor
+        showNotification(
+          'Error de red o servidor. Por favor, inténtalo de nuevo más tarde.',
+          'error'
         )
-        console.log('GestionarEmpleados: respuesta del backend:', response.data)
-        setPossibleEmployees(response.data)
-      } catch (error) {
-        console.error(
-          'GestionarEmpleados: Error al obtener la lista de empleados:',
-          error
+      } else if (error.response?.status === 403) {
+        showNotification(
+          'No tienes permiso para acceder a esta sección.',
+          'error'
         )
-        if (error.response && error.response.status === 403) {
-          showNotification(
-            'No tienes permiso para acceder a esta sección.',
-            'error'
-          )
-        } else {
-          showNotification('Error al obtener la lista de empleados.', 'error')
-        }
-      } finally {
-        setIsLoading(false)
+      } else {
+        showNotification(
+          'Hubo un error al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.',
+          'error'
+        )
       }
-    }
 
-    // Verifica el rol del usuario DESPUÉS de que se haya cargado la información
-    if (user && user.rol === 'administrador') {
-      fetchPossibleEmployees()
-      fetchCurrentEmployees()
-    } else if (user) {
-      // Si el usuario está cargado pero no es administrador
+      console.error('Detalles del error para depuración:', error) // Log para desarrollo.
+
+      setError(
+        'Hubo un error. Por favor, verifica tu conexión e inténtalo de nuevo.'
+      )
+    },
+    [showNotification]
+  )
+
+  const fetchData = useCallback(async () => {
+    if (!isOnline) {
+      // Verifica si hay conexión
       showNotification(
-        'No tienes permiso para acceder a esta sección.',
+        'No hay conexión a internet. No se pueden cargar los datos.',
         'error'
       )
+      return // No intentes hacer la petición
+    }
+
+    setIsLoading(true)
+    try {
+      const [possibleEmpResponse, currentEmpResponse] = await Promise.all([
+        window.axiosInstance.get('/admin/list-possible-employees'),
+        window.axiosInstance.get('/admin/list-employees')
+      ])
+      setPossibleEmployees(possibleEmpResponse.data)
+      setCurrentEmployees(currentEmpResponse.data)
+      setError(null) // Limpia cualquier error previo si las peticiones son exitosas.
+    } catch (error) {
+      handleError(error)
+    } finally {
       setIsLoading(false)
     }
-  }, [token, user, showNotification, fetchCurrentEmployees])
+  }, [handleError, isOnline, showNotification])
 
-  if (isLoading) {
-    return <div>Cargando empleados...</div>
+  const fetchCurrentEmployees = useCallback(async () => {
+    // Movida fuera de fetchData
+    try {
+      const response = await window.axiosInstance.get('/admin/list-employees')
+      setCurrentEmployees(response.data)
+      setError(null)
+    } catch (error) {
+      handleError(error)
+    }
+  }, [handleError])
+
+  useEffect(() => {
+    if (!authLoading && user && user.rol === 'administrador') {
+      fetchData()
+    } else if (!authLoading && user && user.rol !== 'administrador') {
+      showNotification('No tienes permisos para acceder a esta página', 'error')
+    }
+  }, [user, authLoading, showNotification, fetchData])
+
+  if (authLoading || isLoading) {
+    return <div>Cargando...</div>
   }
+
+  if (error) {
+    return <div className="error-message">{error}</div> // Muestra un mensaje de error genérico.
+  }
+
+  if (!user || user.rol !== 'administrador') {
+    return <div>No tienes permisos para acceder a esta página.</div>
+  }
+
   const handleAcceptConversion = async (employeeId) => {
     try {
-      await axiosInstance.post(
-        '/admin/convert-to-employee',
-        { userId: employeeId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await window.axiosInstance.post('/admin/convert-to-employee', {
+        userId: employeeId
+      })
       showNotification('Empleado aceptado con éxito', 'success')
-
-      // Actualizar la lista de posibles empleados
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
       )
-
-      // Actualizar la lista de empleados actuales
       fetchCurrentEmployees()
     } catch (error) {
-      showNotification('Error al aceptar la conversión', 'error')
+      handleError(error)
     }
   }
 
   const handleRejectConversion = async (employeeId) => {
     try {
-      await axiosInstance.put(
-        '/admin/cancel-employee-conversion',
-        { userId: employeeId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await window.axiosInstance.put('/admin/cancel-employee-conversion', {
+        userId: employeeId
+      })
       showNotification('Conversión rechazada con éxito', 'success')
-      // Actualizar la lista de posibles empleados
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
       )
     } catch (error) {
       console.error('Error al rechazar la conversión:', error)
-      showNotification('Error al rechazar la conversión', 'error')
+      handleError(error)
     }
   }
+
   return (
-    <div className="gestionar-nuevos-empleados-container">
-      <h2>Gestionar Nuevos Empleados</h2>
-      <ConversionKeyManager />
-      <PossibleEmployeesList
-        possibleEmployees={possibleEmployees}
-        onAccept={handleAcceptConversion}
-        onReject={handleRejectConversion}
-        onUpdateCurrentEmployees={fetchCurrentEmployees}
-      />
-      <h2>Gestionar Empleados Actuales</h2>
-      <CurrentEmployeesList
-        employees={currentEmployees}
-        setCurrentEmployees={setCurrentEmployees}
-      />
+    <div className="gestion-main-container">
+      <div className="gestion-section-container">
+        <h2>Gestionar Nuevos Empleados</h2>
+        <PossibleEmployeesList
+          possibleEmployees={possibleEmployees}
+          onAccept={handleAcceptConversion}
+          onReject={handleRejectConversion}
+          onUpdateCurrentEmployees={fetchCurrentEmployees} // Pasa fetchCurrentEmployees como prop
+        />
+      </div>
+      <div className="gestion-section-container">
+        <h2>Gestionar Empleados Actuales</h2>
+        <CurrentEmployeesList
+          employees={currentEmployees}
+          setCurrentEmployees={setCurrentEmployees}
+          fetchCurrentEmployees={fetchCurrentEmployees} // Pasa fetchCurrentEmployees como prop
+        />
+      </div>
     </div>
   )
 }

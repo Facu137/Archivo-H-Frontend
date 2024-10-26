@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import trabajo from '../../assets/topaz-CasaArchivo.avif'
 import './RequestEmployeeCard.css'
-import axiosInstance from '../../api/axiosConfig'
 import { useNotification } from '../../hooks/useNotification'
 import { useAuth } from '../../context/AuthContext'
 
@@ -18,7 +17,7 @@ const RequestEmployeeCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axiosInstance.post(
+      const response = await window.axiosInstance.post(
         '/auth/request-emp-role',
         {
           userId: user.id,

@@ -1,23 +1,22 @@
-/* src/components/UserCard.css */
+/* src/components/UserCard/UserCard.css */
 .user-card {
-    max-width: 250px;
     background-color: #ffffff;
     border-radius: 10px;
     padding: 15px;
-    /* Reducido el padding */
+    margin-bottom: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* Reducido para compactar */
     display: flex;
-    /* Añadido flex para controlar el diseño */
     align-items: center;
-    /* Alinea los elementos al centro verticalmente */
+    width: 100%;
+    /* Ocupa el ancho disponible */
+    max-width: 250px;
+    /* Ancho máximo */
 }
 
-/* Nuevo estilo para el contenedor del avatar y la información */
 .user-card-content {
     display: flex;
-    align-items: center;
-    /* Alinea los elementos al centro verticalmente */
+    width: 100%;
+    /* Ocupa el ancho disponible */
 }
 
 .user-avatar {
@@ -25,11 +24,11 @@
     justify-content: center;
     align-items: center;
     width: 70px;
-    min-width: 70px;
     height: 70px;
-    min-height: 70px;
     border-radius: 50%;
     margin-right: 15px;
+    flex-shrink: 0;
+    /* Evita que el avatar se encoja */
 }
 
 .user-avatar svg {
@@ -37,35 +36,25 @@
 }
 
 .user-info {
-    margin-bottom: 10px;
+    flex: 1;
+    /* La información del usuario ocupa el espacio restante */
     display: flex;
-    /* Cambiado a flex-column para un diseño vertical */
     flex-direction: column;
 }
 
 .user-info-item {
     display: flex;
-    flex-direction: row;
-    /* Cambiado a row para alinear los elementos en una fila */
-    align-items: center;
-    /* Alinea los elementos al centro verticalmente */
+    flex-direction: column;
+    /* Los elementos se apilan verticalmente */
+    align-items: flex-start;
+    /* Alinea los elementos a la izquierda */
     margin-bottom: 5px;
-    /* Añadido margen inferior para separar los elementos */
 }
 
 .user-info-item strong {
-    margin-right: 5px;
-    /* Añadido margen derecho para separar el texto en negrita del valor */
     font-weight: bold;
-    /* Asegurar que el texto esté en negrita */
-}
-
-/* Añadido estilo para el span dentro de user-info-item */
-.user-info-item span {
-    /* Permite que el texto se ajuste a varias líneas si es necesario */
-    word-break: break-word;
-    text-align: left;
-    /* Alinea el texto a la izquierda */
+    margin-bottom: 3px;
+    /* Espacio entre la etiqueta y el valor */
 }
 
 /* Modo Oscuro */
