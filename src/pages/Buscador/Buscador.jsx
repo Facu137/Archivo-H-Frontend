@@ -1,39 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react'
 import SearchContainer from './SearchContainer'
-import ResultsContainer from './ResultsContainer'
 import './Buscador.css'
-import axiosInstance from '../../api/axiosConfig' // Asegúrate de que la ruta sea correcta
+import axiosInstance from '../../api/axiosConfig'
 import { useAuth } from '../../context/AuthContext'
 
 const Buscador = () => {
-  const [searchResults, setSearchResults] = useState([])
   const { token } = useAuth()
 
   const handleSearch = (results) => {
-    setSearchResults(results)
+    // Aquí puedes actualizar el estado global si es necesario
+    // o realizar alguna acción con los resultados
+    console.log('Resultados de la búsqueda:', results)
   }
 
-  const handleEdit = async (documento_id) => {
+  const handleEdit = async (documentoId) => {
     try {
       // Aquí puedes implementar la lógica para editar el documento
       // Por ejemplo, abrir un modal o redirigir a una página de edición
-      console.log(`Editando: ${documento_id}`)
+      console.log(`Editando: ${documentoId}`)
     } catch (error) {
       console.error('Error al editar el documento:', error)
     }
   }
 
-  const handleDelete = async (documento_id) => {
+  const handleDelete = async (documentoId) => {
     try {
-      await axiosInstance.delete(`/documents/${documento_id}`, {
+      await axiosInstance.delete(`/documents/${documentoId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-      // Actualizar los resultados de búsqueda después de eliminar
-      setSearchResults((prevResults) =>
-        prevResults.filter((result) => result.documento_id !== documento_id)
-      )
+      // Realiza alguna acción después de eliminar el documento, como actualizar la lista
     } catch (error) {
       console.error('Error al eliminar el documento:', error)
     }
@@ -42,9 +39,8 @@ const Buscador = () => {
   return (
     <div className="buscador-container">
       <h1>Búsqueda</h1>
-      <SearchContainer onSearch={handleSearch} />
-      <ResultsContainer
-        results={searchResults}
+      <SearchContainer
+        onSearch={handleSearch}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />

@@ -1,0 +1,161 @@
+/* InstitucionalCard.css */
+
+/* Contenedor principal de la tarjeta */
+.institucional-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    background-color: #f8f8f8;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    width: 90%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+.institucional-card:hover {
+    transform: translateY(-0.25rem);
+}
+
+/* Contenedor de la galería de imágenes */
+.institucional-card-gallery {
+    margin-bottom: 1rem;
+}
+
+/* Imágenes del slider de la galería */
+.institucional-card-gallery img {
+    width: 100%;
+    height: 300px; /* Ajusta la altura a tus necesidades */
+    object-fit: cover; /* Mantiene la proporción de la imagen, ajustándose al contenedor */
+}
+
+/* Forzar que todas las imágenes dentro del slider tengan un tamaño fijo */
+.image-gallery-slide img {
+    width: 100%;
+    height: 300px; /* Misma altura que en el contenedor */
+    object-fit: cover; /* Asegura que las imágenes mantengan su proporción */
+}
+
+/* Contenedor de texto */
+.institucional-card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Estilos para el título */
+.institucional-card h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+/* Estilos para el texto */
+.institucional-card p {
+    color: #555;
+    line-height: 1.5;
+}
+
+
+
+/* Estilos para la galería en pantalla completa */
+.image-gallery-fullscreen-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain; /* O 'cover' si prefieres que se recorte */
+}
+
+
+
+/* Estilos para los botones del slider  (agrupados)*/
+.image-gallery-left-nav,
+.image-gallery-right-nav,
+.image-gallery-play-button,
+.image-gallery-fullscreen-button {
+    padding: 0.75rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.8;
+    box-shadow: 0 4px 10px rgba(0,0,0, 0.4); /* Sombra */
+}
+
+.image-gallery-left-nav, .image-gallery-right-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+
+.image-gallery-play-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.image-gallery-fullscreen-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
+.image-gallery-left-nav:hover,
+.image-gallery-right-nav:hover,
+.image-gallery-play-button:hover,
+.image-gallery-fullscreen-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+
+.image-gallery-icon {
+    color: white;
+}
+.image-gallery-left-nav .image-gallery-icon,
+.image-gallery-right-nav .image-gallery-icon {
+    font-size: 1.75rem;
+}
+.image-gallery-play-button .image-gallery-icon,
+.image-gallery-fullscreen-button .image-gallery-icon{
+    font-size: 1.5rem;
+}
+
+
+
+
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .institucional-card-gallery img {
+        height: 200px; /* Ajusta el tamaño para pantallas más pequeñas */
+    }
+
+    .image-gallery-left-nav,
+    .image-gallery-right-nav,
+    .image-gallery-play-button,
+    .image-gallery-fullscreen-button {
+        width: 35px;
+        height: 35px;
+    }
+
+
+    .image-gallery-left-nav .image-gallery-icon,
+.image-gallery-right-nav .image-gallery-icon,
+.image-gallery-play-button .image-gallery-icon,
+.image-gallery-fullscreen-button .image-gallery-icon {
+   font-size: 1.5rem;
+}
+
+
+}

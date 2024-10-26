@@ -2,16 +2,14 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAuth } from './context/AuthContext'
-// components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
-// pages
 import { Home } from './pages/Home/Home'
-import { Institucional } from './pages/Institucional/Institucional'
+import Institucional from './pages/Institucional/Institucional' // Importación corregida
 import { Login } from './pages/Login/Login'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
@@ -28,8 +26,8 @@ import {
 } from './hooks/useNotification'
 // api
 import AxiosConfig from './api/AxiosConfig' // Asegúrate de importar el componente
-
 import './index.css'
+
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState({
@@ -77,6 +75,7 @@ export const App = () => {
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
         <AxiosConfig notificationHandler={showNotificationFromContext} />{' '}
         {/*  showNotificationFromContext */}
+
         <div className="main-container">
           <div className="content">
             <NavBar
@@ -99,7 +98,6 @@ export const App = () => {
 
             <main>
               <Routes>
-                {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/institucional" element={<Institucional />} />
                 <Route path="/login" element={<Login />} />
@@ -108,6 +106,7 @@ export const App = () => {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/buscador" element={<Buscador />} />
                 <Route path="/visor" element={<VerArchivo />} />
+                <Route path="/agregar-archivo" element={<GestionArchivo />} />
 
                 {/* Rutas protegidas */}
                 <Route element={<AuthenticatedRoute />}>
@@ -116,6 +115,7 @@ export const App = () => {
                 </Route>
 
                 {/* Ruta protegida para administradores */}
+
                 <Route
                   element={
                     <AuthenticatedRoute allowedRoles={['administrador']} />
@@ -132,6 +132,7 @@ export const App = () => {
             </main>
 
             <Footer isDarkMode={isDarkMode} />
+
             {notification && (
               <NotificationBar
                 message={notification.message}
