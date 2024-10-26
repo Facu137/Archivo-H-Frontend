@@ -7,8 +7,7 @@ import {
   FaFile,
   FaTrash,
   FaHistory,
-  FaUserFriends,
-  FaCog
+  FaUserFriends
 } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import './LeftSidebar.css'
@@ -78,12 +77,6 @@ const LeftSidebar = ({ isOpen, onClose }) => {
                 <li>
                   <FaUserFriends />{' '}
                   <Link to="/gestionar-empleados">Gestionar Empleados</Link>
-                </li>
-                <li>
-                  <FaCog />{' '}
-                  <Link to="/editar-portada">
-                    Editar Portada e Institucional
-                  </Link>
                 </li>
               </ul>
             </div>
