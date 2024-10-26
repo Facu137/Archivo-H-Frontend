@@ -1,4 +1,4 @@
-// src/pages/GestionarEmpleados/ConversionKeyManager/ConversionKeyManager.jsx
+// src/pages/GestionarEmpleados/PossibleEmployeesList/ConversionKeyManager/ConversionKeyManager.jsx
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../../context/AuthContext'
 import { useNotification } from '../../../../hooks/useNotification'
@@ -11,49 +11,49 @@ const ConversionKeyManager = () => {
   const [conversionKey, setConversionKey] = useState('')
   const [isSearchEnabled, setIsSearchEnabled] = useState(false)
   const [newConversionKey, setNewConversionKey] = useState('')
+  const [error, setError] = useState(null) // Estado para el mensaje de error
   const showNotification = useNotification()
 
   useEffect(() => {
-    const fetchConversionKey = async () => {
-      try {
-        const response = await window.axiosInstance.get(
-          `/admin/get-conversion-key/${user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        setConversionKey(response.data.claveConversion)
-      } catch (error) {
-        console.error('Error al obtener la clave de conversión:', error)
-        showNotification('Error al obtener la clave de conversión', 'error')
-      }
-    }
+    let ignore = false // Para evitar actualizaciones de estado en componentes desmontados
 
-    const fetchSearchStatus = async () => {
+    const fetchKeyAndStatus = async () => {
       try {
-        const response = await window.axiosInstance.get(
-          `/admin/get-search-status/${user.id}`,
-          {
+        const [keyResponse, statusResponse] = await Promise.all([
+          window.axiosInstance.get(`/admin/get-conversion-key/${user.id}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
-          }
-        )
-        // Convertimos explícitamente a booleano
-        setIsSearchEnabled(Boolean(response.data.habilitarBusquedaEmpleados))
+          }),
+          window.axiosInstance.get(`/admin/get-search-status/${user.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+        ])
+
+        if (!ignore) {
+          setConversionKey(keyResponse.data.claveConversion)
+          setIsSearchEnabled(
+            Boolean(statusResponse.data.habilitarBusquedaEmpleados)
+          )
+        }
       } catch (error) {
-        console.error('Error al obtener el estado de la búsqueda:', error)
-        showNotification('Error al obtener el estado de la búsqueda', 'error')
+        // Maneja el error aquí. Puedes mostrar una notificación o establecer un estado de error.
+        showNotification('Error al obtener la configuración', 'error')
+        setError(error.message) // Guardar el error en el estado
+        console.error('Error fetching key and status:', error)
       }
     }
 
     if (user && user.rol === 'administrador') {
-      fetchConversionKey()
-      fetchSearchStatus()
+      fetchKeyAndStatus()
     }
-  }, [token, user, showNotification])
+
+    return () => {
+      ignore = true // Limpieza para evitar memory leaks
+    }
+  }, [user, token, showNotification]) // Añade user y token como dependencias
 
   useEffect(() => {
     setNewConversionKey(conversionKey)
@@ -112,6 +112,10 @@ const ConversionKeyManager = () => {
       console.error('Error al actualizar la clave de conversión:', error)
       showNotification('Error al actualizar la clave de conversión', 'error')
     }
+  }
+
+  if (error) {
+    return <div className="error-message">Error: {error}</div>
   }
 
   return (

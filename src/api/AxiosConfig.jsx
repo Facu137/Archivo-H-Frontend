@@ -20,7 +20,7 @@ const AxiosConfig = ({ notificationHandler }) => {
 
     instance.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         const originalRequest = error.config
 
         if (
@@ -30,7 +30,7 @@ const AxiosConfig = ({ notificationHandler }) => {
         ) {
           originalRequest._retry = true
           try {
-            const response = instance.post('/auth/refresh-token') // axiosInstance ya es una instancia configurada
+            const response = await instance.post('/auth/refresh-token') // axiosInstance ya es una instancia configurada
             const newToken = response.data.accessToken
             localStorage.setItem('accessToken', newToken)
             instance.defaults.headers.common.Authorization = `Bearer ${newToken}`
@@ -49,7 +49,9 @@ const AxiosConfig = ({ notificationHandler }) => {
         if (
           error.message === 'Network Error' ||
           error.message.includes('offline') ||
-          error.message.includes('net::ERR_NETWORK_IO_SUSPENDED')
+          error.message.includes('net::ERR_NETWORK_IO_SUSPENDED') ||
+          error.message.includes('ERR_INTERNET_DISCONNECTED') ||
+          error.message.includes('ERR_NETWORK_IO_SUSPENDED')
         ) {
           notificationHandler(
             'Error de red. Verifica tu conexión a internet.',

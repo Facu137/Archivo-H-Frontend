@@ -12,6 +12,8 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
   const { token, user } = useAuth()
   const showNotification = useNotification()
   const [successor, setSuccessor] = useState(null)
+  const [successorError, setSuccessorError] = useState(null)
+
   const fetchSuccessor = useCallback(async () => {
     try {
       const response = await window.axiosInstance.get(
@@ -26,11 +28,10 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
       setSuccessor(response.data.sucesor)
     } catch (error) {
       console.error('Error al obtener el sucesor:', error)
-      showNotification('Error al obtener el sucesor', 'error')
+      throw error // Lanza el error para que pueda ser capturado en el useEffect
     }
-  }, [token, user, showNotification])
+  }, [token, user])
 
-  // Obtener la lista de empleados actuales
   const fetchCurrentEmployees = useCallback(async () => {
     try {
       const response = await window.axiosInstance.get('/admin/list-employees', {
@@ -52,8 +53,22 @@ const CurrentEmployeesList = ({ employees, setCurrentEmployees }) => {
   useEffect(() => {
     if (user && user.rol === 'administrador') {
       fetchSuccessor()
+        .catch((error) => {
+          setSuccessorError(error) // Guardar el error en el estado
+          showNotification(
+            'Hubo un error al obtener el sucesor del administrador.',
+            'error'
+          )
+        })
+        .finally(() => {
+          fetchCurrentEmployees()
+        })
     }
-  }, [fetchSuccessor, user])
+  }, [fetchSuccessor, fetchCurrentEmployees, user, showNotification])
+
+  if (successorError) {
+    return <div className="error-message">Error: {successorError.message}</div>
+  }
 
   return (
     <div className="employees-section-container">
