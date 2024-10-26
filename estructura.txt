@@ -1,4 +1,4 @@
-Tengo esta estructura en React Vite:
+Estructura en React Vite:
 
 node_modules
 public
@@ -59,6 +59,7 @@ src
 │   ├── Home
 │   ├── Institucional
 │   ├── Login
+│   ├── ModificacionArchivo
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo
