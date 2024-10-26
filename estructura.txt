@@ -12,6 +12,7 @@ src
 │   ├── Footer
 │   │   ├── Footer.css
 │   │   └── Footer.jsx
+│   ├── InstitucionalCard
 │   ├── LeftSidebar
 │   ├── NavBar
 │   │   ├── NavBar.css
