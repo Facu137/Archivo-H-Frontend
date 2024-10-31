@@ -121,25 +121,40 @@ const PERSON_FIELDS = [
   'Destinatario'
 ]
 
-const formSchema = z.object({
-  legajoNumero: z.string().min(1, 'El número de legajo es requerido'),
-  legajoEsBis: z.boolean(),
-  expedienteNumero: z.string().min(1, 'El número de expediente es requerido'),
-  expedienteEsBis: z.boolean(),
-  tipoDocumento: z.enum(Object.keys(FILE_TYPES)),
-  anio: z.number().int().min(1800).max(new Date().getFullYear()),
-  mes: z.number().int().min(1).max(12).optional(),
-  dia: z.number().int().min(1).max(31).optional(),
-  caratulaAsuntoExtracto: z
-    .string()
-    .min(1, 'La carátula/asunto/extracto es requerido'),
-  tema: z.string().min(1, 'El tema es requerido'),
-  folios: z.number().int().positive('El número de folios debe ser positivo'),
-  esPublico: z.boolean(),
-  personaNombre: z.string().min(1, 'El nombre de la persona es requerido'),
-  personaTipo: z.enum(['Persona Física', 'Persona Jurídica']),
-  personaRol: z.enum(PERSON_FIELDS)
-})
+const createFormSchema = (fileType) => {
+  const fieldList = FORM_FIELDS[fileType]
+  const schemaFields = {}
+
+  fieldList.forEach((field) => {
+    if (PERSON_FIELDS.includes(field)) {
+      // Schema específico para campos de persona
+      schemaFields[`${field}Nombre`] = z
+        .string()
+        .min(1, `El nombre de ${field} es requerido`)
+      schemaFields[`${field}Tipo`] = z
+        .string()
+        .min(1, `El tipo de ${field} es requerido`)
+    } else if (field === 'legajoEsBis' || field === 'expedienteEsBis') {
+      // Campos booleanos
+      schemaFields[field] = z.boolean()
+    } else if (['dia', 'mes', 'anio', 'Fojas'].includes(field)) {
+      // Campos numéricos
+      schemaFields[field] = z
+        .number()
+        .int()
+        .positive('El valor debe ser positivo')
+      if (field === 'mes') schemaFields[field] = schemaFields[field].max(12)
+      if (field === 'dia') schemaFields[field] = schemaFields[field].max(31)
+      if (field === 'anio')
+        schemaFields[field] = schemaFields[field].max(new Date().getFullYear())
+    } else {
+      // Campos de texto regulares
+      schemaFields[field] = z.string().min(1, `El campo ${field} es requerido`)
+    }
+  })
+
+  return z.object(schemaFields)
+}
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState(FILE_TYPES.Mensura)
@@ -153,28 +168,61 @@ export const GestionArchivo = () => {
     const fieldList = FORM_FIELDS[fileType]
     const newFormData = {}
     fieldList.forEach((field) => {
-      newFormData[field] = ''
+      if (PERSON_FIELDS.includes(field)) {
+        newFormData[`${field}Nombre`] = ''
+        newFormData[`${field}Tipo`] = ''
+      } else {
+        newFormData[field] = field.includes('EsBis') ? false : ''
+      }
     })
     setFormData(newFormData)
+    setErrors({})
   }, [fileType])
 
   useEffect(() => {
     createFormFields()
   }, [createFormFields])
 
-  const handleFileTypeChange = (e) => {
-    setFileType(e.target.value)
+  const validateForm = () => {
+    try {
+      const schema = createFormSchema(fileType)
+      schema.parse(formData)
+      setErrors({})
+      return true
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors = {}
+        error.errors.forEach((err) => {
+          newErrors[err.path[0]] = err.message
+        })
+        setErrors(newErrors)
+      }
+      return false
+    }
   }
 
-  const handleFormFieldChange = (id, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value
+  const handleFormFieldChange = (field, value) => {
+    const numberFields = ['dia', 'mes', 'anio', 'Fojas']
+    const processedValue = numberFields.includes(field)
+      ? value === ''
+        ? ''
+        : Number(value)
+      : value
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: processedValue
     }))
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [id]: ''
+
+    // Limpiar el error específico cuando se modifica el campo
+    setErrors((prev) => ({
+      ...prev,
+      [field]: ''
     }))
+  }
+
+  const handleFileTypeChange = (e) => {
+    setFileType(e.target.value)
   }
 
   const handleFileUpload = (e) => {
@@ -200,22 +248,6 @@ export const GestionArchivo = () => {
 
   const handleFileRemove = (index) => {
     setFileUploads((prevUploads) => prevUploads.filter((_, i) => i !== index))
-  }
-
-  const validateForm = () => {
-    try {
-      formSchema.parse(formData)
-      return true
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors = {}
-        error.errors.forEach((err) => {
-          newErrors[err.path[0]] = err.message
-        })
-        setErrors(newErrors)
-      }
-      return false
-    }
   }
 
   const handleSubmit = async (e) => {
@@ -273,6 +305,86 @@ export const GestionArchivo = () => {
     }
   }
 
+  const renderFormField = (field) => {
+    if (PERSON_FIELDS.includes(field)) {
+      return (
+        <div>
+          <input
+            type="text"
+            id={`${field}Nombre`}
+            name={`${field}Nombre`}
+            value={formData[`${field}Nombre`] || ''}
+            onChange={(e) =>
+              handleFormFieldChange(`${field}Nombre`, e.target.value)
+            }
+            placeholder="Nombre"
+          />
+          {errors[`${field}Nombre`] && (
+            <p className="error">{errors[`${field}Nombre`]}</p>
+          )}
+          <div className="person-type">
+            <label>
+              <input
+                type="radio"
+                name={`${field}Tipo`}
+                value="Persona Física"
+                checked={formData[`${field}Tipo`] === 'Persona Física'}
+                onChange={() =>
+                  handleFormFieldChange(`${field}Tipo`, 'Persona Física')
+                }
+              />
+              Persona Física
+            </label>
+            <label>
+              <input
+                type="radio"
+                name={`${field}Tipo`}
+                value="Persona Jurídica"
+                checked={formData[`${field}Tipo`] === 'Persona Jurídica'}
+                onChange={() =>
+                  handleFormFieldChange(`${field}Tipo`, 'Persona Jurídica')
+                }
+              />
+              Persona Jurídica
+            </label>
+          </div>
+          {errors[`${field}Tipo`] && (
+            <p className="error">{errors[`${field}Tipo`]}</p>
+          )}
+        </div>
+      )
+    }
+
+    const isNumberField = ['dia', 'mes', 'anio', 'Fojas'].includes(field)
+    const isBooleanField = ['legajoEsBis', 'expedienteEsBis'].includes(field)
+
+    if (isBooleanField) {
+      return (
+        <input
+          type="checkbox"
+          id={field}
+          name={field}
+          checked={formData[field] || false}
+          onChange={(e) => handleFormFieldChange(field, e.target.checked)}
+        />
+      )
+    }
+
+    return (
+      <input
+        type={isNumberField ? 'number' : 'text'}
+        id={field}
+        name={field}
+        value={formData[field] || ''}
+        onChange={(e) => handleFormFieldChange(field, e.target.value)}
+        {...(field === 'mes' && { min: 1, max: 12 })}
+        {...(field === 'dia' && { min: 1, max: 31 })}
+        {...(field === 'anio' && { min: 1800, max: new Date().getFullYear() })}
+        {...(isNumberField && { min: 1 })}
+      />
+    )
+  }
+
   return (
     <div className="main-content">
       <form id="fileForm" onSubmit={handleSubmit}>
@@ -291,75 +403,10 @@ export const GestionArchivo = () => {
         </select>
 
         <div id="formFields">
-          {Object.keys(formData).map((field) => (
+          {FORM_FIELDS[fileType].map((field) => (
             <div key={field}>
               <label htmlFor={field}>{field}:</label>
-              {PERSON_FIELDS.includes(field) ? (
-                <div>
-                  <input
-                    type="text"
-                    id={`${field}Nombre`}
-                    name={`${field}Nombre`}
-                    value={formData[`${field}Nombre`] || ''}
-                    onChange={(e) =>
-                      handleFormFieldChange(`${field}Nombre`, e.target.value)
-                    }
-                    placeholder="Nombre"
-                  />
-                  <div className="person-type">
-                    <label>
-                      <input
-                        type="radio"
-                        name={`${field}Tipo`}
-                        value="Persona Física"
-                        checked={formData[`${field}Tipo`] === 'Persona Física'}
-                        onChange={() =>
-                          handleFormFieldChange(
-                            `${field}Tipo`,
-                            'Persona Física'
-                          )
-                        }
-                      />
-                      Persona Física
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name={`${field}Tipo`}
-                        value="Persona Jurídica"
-                        checked={
-                          formData[`${field}Tipo`] === 'Persona Jurídica'
-                        }
-                        onChange={() =>
-                          handleFormFieldChange(
-                            `${field}Tipo`,
-                            'Persona Jurídica'
-                          )
-                        }
-                      />
-                      Persona Jurídica
-                    </label>
-                  </div>
-                  <input
-                    type="text"
-                    id={`${field}Rol`}
-                    name={`${field}Rol`}
-                    value={formData[`${field}Rol`] || ''}
-                    onChange={(e) =>
-                      handleFormFieldChange(`${field}Rol`, e.target.value)
-                    }
-                    placeholder="Rol"
-                  />
-                </div>
-              ) : (
-                <input
-                  type="text"
-                  id={field}
-                  name={field}
-                  value={formData[field] || ''}
-                  onChange={(e) => handleFormFieldChange(field, e.target.value)}
-                />
-              )}
+              {renderFormField(field)}
               {errors[field] && <p className="error">{errors[field]}</p>}
             </div>
           ))}
