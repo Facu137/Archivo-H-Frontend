@@ -1,7 +1,7 @@
 import React from 'react'
 import SearchContainer from './SearchContainer'
 import './Buscador.css'
-import axiosInstance from '../../api/axiosConfig'
+import axiosInstance from '../../api/AxiosConfig'
 import { useAuth } from '../../context/AuthContext'
 
 const Buscador = () => {
