@@ -19,6 +19,8 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados' // Importa el componente de Archivos Eliminados
+// hooks
 // hooks
 import {
   NotificationProvider,
@@ -124,6 +126,11 @@ export const App = () => {
                     element={<GestionarEmpleados />}
                   />
                 </Route>
+
+                <Route
+                  path="/archivos-eliminados"
+                  element={<ArchivosEliminados />} // Protege la ruta
+                />
 
                 <Route path="/*" element={<Navigate to="/" />} />
               </Routes>
