@@ -1,7 +1,7 @@
 ## Proyecto Archivo Historico SDE
 ### Instrucciones al clonar el repositorio:
 
-1. instalar Node.JS v20.12.2 LTS
+1. instalar Node.JS LTS
 2. iniciar la carpeta en VS Code
 3. instalar todas las dependencias con:
 `npm install`
@@ -23,4 +23,4 @@ Vínculo de VS Marketplace: [Simple React Snippets](https://marketplace.visualst
 Nombre: Prettier - Code formatter
 Vínculo de VS Marketplace: [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode "Prettier")
 
-## Crear Rama a partir del Desarrollo.Crear Rama a partir del Desarrollo.
+## Crear Rama a partir del Desarrollo.
