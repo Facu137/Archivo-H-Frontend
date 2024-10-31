@@ -25,8 +25,8 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
     mensura_lugar,
     mensura_propiedad,
     notarial_registro,
-    notarial_protocolo,
-    isFavorite
+    notarial_protocolo
+    // isFavorite // Elimina isFavorite si ya no lo necesitas
   } = result
 
   const navigate = useNavigate()
@@ -49,12 +49,12 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
   }
 
   const handleEdit = (e) => {
-    e.stopPropagation() // Evita que el clic se propague al padre
+    e.stopPropagation()
     onEdit(documento_id)
   }
 
   const handleDelete = (e) => {
-    e.stopPropagation() // Evita que el clic se propague al padre
+    e.stopPropagation()
     onDelete(documento_id)
   }
 
@@ -143,29 +143,14 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
       {thumbnailIcon && (
         <div className="miniatura" onClick={handleClick}>
           {thumbnailIcon}
-          {/* Elemento vacío para el title */}
         </div>
       )}
 
-      {/* Mostrar botón de favorito solo para usuarios autenticados que NO son admin ni empleado*/}
-      {user && !isAdminOrEmployee && (
-        <button
-          className="favorite-button"
-          onClick={handleFavorite}
-          title="Agregar a favoritos"
-        >
-          <FaStar color={result.isFavorite ? 'gold' : 'gray'} />
-        </button>
-      )}
-
-      {/* Mostrar botones de editar y eliminar solo para admin y empleados */}
+      {/* Mostrar botones solo para admin y empleados */}
       {isAdminOrEmployee && (
         <div className="admin-actions">
-          {' '}
-          {/* Volvemos a agregar el div admin-actions */}
           <button className="edit-button" onClick={handleEdit} title="Editar">
-            <FaEdit className="edit-icon" />{' '}
-            {/* Agrega la clase "edit-icon" al icono de FaEdit */}
+            <FaEdit className="edit-icon" />
           </button>
           <button
             className="delete-button"
@@ -208,7 +193,7 @@ ResultCard.propTypes = {
     mensura_propiedad: PropTypes.string,
     notarial_registro: PropTypes.string,
     notarial_protocolo: PropTypes.string,
-    isFavorite: PropTypes.bool.isRequired
+    isFavorite: PropTypes.bool.isRequired // Asegúrate de que isFavorite esté definido en el backend
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired

@@ -25,7 +25,7 @@ const Buscador = () => {
 
   const handleDelete = async (documentoId) => {
     try {
-      await axiosInstance.delete(`/documents/${documentoId}`, {
+      await axiosInstance.delete(`/api/documents/${documentoId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

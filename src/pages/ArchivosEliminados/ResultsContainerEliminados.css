@@ -1,0 +1,17 @@
+/* src/pages/ArchivosEliminados/ResultsContainerEliminados.css */
+.results-container-eliminados {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espacio entre tarjetas */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin: 20px 0; /* Margen superior e inferior */
+  padding: 0 20px; /* Padding para evitar que el contenido toque los bordes */
+  box-sizing: border-box; /* Incluye padding y border en el ancho total */
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .results-container-eliminados {
+    padding: 0 10px; /* Reduce el padding en pantallas pequeñas */
+  }
+}

@@ -20,6 +20,7 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados' // Importa el componente de Archivos Eliminados
 import './index.css'
 import { NotificationProvider } from './hooks/useNotification'
 
@@ -111,6 +112,10 @@ export const App = () => {
                 <Route
                   element={<AuthenticatedRoute element={GestionarEmpleados} />}
                   path="/gestionar-empleados"
+                />
+                <Route
+                  element={<AuthenticatedRoute element={ArchivosEliminados} />} // Protege la ruta
+                  path="/archivos-eliminados"
                 />
 
                 <Route path="/*" element={<Navigate to="/" />} />
