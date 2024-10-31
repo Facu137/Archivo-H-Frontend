@@ -1,0 +1,115 @@
+/* src/components/ScrollableCardList/ScrollableCardList.css */
+.scrollable-card-list-container {
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto 20px auto;
+    /* Añadido margen inferior */
+}
+
+.scrollable-card-list-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.scrollable-card-list-container h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 0px;
+}
+
+.scrollable-card-list-container p {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 10px;
+}
+
+.scrollable-list {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+}
+
+
+/* Estilos para la barra de desplazamiento */
+.scrollable-list::-webkit-scrollbar {
+    height: 24px;
+    background-color: #607d8a;
+    border-radius: 6px;
+}
+
+.scrollable-list::-webkit-scrollbar-track {
+    background: #bbb;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+    background-color: #607d8a;
+    border-radius: 8px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(51, 87, 255);
+}
+
+
+.scrollable-card-item {
+    border: 1px solid rgb(96, 125, 138);
+    padding: 0px 15px;
+    border-radius: 10px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.buttons-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.buttons-container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buttons-container button:nth-child(2) {
+    background-color: #f44336;
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .scrollable-card-list-container {
+    /* Adaptado al modo oscuro */
+    background-color: #222;
+    color: #fff;
+}
+
+.dark-mode .scrollable-card-item {
+    /* Adaptado al modo oscuro */
+    background-color: #222;
+}
+
+.dark-mode .buttons-container button {
+    /* Adaptado al modo oscuro */
+    color: #fff;
+}
+
+.dark-mode .scrollable-list::-webkit-scrollbar-track {
+    /* Adaptado al modo oscuro */
+    background: #333;
+}

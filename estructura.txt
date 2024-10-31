@@ -1,25 +1,34 @@
-Tengo esta estructura en React Vite:
+Estructura en React Vite:
 
+node_modules
+public
+└── favicon.svg
 src
 ├── api
-│   └── axiosConfig.js
+│   └── AxiosConfig.jsx
 ├── assets
+│   └── files
 ├── components
 │   ├── Footer
 │   │   ├── Footer.css
 │   │   └── Footer.jsx
+│   ├── InstitucionalCard
 │   ├── LeftSidebar
 │   ├── NavBar
 │   │   ├── NavBar.css
 │   │   └── NavBar.jsx
+│   ├── NetworkStatus
 │   ├── NotificationBar
 │   ├── RequestEmployeeCard
 │   ├── RightSidebar
+│   ├── ScrollableCardList
+│   ├── ToggleSwitch
 │   ├── Tooltip
 │   ├── UserCard
 │   └── AuthenticatedRoute.jsx
 ├── context
-│   └── AuthContext.jsx
+│   ├── AuthContext.jsx
+│   └── NetworkContext.jsx
 ├── hooks
 │   └── useNotification.jsx
 ├── pages
@@ -32,9 +41,6 @@ src
 │   ├── ForgotPassword
 │   ├── GestionArchivo
 │   ├── GestionarEmpleados
-│   │   ├── ConversionKeyManager
-│   │   │   ├── ConversionKeyManager.css
-│   │   │   └── ConversionKeyManager.jsx
 │   │   ├── CurrentEmployeesList
 │   │   │   ├── EmployeeDetails
 │   │   │   │   ├── EmployeeDetails.css
@@ -48,6 +54,9 @@ src
 │   │   │   ├── CurrentEmployeesList.css
 │   │   │   └── CurrentEmployeesList.jsx
 │   │   ├── PossibleEmployeesList
+│   │   │   ├── ConversionKeyManager
+│   │   │   │   ├── ConversionKeyManager.css
+│   │   │   │   └── ConversionKeyManager.jsx
 │   │   │   ├── PossibleEmployeesList.css
 │   │   │   └── PossibleEmployeesList.jsx
 │   │   ├── GestionarEmpleados.css
@@ -55,7 +64,7 @@ src
 │   ├── Home
 │   ├── Institucional
 │   ├── Login
-│   ├── MiCuenta
+│   ├── ModificacionArchivo
 │   ├── Registrar
 │   ├── ResetPassword
 │   └── VerArchivo
@@ -69,6 +78,7 @@ src
 .gitattributes
 .gitignore
 .prettierrc
+estructura.txt
 index.html
 package-lock.json
 package.json

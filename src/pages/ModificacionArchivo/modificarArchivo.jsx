@@ -1,14 +1,21 @@
-// src/pages/GestionArchivo/GestionArchivo.jsx
+// src/pages/ModificacionArchivo/modificarArchivo.jsx
 import React, { useState, useEffect } from 'react'
 import './GestionArchivo.css'
 import * as zod from 'zod'
 import { useAuth } from '../../context/AuthContext'
+import { fileSchema } from '../../schemas/fileSchema'
+import { mensuraSchema } from '../../schemas/mensuraSchema'
+import { notarialSchema } from '../../schemas/notarialSchema'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState('Mensura')
   const [formFields, setFormFields] = useState([])
   const [fileUploads, setFileUploads] = useState([])
+  const [errors, setErrors] = useState({})
   const { token } = useAuth()
+  const [documentId, setDocumentId] = useState(null)
+  const [selectedTable, setSelectedTable] = useState('documentos')
 
   useEffect(() => {
     const createFormFields = () => {
@@ -124,6 +131,7 @@ export const GestionArchivo = () => {
         ].includes(field)
       }))
       setFormFields(newFormFields)
+      setErrors({})
     }
 
     createFormFields()
@@ -138,6 +146,8 @@ export const GestionArchivo = () => {
       field.id === id ? { ...field, value } : field
     )
     setFormFields(updatedFields)
+
+    validateField(id, value)
   }
 
   const handleFileUpload = (e) => {
@@ -154,104 +164,144 @@ export const GestionArchivo = () => {
     e.preventDefault()
     const formData = new FormData(e.target)
 
-    const schema = zod.object({
-      numeroLegajo: zod.string().nonempty(),
-      legajoBis: zod.string().optional(),
-      numeroExpediente: zod.string().nonempty(),
-      expedienteBis: zod.string().optional(),
-      DepartamentoAntiguo: zod.string().optional(),
-      DepartamentoActual: zod.string().optional(),
-      Lugar: zod.string().optional(),
-      dia: zod.number().int().positive(),
-      mes: zod.number().int().positive().max(12),
-      año: zod
-        .number()
-        .int()
-        .positive()
-        .min(1900)
-        .max(new Date().getFullYear()),
-      Titular: zod.string().nonempty(),
-      Carátula: zod.string().optional(),
-      Propiedad: zod.string().optional(),
-      Fojas: zod.number().int().positive().optional(),
-      Escribano: zod.string().optional(),
-      Registro: zod.string().optional(),
-      Protocolo: zod.string().optional(),
-      MesInicio: zod.string().optional(),
-      MesFin: zod.string().optional(),
-      EscrituraNº: zod.string().optional(),
-      Iniciador: zod.string().nonempty(),
-      Extracto: zod.string().optional(),
-      NegocioJuridico: zod.string().optional(),
-      Folio: zod.string().optional(),
-      Emisor: zod.string().nonempty(),
-      Destinatario: zod.string().nonempty(),
-      Asunto: zod.string().optional(),
-      Tema: zod.string().optional(),
-      Folios: zod.string().optional(),
-      files: zod.array(zod.instanceof(File)).nonempty()
-    })
+    let validationSchema
+
+    switch (fileType) {
+      case 'Mensura':
+        validationSchema = mensuraSchema
+        break
+      case 'Notarial':
+        validationSchema = notarialSchema
+        break
+      default:
+        validationSchema = fileSchema
+        break
+    }
 
     try {
-      const validatedData = schema.parse({
+      validationSchema.parse({
         ...Object.fromEntries(formData),
         files: fileUploads
       })
 
-      // Determinar la ruta del endpoint según el tipo de archivo
-      let endpoint
-      switch (fileType) {
-        case 'Mensura':
-          endpoint = '/documents/upload/mensura'
-          break
-        case 'Notarial':
-          endpoint = '/documents/upload/notarial'
-          break
-        default:
-          endpoint = '/documents/upload/general'
-          break
+      const camposAModificar = {}
+      formFields.forEach((field) => {
+        camposAModificar[field.id] = field.value
+      })
+
+      const requestBody = {
+        tabla: selectedTable,
+        campos: camposAModificar,
+        tipoDocumento: fileType
       }
 
-      // Enviar la petición al backend
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: formData,
+      const response = await fetch(`http://localhost:3000/api/${documentId}`, {
+        method: 'PUT',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
-          // Agrega el token de autenticación si es necesario
-          // Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify(requestBody)
       })
 
       if (response.ok) {
-        console.log('Archivo subido correctamente')
-        // Puedes mostrar un mensaje de éxito al usuario, redirigirlo a otra página, etc.
+        console.log('Documento modificado correctamente')
       } else {
-        console.error('Error al subir el archivo:', response.status)
-        // Puedes mostrar un mensaje de error al usuario
+        console.error('Error al modificar el documento:', response.status)
       }
     } catch (error) {
-      console.error('Validation error:', error)
+      if (error instanceof zod.ZodError) {
+        const validationErrors = {}
+        error.issues.forEach((issue) => {
+          validationErrors[issue.path[0]] = issue.message
+        })
+        setErrors(validationErrors)
+      } else {
+        console.error('Error al enviar el formulario:', error)
+      }
+    }
+  }
+
+  const validateField = (fieldId, value) => {
+    try {
+      let validationSchema
+      switch (fileType) {
+        case 'Mensura':
+          validationSchema = mensuraSchema
+          break
+        case 'Notarial':
+          validationSchema = notarialSchema
+          break
+        default:
+          validationSchema = fileSchema
+          break
+      }
+
+      validationSchema.shape[fieldId].parse(value)
+
+      setErrors((prevErrors) => {
+        const updatedErrors = { ...prevErrors }
+        delete updatedErrors[fieldId]
+        return updatedErrors
+      })
+    } catch (error) {
+      if (error instanceof zod.ZodError) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [fieldId]: error.issues[0].message
+        }))
+      } else {
+        console.error('Error al validar el campo:', error)
+      }
     }
   }
 
   return (
-    <div className="gestion-archivo-main-content">
-      {' '}
-      {/* Agrega el prefijo */}
+    <div className="main-content">
+      <div className="mb-3">
+        <label htmlFor="documentId" className="form-label">
+          ID del documento:
+        </label>
+        <input
+          type="number"
+          id="documentId"
+          className="form-control"
+          value={documentId}
+          onChange={(e) => setDocumentId(parseInt(e.target.value))}
+          required
+        />
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="tableSelect" className="form-label">
+          Tabla a modificar:
+        </label>
+        <select
+          id="tableSelect"
+          className="form-select"
+          value={selectedTable}
+          onChange={(e) => setSelectedTable(e.target.value)}
+        >
+          <option value="documentos">Documentos</option>
+          <option value="mensura">Mensura</option>
+          <option value="notarial">Notarial</option>
+        </select>
+      </div>
+
       <form
         id="fileForm"
         onSubmit={handleSubmit}
-        className="gestion-archivo-form"
+        className="needs-validation"
+        noValidate
       >
-        {' '}
-        {/* Agrega el prefijo */}
         <label htmlFor="fileType">Seleccionar Tipo de Archivo:</label>
         <select
           id="fileType"
           name="fileType"
           value={fileType}
           onChange={handleFileTypeChange}
+          className="form-select"
+          required
         >
           <option value="Mensura">Mensura</option>
           <option value="Notarial">Notarial</option>
@@ -261,10 +311,13 @@ export const GestionArchivo = () => {
           <option value="Tierras_Fiscales">Tierras Fiscales</option>
           <option value="Tribunales">Tribunales</option>
         </select>
-        <div id="formFields">
+
+        <div id="formFields" className="row g-3">
           {formFields.map((field) => (
-            <div key={field.id}>
-              <label htmlFor={field.id}>{field.id}:</label>
+            <div key={field.id} className="col-md-4">
+              <label htmlFor={field.id} className="form-label">
+                {field.id}:
+              </label>
               <input
                 type="text"
                 id={field.id}
@@ -273,11 +326,15 @@ export const GestionArchivo = () => {
                 onChange={(e) =>
                   handleFormFieldChange(field.id, e.target.value)
                 }
+                className={`form-control ${errors[field.id] ? 'is-invalid' : ''}`}
+                required
               />
+              {errors[field.id] && (
+                <div className="invalid-feedback">{errors[field.id]}</div>
+              )}
+
               {field.isPersonField && (
-                <div className="gestion-archivo-person-type">
-                  {' '}
-                  {/* Agrega el prefijo */}
+                <div className="person-type">
                   <label>Física</label>
                   <input type="radio" name={`${field.id}Type`} value="Física" />
                   <label>Jurídica</label>
@@ -291,16 +348,19 @@ export const GestionArchivo = () => {
             </div>
           ))}
         </div>
-        <div id="fileUploads" className="gestion-archivo-file-upload">
-          {' '}
-          {/* Agrega el prefijo */}
-          <label htmlFor="files">Archivos (imágenes o PDFs):</label>
+
+        <div id="fileUploads" className="mb-3">
+          <label htmlFor="files" className="form-label">
+            Archivos (imágenes o PDFs):
+          </label>
           <input
             type="file"
             id="files"
             name="files"
             multiple
             onChange={handleFileUpload}
+            className="form-control"
+            required
           />
           {fileUploads.map((file, index) => (
             <div key={index}>
@@ -310,10 +370,10 @@ export const GestionArchivo = () => {
               </button>
             </div>
           ))}
+          {errors.file && <div className="invalid-feedback">{errors.file}</div>}
         </div>
-        <button type="submit" className="gestion-archivo-submit-button">
-          {' '}
-          {/* Agrega el prefijo */}
+
+        <button type="submit" className="btn btn-primary">
           Guardar
         </button>
       </form>

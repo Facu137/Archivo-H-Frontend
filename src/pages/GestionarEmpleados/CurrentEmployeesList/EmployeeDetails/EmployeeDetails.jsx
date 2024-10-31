@@ -1,6 +1,7 @@
 // src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeDetails/EmployeeDetails.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
+import ToggleSwitch from '../../../../components/ToggleSwitch/ToggleSwitch'
 import './EmployeeDetails.css'
 
 const permissionsMap = [
@@ -19,13 +20,15 @@ const EmployeeDetails = ({
 }) => (
   <div className="employee-details">
     <div className="employee-info-item">
-      <strong>Activo:</strong>
+      <strong>Empleado en Actividad:</strong>
       {isEditing ? (
-        <input
-          type="checkbox"
-          name="activo"
-          checked={editedEmployeeData.activo}
-          onChange={onChange}
+        <ToggleSwitch
+          isOn={editedEmployeeData.activo}
+          handleToggle={() =>
+            onChange({
+              target: { name: 'activo', checked: !editedEmployeeData.activo }
+            })
+          }
         />
       ) : (
         <span>{employee.activo ? 'Sí' : 'No'}</span>
@@ -35,11 +38,13 @@ const EmployeeDetails = ({
       <div key={backend} className="employee-info-item">
         <strong>{frontend}:</strong>
         {isEditing ? (
-          <input
-            type="checkbox"
-            name={backend}
-            checked={editedEmployeeData[backend]}
-            onChange={onChange}
+          <ToggleSwitch
+            isOn={editedEmployeeData[backend]}
+            handleToggle={() =>
+              onChange({
+                target: { name: backend, checked: !editedEmployeeData[backend] }
+              })
+            }
           />
         ) : (
           <span>{employee[backend] ? 'Sí' : 'No'}</span>

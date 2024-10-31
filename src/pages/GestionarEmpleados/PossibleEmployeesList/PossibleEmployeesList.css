@@ -1,33 +1,24 @@
 /* src/pages/GestionarEmpleados/PossibleEmployeesList/PossibleEmployeesList.css */
-
-.employee-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    /* Diseño responsivo en grilla */
-    grid-gap: 20px;
-}
-
-/* Estilos para el contenedor de la tarjeta del empleado */
-.employee-card-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Sombra suave */
+.possible-employees-section-container {
+    /* Nuevo contenedor para la sección */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    /* Centra el contenido horizontalmente */
+    /* Apila verticalmente en pantallas pequeñas */
+    gap: 20px;
+    margin: auto auto;
+    padding: 30px;
+    max-width: 1200px;
+    color: var(--text-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-/* Estilos para los botones */
 .buttons-container {
     margin-top: 10px;
     display: flex;
     justify-content: space-around;
     width: 100%;
-    /* Ocupa todo el ancho del contenedor */
 }
 
 .buttons-container button {
@@ -46,12 +37,7 @@
     /* Color rojo para el botón "Rechazar" */
 }
 
-/* Adaptación al modo oscuro */
-.dark-mode .employee-card-container {
-    border-color: #555;
-    background-color: #222;
-}
-
+/* Adaptación al modo oscuro para botones */
 .dark-mode .buttons-container button {
     color: #fff;
 }
