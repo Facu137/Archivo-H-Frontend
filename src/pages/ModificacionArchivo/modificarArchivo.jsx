@@ -1,12 +1,11 @@
 // src/pages/ModificacionArchivo/modificarArchivo.jsx
 import React, { useState, useEffect } from 'react'
-import './GestionArchivo.css'
 import * as zod from 'zod'
+import './../GestionArchivo/GestionArchivo.css'
 import { useAuth } from '../../context/AuthContext'
 import { fileSchema } from '../../schemas/fileSchema'
 import { mensuraSchema } from '../../schemas/mensuraSchema'
 import { notarialSchema } from '../../schemas/notarialSchema'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState('Mensura')
@@ -380,3 +379,4 @@ export const GestionArchivo = () => {
     </div>
   )
 }
+export default GestionArchivo

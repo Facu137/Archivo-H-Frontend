@@ -2,14 +2,16 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
+// components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
+// pages
 import { Home } from './pages/Home/Home'
-import Institucional from './pages/Institucional/Institucional' // Importación corregida
+import Institucional from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
 import { MiCuenta } from './pages/MiCuenta/MiCuenta'
 import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
@@ -18,9 +20,11 @@ import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
-import Buscador from './pages/Buscador/Buscador'
+import Buscador from './pages/Buscador/Buscador' // Importa el nuevo componente de búsqueda
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+import ModificarArchivo from './pages/ModificacionArchivo/modificarArchivo' // Ajusta la ruta si es necesario
 import './index.css'
+// hooks
 import { NotificationProvider } from './hooks/useNotification'
 
 export const App = () => {
@@ -63,7 +67,7 @@ export const App = () => {
 
   return (
     <NotificationProvider showNotification={showNotification}>
-      <div id="root" className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+      <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
         <div className="main-container">
           <div className="content">
             <NavBar
@@ -86,6 +90,7 @@ export const App = () => {
 
             <main>
               <Routes>
+                {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/institucional" element={<Institucional />} />
                 <Route path="/login" element={<Login />} />
@@ -95,7 +100,7 @@ export const App = () => {
                 <Route path="/buscador" element={<Buscador />} />
                 <Route path="/visor" element={<VerArchivo />} />
                 <Route path="/agregar-archivo" element={<GestionArchivo />} />
-
+                {/* Rutas protegidas */}
                 <Route
                   element={<AuthenticatedRoute element={MiCuenta} />}
                   path="/cuenta"
@@ -112,13 +117,16 @@ export const App = () => {
                   element={<AuthenticatedRoute element={GestionarEmpleados} />}
                   path="/gestionar-empleados"
                 />
+                <Route
+                  element={<AuthenticatedRoute element={ModificarArchivo} />} // Usar el nuevo nombre del componente
+                  path="/editar-archivo"
+                />
 
                 <Route path="/*" element={<Navigate to="/" />} />
               </Routes>
             </main>
 
             <Footer isDarkMode={isDarkMode} />
-
             {notification && (
               <NotificationBar
                 message={notification.message}
@@ -133,5 +141,4 @@ export const App = () => {
     </NotificationProvider>
   )
 }
-
 export default App
