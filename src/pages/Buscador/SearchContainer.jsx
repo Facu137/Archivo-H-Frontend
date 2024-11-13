@@ -1,3 +1,4 @@
+// src/pages/Buscador/SearchContainer.jsx
 import React, { useState } from 'react'
 import './SearchContainer.css'
 import AdvancedSearchForm from './AdvancedSearchForm'

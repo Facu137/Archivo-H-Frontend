@@ -1,7 +1,8 @@
+// src/pages/Buscador/Buscador.jsx
 import React from 'react'
+import axios from 'axios'
 import SearchContainer from './SearchContainer'
 import './Buscador.css'
-import axiosInstance from '../../api/AxiosConfig'
 import { useAuth } from '../../context/AuthContext'
 
 const Buscador = () => {
@@ -25,7 +26,8 @@ const Buscador = () => {
 
   const handleDelete = async (documentoId) => {
     try {
-      await axiosInstance.delete(`/documents/${documentoId}`, {
+      await axios.delete(`http://localhost:3000/api/documents/${documentoId}`, {
+        // Usa axios directamente
         headers: {
           Authorization: `Bearer ${token}`
         }

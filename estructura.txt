@@ -33,6 +33,18 @@ src
 │   └── useNotification.jsx
 ├── pages
 │   ├── Buscador
+│   │   ├── AdvancedSearchForm.css
+│   │   ├── AdvancedSearchForm.jsx
+│   │   ├── Buscador.css
+│   │   ├── Buscador.jsx
+│   │   ├── ResultCard.css
+│   │   ├── ResultCard.jsx
+│   │   ├── ResultsContainer.css
+│   │   ├── ResultsContainer.jsx
+│   │   ├── SearchContainer.css
+│   │   ├── SearchContainer.jsx
+│   │   ├── SimpleSearchForm.css
+│   │   └── SimpleSearchForm.jsx
 │   ├── EditUser
 │   ├── ForgotPassword
 │   ├── GestionArchivo

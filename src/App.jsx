@@ -21,7 +21,6 @@ import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
 import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados' // Importa el componente de Archivos Eliminados
 // hooks
-// hooks
 import {
   NotificationProvider,
   NotificationContext
