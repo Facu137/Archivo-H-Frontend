@@ -1,3 +1,4 @@
+// src/pages/Buscador/ResultsContainer.jsx
 import React from 'react'
 import './ResultsContainer.css'
 import ResultCard from './ResultCard'

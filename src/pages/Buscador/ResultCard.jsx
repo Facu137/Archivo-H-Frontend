@@ -1,3 +1,4 @@
+// src/pages/Buscador/ResultCard.jsx
 import React from 'react'
 import './ResultCard.css'
 import { useNavigate } from 'react-router-dom'
@@ -147,7 +148,7 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
         </div>
       )}
 
-      {/* Mostrar botón de favorito solo para usuarios autenticados que NO son admin ni empleado*/}
+      {/* Mostrar botón de favorito solo para usuarios autenticados que NO son admin ni empleado */}
       {user && !isAdminOrEmployee && (
         <button
           className="favorite-button"

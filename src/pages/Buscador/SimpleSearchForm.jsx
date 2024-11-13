@@ -1,3 +1,4 @@
+// src/pages/Buscador/SimpleSearchForm.jsx
 import React, { useState } from 'react'
 import './SimpleSearchForm.css'
 import axios from 'axios'
@@ -21,7 +22,7 @@ const SimpleSearchForm = ({ onSearch }) => {
           page,
           pageSize
         },
-        headers: headers
+        headers
       })
 
       onSearch(response.data)
