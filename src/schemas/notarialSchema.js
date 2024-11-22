@@ -1,19 +1,12 @@
 // src/schemas/notarialSchema.js
 import { z } from 'zod'
-import { fileSchema } from './fileSchema.js' // Importa fileSchema
 
 const baseSchema = z.object({
   // Campos comunes a todos los documentos
-  legajoNumero: z.string().min(1, 'El número de legajo es requerido'),
-  legajoEsBis: z.preprocess(
-    (val) => val === 'true' || val === true || val === 1,
-    z.boolean()
-  ),
-  expedienteNumero: z.string().min(1, 'El número de expediente es requerido'),
-  expedienteEsBis: z.preprocess(
-    (val) => val === 'true' || val === true || val === 1,
-    z.boolean()
-  ),
+  legajoNumero: z.string().min(1).optional(),
+  legajoEsBis: z.number().int().min(0).max(100).optional(),
+  expedienteNumero: z.string().min(1).optional(),
+  expedienteEsBis: z.number().int().min(0).max(100).optional(),
   tipoDocumento: z.literal('Notarial'),
   anio: z.coerce.number().int().max(new Date().getFullYear()),
   mes: z.coerce.number().int().min(1).max(12).optional(),
@@ -56,7 +49,7 @@ const baseSchema = z.object({
 // El fileSchema no necesita cambios
 
 export const notarialSchema = baseSchema.extend({
-  file: fileSchema
+  files: z.array(z.any()).optional()
 })
 
 export const validateNotarialUpload = (data) => {

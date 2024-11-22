@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useReducer } from 'react'
 import './GestionArchivo.css'
 import { useAuth } from '../../context/AuthContext'
 import axiosInstance from '../../api/axiosConfig'
 import { z } from 'zod'
+import PropTypes from 'prop-types'
 
 const FILE_TYPES = {
   Mensura: 'Mensura',
@@ -127,7 +128,6 @@ const createFormSchema = (fileType) => {
 
   fieldList.forEach((field) => {
     if (PERSON_FIELDS.includes(field)) {
-      // Schema específico para campos de persona
       schemaFields[`${field}Nombre`] = z
         .string()
         .min(1, `El nombre de ${field} es requerido`)
@@ -135,10 +135,8 @@ const createFormSchema = (fileType) => {
         .string()
         .min(1, `El tipo de ${field} es requerido`)
     } else if (field === 'legajoEsBis' || field === 'expedienteEsBis') {
-      // Campos booleanos
-      schemaFields[field] = z.boolean()
+      schemaFields[field] = z.number().optional()
     } else if (['dia', 'mes', 'anio', 'Fojas'].includes(field)) {
-      // Campos numéricos
       schemaFields[field] = z
         .number()
         .int()
@@ -148,7 +146,6 @@ const createFormSchema = (fileType) => {
       if (field === 'anio')
         schemaFields[field] = schemaFields[field].max(new Date().getFullYear())
     } else {
-      // Campos de texto regulares
       schemaFields[field] = z.string().min(1, `El campo ${field} es requerido`)
     }
   })
@@ -156,28 +153,130 @@ const createFormSchema = (fileType) => {
   return z.object(schemaFields)
 }
 
+const initialState = {
+  fileType: FILE_TYPES.Mensura,
+  formData: {},
+  fileUploads: [],
+  message: '',
+  errors: {},
+  isUploading: false
+}
+
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_FILE_TYPE':
+      return { ...state, fileType: action.payload }
+    case 'SET_FORM_DATA':
+      return { ...state, formData: action.payload }
+    case 'SET_FILE_UPLOADS':
+      return { ...state, fileUploads: action.payload }
+    case 'SET_MESSAGE':
+      return { ...state, message: action.payload }
+    case 'SET_ERRORS':
+      return { ...state, errors: action.payload }
+    case 'SET_IS_UPLOADING':
+      return { ...state, isUploading: action.payload }
+    default:
+      return state
+  }
+}
+
+const FormField = React.memo(({ field, value, onChange, error }) => {
+  const isPersonField = PERSON_FIELDS.includes(field)
+  const isNumberField = [
+    'dia',
+    'mes',
+    'anio',
+    'Fojas',
+    'legajoEsBis',
+    'expedienteEsBis'
+  ].includes(field)
+
+  if (isPersonField) {
+    return (
+      <div>
+        <input
+          type="text"
+          id={`${field}Nombre`}
+          name={`${field}Nombre`}
+          value={value[`${field}Nombre`] || ''}
+          onChange={(e) => onChange(`${field}Nombre`, e.target.value)}
+          placeholder="Nombre"
+        />
+        {error[`${field}Nombre`] && (
+          <p className="error">{error[`${field}Nombre`]}</p>
+        )}
+        <div className="person-type">
+          <label>
+            <input
+              type="radio"
+              name={`${field}Tipo`}
+              value="Persona Física"
+              checked={value[`${field}Tipo`] === 'Persona Física'}
+              onChange={() => onChange(`${field}Tipo`, 'Persona Física')}
+            />
+            Persona Física
+          </label>
+          <label>
+            <input
+              type="radio"
+              name={`${field}Tipo`}
+              value="Persona Jurídica"
+              checked={value[`${field}Tipo`] === 'Persona Jurídica'}
+              onChange={() => onChange(`${field}Tipo`, 'Persona Jurídica')}
+            />
+            Persona Jurídica
+          </label>
+        </div>
+        {error[`${field}Tipo`] && (
+          <p className="error">{error[`${field}Tipo`]}</p>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <input
+      type={isNumberField ? 'number' : 'text'}
+      id={field}
+      name={field}
+      value={value[field] || ''}
+      onChange={(e) => onChange(field, e.target.value)}
+      {...(field === 'mes' && { min: 1, max: 12 })}
+      {...(field === 'dia' && { min: 1, max: 31 })}
+      {...(field === 'anio' && { min: 1800, max: new Date().getFullYear() })}
+      {...(isNumberField && { min: 0 })}
+    />
+  )
+})
+
+FormField.displayName = 'FormField'
+
+FormField.propTypes = {
+  field: PropTypes.string.isRequired,
+  value: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  error: PropTypes.object.isRequired
+}
+
 export const GestionArchivo = () => {
-  const [fileType, setFileType] = useState(FILE_TYPES.Mensura)
-  const [formData, setFormData] = useState({})
-  const [fileUploads, setFileUploads] = useState([])
-  const [message, setMessage] = useState('')
-  const [errors, setErrors] = useState({})
+  const [state, dispatch] = useReducer(formReducer, initialState)
   const { token, user } = useAuth()
 
   const createFormFields = useCallback(() => {
-    const fieldList = FORM_FIELDS[fileType]
+    const fieldList = FORM_FIELDS[state.fileType]
     const newFormData = {}
     fieldList.forEach((field) => {
       if (PERSON_FIELDS.includes(field)) {
         newFormData[`${field}Nombre`] = ''
         newFormData[`${field}Tipo`] = ''
       } else {
-        newFormData[field] = field.includes('EsBis') ? false : ''
+        newFormData[field] = ''
       }
     })
-    setFormData(newFormData)
-    setErrors({})
-  }, [fileType])
+    dispatch({ type: 'SET_FORM_DATA', payload: newFormData })
+    dispatch({ type: 'SET_ERRORS', payload: {} })
+  }, [state.fileType])
 
   useEffect(() => {
     createFormFields()
@@ -185,9 +284,9 @@ export const GestionArchivo = () => {
 
   const validateForm = () => {
     try {
-      const schema = createFormSchema(fileType)
-      schema.parse(formData)
-      setErrors({})
+      const schema = createFormSchema(state.fileType)
+      schema.parse(state.formData)
+      dispatch({ type: 'SET_ERRORS', payload: {} })
       return true
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -195,38 +294,49 @@ export const GestionArchivo = () => {
         error.errors.forEach((err) => {
           newErrors[err.path[0]] = err.message
         })
-        setErrors(newErrors)
+        dispatch({ type: 'SET_ERRORS', payload: newErrors })
+        console.log('Errores detectados:', newErrors)
       }
       return false
     }
   }
 
   const handleFormFieldChange = (field, value) => {
-    const numberFields = ['dia', 'mes', 'anio', 'Fojas']
+    const numberFields = [
+      'dia',
+      'mes',
+      'anio',
+      'Fojas',
+      'legajoEsBis',
+      'expedienteEsBis'
+    ]
     const processedValue = numberFields.includes(field)
       ? value === ''
         ? ''
         : Number(value)
       : value
 
-    setFormData((prev) => ({
-      ...prev,
-      [field]: processedValue
-    }))
+    dispatch({
+      type: 'SET_FORM_DATA',
+      payload: { ...state.formData, [field]: processedValue }
+    })
 
-    // Limpiar el error específico cuando se modifica el campo
-    setErrors((prev) => ({
-      ...prev,
-      [field]: ''
-    }))
+    dispatch({
+      type: 'SET_ERRORS',
+      payload: { ...state.errors, [field]: '' }
+    })
+
+    console.log('formData actual:', state.formData)
   }
 
-  const handleFileTypeChange = (e) => {
-    setFileType(e.target.value)
+  const handleFileTypeChange = (fileType) => {
+    dispatch({ type: 'SET_FILE_TYPE', payload: fileType })
+    const formDataToSend = new FormData()
+    formDataToSend.append('tipoDocumento', fileType)
   }
 
   const handleFileUpload = (e) => {
-    const maxFileSize = 20 * 1024 * 1024 // 20 MB limit
+    const maxFileSize = 20 * 1024 * 1024
     const validFileTypes = [
       'application/pdf',
       'image/jpeg',
@@ -240,43 +350,57 @@ export const GestionArchivo = () => {
     )
 
     if (validFiles.length !== files.length) {
-      setMessage('Algunos archivos fueron rechazados por tipo o tamaño.')
+      dispatch({
+        type: 'SET_MESSAGE',
+        payload: 'Algunos archivos fueron rechazados por tipo o tamaño.'
+      })
     }
 
-    setFileUploads((prevUploads) => [...prevUploads, ...validFiles])
+    dispatch({
+      type: 'SET_FILE_UPLOADS',
+      payload: [...state.fileUploads, ...validFiles]
+    })
   }
 
   const handleFileRemove = (index) => {
-    setFileUploads((prevUploads) => prevUploads.filter((_, i) => i !== index))
+    dispatch({
+      type: 'SET_FILE_UPLOADS',
+      payload: state.fileUploads.filter((_, i) => i !== index)
+    })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!validateForm()) {
-      setMessage('Por favor, corrija los errores en el formulario.')
+      dispatch({
+        type: 'SET_MESSAGE',
+        payload: 'Por favor, corrija los errores en el formulario.'
+      })
       return
     }
 
+    dispatch({ type: 'SET_IS_UPLOADING', payload: true })
+
     const formDataToSend = new FormData()
 
-    // Añadir todos los campos del formulario
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key])
+    Object.keys(state.formData).forEach((key) => {
+      formDataToSend.append(key, state.formData[key])
     })
 
-    // Añadir archivos
-    fileUploads.forEach((file) => {
+    state.fileUploads.forEach((file) => {
       formDataToSend.append('archivo', file)
     })
 
-    // Añadir campos adicionales
-    formDataToSend.append('tipoDocumento', fileType)
+    // Asegúrate de que 'tipoDocumento' se esté enviando correctamente
+    formDataToSend.append('tipoDocumento', FILE_TYPES[state.fileType])
     formDataToSend.append('creadorId', user.id || 0)
+
+    console.log('formDataToSend:', formDataToSend) // Add this line for debugging
 
     try {
       const response = await axiosInstance.post(
-        `api/documents/upload/${fileType.toLowerCase()}`,
+        `api/documents/upload/${state.fileType.toLowerCase()}`,
         formDataToSend,
         {
           headers: {
@@ -287,129 +411,79 @@ export const GestionArchivo = () => {
       )
 
       if (response.status === 200 || response.status === 201) {
-        setMessage('Archivo subido correctamente')
-        createFormFields() // Reset form
-        setFileUploads([])
+        dispatch({
+          type: 'SET_MESSAGE',
+          payload: 'Archivo subido correctamente'
+        })
+        createFormFields()
+        dispatch({ type: 'SET_FILE_UPLOADS', payload: [] })
       } else {
-        setMessage(`Error al subir el archivo: ${response.status}`)
+        dispatch({
+          type: 'SET_MESSAGE',
+          payload: `Error al subir el archivo: ${response.status}`
+        })
       }
     } catch (error) {
       console.error('Error al subir el archivo:', error)
       if (error.response && error.response.data) {
-        setMessage(
-          `Error: ${error.response.data.message || 'Error desconocido'}`
-        )
+        dispatch({
+          type: 'SET_MESSAGE',
+          payload: `Error: ${error.response.data.message || 'Error desconocido'}`
+        })
       } else {
-        setMessage('Error al procesar la solicitud')
+        dispatch({
+          type: 'SET_MESSAGE',
+          payload: 'Error al procesar la solicitud'
+        })
       }
+    } finally {
+      dispatch({ type: 'SET_IS_UPLOADING', payload: false })
     }
-  }
-
-  const renderFormField = (field) => {
-    if (PERSON_FIELDS.includes(field)) {
-      return (
-        <div>
-          <input
-            type="text"
-            id={`${field}Nombre`}
-            name={`${field}Nombre`}
-            value={formData[`${field}Nombre`] || ''}
-            onChange={(e) =>
-              handleFormFieldChange(`${field}Nombre`, e.target.value)
-            }
-            placeholder="Nombre"
-          />
-          {errors[`${field}Nombre`] && (
-            <p className="error">{errors[`${field}Nombre`]}</p>
-          )}
-          <div className="person-type">
-            <label>
-              <input
-                type="radio"
-                name={`${field}Tipo`}
-                value="Persona Física"
-                checked={formData[`${field}Tipo`] === 'Persona Física'}
-                onChange={() =>
-                  handleFormFieldChange(`${field}Tipo`, 'Persona Física')
-                }
-              />
-              Persona Física
-            </label>
-            <label>
-              <input
-                type="radio"
-                name={`${field}Tipo`}
-                value="Persona Jurídica"
-                checked={formData[`${field}Tipo`] === 'Persona Jurídica'}
-                onChange={() =>
-                  handleFormFieldChange(`${field}Tipo`, 'Persona Jurídica')
-                }
-              />
-              Persona Jurídica
-            </label>
-          </div>
-          {errors[`${field}Tipo`] && (
-            <p className="error">{errors[`${field}Tipo`]}</p>
-          )}
-        </div>
-      )
-    }
-
-    const isNumberField = ['dia', 'mes', 'anio', 'Fojas'].includes(field)
-    const isBooleanField = ['legajoEsBis', 'expedienteEsBis'].includes(field)
-
-    if (isBooleanField) {
-      return (
-        <input
-          type="checkbox"
-          id={field}
-          name={field}
-          checked={formData[field] || false}
-          onChange={(e) => handleFormFieldChange(field, e.target.checked)}
-        />
-      )
-    }
-
-    return (
-      <input
-        type={isNumberField ? 'number' : 'text'}
-        id={field}
-        name={field}
-        value={formData[field] || ''}
-        onChange={(e) => handleFormFieldChange(field, e.target.value)}
-        {...(field === 'mes' && { min: 1, max: 12 })}
-        {...(field === 'dia' && { min: 1, max: 31 })}
-        {...(field === 'anio' && { min: 1800, max: new Date().getFullYear() })}
-        {...(isNumberField && { min: 1 })}
-      />
-    )
   }
 
   return (
     <div className="main-content">
       <form id="fileForm" onSubmit={handleSubmit}>
-        <label htmlFor="fileType">Seleccionar Tipo de Archivo:</label>
-        <select
-          id="fileType"
-          name="fileType"
-          value={fileType}
-          onChange={handleFileTypeChange}
-        >
-          {Object.entries(FILE_TYPES).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
+        <div className="file-type-select">
+          <label htmlFor="fileTypeSelect">Seleccionar Tipo de Archivo:</label>
+          <select
+            id="fileTypeSelect"
+            value={state.fileType}
+            onChange={(e) => handleFileTypeChange(e.target.value)}
+          >
+            {Object.entries(FILE_TYPES).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div id="formFields">
-          {FORM_FIELDS[fileType].map((field) => (
+          {FORM_FIELDS[state.fileType].map((field) => (
             <div key={field}>
               <label htmlFor={field}>{field}:</label>
-              {renderFormField(field)}
-              {errors[field] && <p className="error">{errors[field]}</p>}
+              <FormField
+                field={field}
+                value={state.formData}
+                onChange={handleFormFieldChange}
+                error={state.errors}
+              />
+              {state.errors[field] && (
+                <p className="error">{state.errors[field]}</p>
+              )}
             </div>
           ))}
+          <input
+            type="hidden"
+            name="TitularNombre"
+            value={state.formData.TitularNombre}
+          />
+          <input
+            type="hidden"
+            name="TitularTipo"
+            value={state.formData.TitularTipo}
+          />
         </div>
 
         <div id="fileUploads">
@@ -417,25 +491,32 @@ export const GestionArchivo = () => {
           <input
             type="file"
             id="fileUpload"
-            name="archivo"
+            name="fileUpload"
             multiple
+            accept=".pdf, .jpeg, .jpg, .png, .tiff"
             onChange={handleFileUpload}
           />
-          <div className="file-list">
-            {fileUploads.map((file, index) => (
-              <div key={index}>
-                {file.name}{' '}
-                <button type="button" onClick={() => handleFileRemove(index)}>
-                  Eliminar
-                </button>
-              </div>
-            ))}
-          </div>
+          {state.fileUploads.length > 0 && (
+            <ul>
+              {state.fileUploads.map((file, index) => (
+                <li key={index}>
+                  {file.name}
+                  <button type="button" onClick={() => handleFileRemove(index)}>
+                    Eliminar
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        <button type="submit">Enviar</button>
-        {message && <p className="message">{message}</p>}
+        <button type="submit" disabled={state.isUploading}>
+          {state.isUploading ? 'Subiendo...' : 'Guardar'}
+        </button>
+        {state.message && <p>{state.message}</p>}
       </form>
     </div>
   )
 }
+
+export default GestionArchivo

@@ -3,12 +3,12 @@ import { z } from 'zod'
 
 export const fileSchema = z.object({
   // Datos del legajo
-  legajoNumero: z.string().min(1, 'El número de legajo es requerido'),
-  legajoEsBis: z.coerce.number().int().min(0).max(100),
+  legajoNumero: z.string().min(1).optional(),
+  legajoEsBis: z.coerce.number().int().min(0).max(100).optional(),
 
   // Datos del expediente
-  expedienteNumero: z.string().min(1, 'El número de expediente es requerido'),
-  expedienteEsBis: z.coerce.number().int().min(0).max(100),
+  expedienteNumero: z.string().min(1).optional(),
+  expedienteEsBis: z.coerce.number().int().min(0).max(100).optional(),
 
   // Datos del documento
   tipoDocumento: z.enum(
