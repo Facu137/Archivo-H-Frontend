@@ -1,5 +1,4 @@
-/* src\pages\Institucional\Institucional.css */
-/*.institucional-container {
+.institucional-container {
   position: relative;
   margin: 0 auto;
   padding: 20px;
@@ -11,14 +10,9 @@
   align-items: center;
 }
 
-
-.body-1,
-.body-2,
-.body-3 {
-  display: flex;
-  align-items: center;
-  margin-bottom: 60px;
-  background-color: #f8f8f8;
+.institucional-card {
+  margin-bottom: 20px; /* Espacio entre las tarjetas */
+  background-color: #f8f8f8; /* Color de fondo de la tarjeta */
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -26,87 +20,64 @@
   box-sizing: border-box;
 }
 
-.body-2 {
-  flex-direction: row-reverse;
-}
-
-.body-1-img,
-.body-2-img,
-.body-3-img {
-  object-fit: cover;
-  width: 40%;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.body-1-content,
-.body-2-content,
-.body-3-content {
-  padding: 20px;
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.body-1 h3,
-.body-2 h3,
-.body-3 h3 {
+.institucional-card h2 {
+  padding: 10px 15px; /* Espaciado interno para el título */
+  margin: 0; /* Elimina el margen predeterminado */
   color: #333;
-  margin-bottom: 15px;
 }
 
-.body-1 p,
-.body-2 p,
-.body-3 p {
+.institucional-card p {
+  padding: 0 15px 15px; /* Espaciado interno para el párrafo */
+  margin: 0; /* Elimina el margen predeterminado */
   color: #555;
+  line-height: 1.5; /* Espacio entre líneas */
 }
 
+.institucional-card-gallery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 20px; /* Espacio inferior */
+}
+
+.institucional-card-gallery img {
+  opacity: 0;
+  transform: scale(0.25);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  display: block;
+  width: 300px; /* Ancho fijo - ajusta este valor */
+  height: 200px; /* Alto fijo - ajusta este valor */
+  object-fit: cover; /* Ajusta la imagen para que cubra el área sin deformarse */
+}
+
+.institucional-card-gallery img.show {
+  opacity: 1;
+  transform: scale(1);
+}
+/* Media Queries (adapta según tus necesidades) */
 @media (max-width: 768px) {
-
-  .body-1,
-  .body-2,
-  .body-3 {
-    flex-direction: column;
-    margin-bottom: 40px;
-  }
-
-  .body-1-img,
-  .body-2-img,
-  .body-3-img {
-  object-fit: cover;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    border-radius: 10px;
-  }
-
-  .body-1-content,
-  .body-2-content,
-  .body-3-content {
-    width: 80%;
+  .institucional-container {
     padding: 10px;
+  }
+  .institucional-card {
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-
-  .body-1-img,
-  .body-2-img,
-  .body-3-img {
-  object-fit: cover;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    border-radius: 10px;
-  }
-
-  .body-1-content,
-  .body-2-content,
-  .body-3-content {
+ .institucional-container {
     padding: 5px;
-    width: 80%;
   }
 }
-*/
+
+body { /* O el selector del contenedor principal */
+  min-height: 100vh; /* vh = viewport height (altura de la ventana) */
+}
+
+@media (max-width: 768px) {
+  .institucional-card-gallery {
+    padding-bottom: 10px; /* Espacio inferior en pantallas más pequeñas */
+  }
+}
