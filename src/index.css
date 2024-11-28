@@ -244,6 +244,9 @@ span, b, i, strong, em, a, code {
 /* Estilos globales */
 ** { min-width: 0; }
 
+button {
+  font-family: var(--font-family-primary);
+}
 
 img, video, svg {
   display: block;
@@ -267,23 +270,16 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
 p { text-wrap: pretty; }
 /* Estilos para balancear texto en encabezados y párrafos */
 
-
 p {
   text-wrap: pretty;
   /* Ajusta la longitud de las líneas de los párrafos para una mejor presentación visual de la última línea. */
 }
 
 .dark-mode {
-  background-color: #121212;   color: #ffffff;
-
+  background-color: #191919;
+  color: #ffffff;
 }
 
-.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Estilos específicos para el modo oscuro */
 .dark-mode a {
   color: inherit;
   /* Heredar el color del texto */
@@ -291,19 +287,11 @@ p {
   /* Quitar el subrayado */
 }
 
-.dark-mode button {
-  background-color: #0a0a0a;
-  color: #ffffff;
-  border-radius: 20px;
-  border-width: 2px;
-  border-style: solid;
+.light-mode {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.dark-mode button:hover {
-  background-color: #555555;
-}
-
-/* Estilos específicos para el modo claro */
 .light-mode a {
   color: inherit;
   /* Heredar el color del texto */
@@ -311,62 +299,24 @@ p {
   /* Quitar el subrayado */
 }
 
-.light-mode a:hover {
-  color: #551a8b;
-}
-
-.light-mode button {
-  background-color: #f0f0f0;
-  color: #000000;
-  border-radius: 20px;
-  border-width: 2px;
-  border-style: solid;
-  
-}
-
-.light-mode button:hover {
-  background-color: #d0d0d0;
-}
-
 .main-container {
-  margin-top: 87px;
-  @media screen and (max-width: 1200px) {
-    margin-top: 70px;
-  }
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
   background-image: url('./assets/entrada.avif');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   position: relative;
-  overflow: hidden;
   z-index: 1;
-  flex: 1; /* IMPORTANTE para sticky footer */
-}
-
-.main-container::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  /* Ajusta estos valores para asegurar que cubra completamente el contenedor */
-  right: -80px;
-  bottom: -80px;
-  left: -80px;
-  background: inherit;
-  filter: blur(40px) grayscale(100%);
-  /* Efecto de blanco y negro y desenfoque */
-  z-index: -1;
-  /* Asegura que el pseudo-elemento esté detrás del contenido */
-  background-image: url('./assets/entrada.avif');
-  /* Asegura que el pseudo-elemento tenga la misma imagen de fondo */
-  background-size: cover;
-  background-position: center;
 }
 
 .content {
-  position: relative;
-  /* Asegura que el contenido esté por encima del pseudo-elemento */
-  z-index: 2;
-  /* Asegura que el contenido esté por encima del pseudo-elemento */
+  min-height: 100%;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.dark-mode .content {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Estilos para el contenedor principal y el footer */

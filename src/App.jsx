@@ -45,6 +45,12 @@ export const App = () => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
 
+  useEffect(() => {
+    document.body.className = isDarkMode
+      ? 'bg-dark text-white'
+      : 'bg-light text-dark'
+  }, [isDarkMode])
+
   const toggleSidebar = (side) => {
     setIsSidebarOpen((prev) => ({
       ...prev,
