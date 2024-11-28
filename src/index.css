@@ -16,10 +16,10 @@ body {
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
   transition: background-color 0.3s, color 0.3s; /* Transición suave para el cambio de modo */
-  display: flex; /* Añadido para sticky footer */
-  flex-direction: column; /* Añadido para sticky footer */
-  min-height: 100vh; /* Añadido para sticky footer */
   margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6, p, blockquote, pre, span, b, i, strong, em, ul, ol, li, a, code {
@@ -323,7 +323,22 @@ p {
 #root {
   display: flex;
   flex-direction: column;
-  flex: 1; /* IMPORTANTE para sticky footer */
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: auto;
+}
+
+.navbar {
+  flex-shrink: 0;
+  width: 100%;
 }
 
 footer {
