@@ -8,7 +8,15 @@ import {
   FaEnvelope,
   FaCopy
 } from 'react-icons/fa'
-import { Card, Badge, Button, Overlay, Tooltip } from 'react-bootstrap'
+import {
+  Card,
+  Badge,
+  Button,
+  Overlay,
+  Tooltip,
+  Row,
+  Col
+} from 'react-bootstrap'
 
 const UserCard = ({ user, darkMode, className }) => {
   const [showTooltip, setShowTooltip] = useState(false)
@@ -61,37 +69,42 @@ const UserCard = ({ user, darkMode, className }) => {
 
   return (
     <Card
-      className={`border shadow-sm ${
+      className={`border ${
         darkMode
           ? 'bg-dark text-white border-secondary'
-          : 'bg-white border-light'
+          : 'bg-white border-secondary border-opacity-50'
       } ${className || ''}`}
+      style={{ minHeight: '120px' }}
     >
       <Card.Body className="p-3">
-        <div className="d-flex align-items-start">
-          <div
-            className={`rounded-circle p-2 me-3 ${
-              darkMode ? 'bg-dark bg-opacity-50' : 'bg-light'
-            }`}
-            style={{
-              border: `2px solid var(--bs-${getRoleBadgeVariant(user.rol)})`,
-              minWidth: '48px',
-              height: '48px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: darkMode ? 'var(--bs-light)' : 'var(--bs-dark)'
-            }}
-          >
-            {getAvatarByRole(user.rol)}
-          </div>
-          <div className="flex-grow-1 min-width-0">
-            <div className="d-flex flex-column">
+        <Row className="g-0">
+          <Col xs="auto" className="me-3">
+            <div
+              className={`rounded-circle p-2 ${
+                darkMode ? 'bg-dark bg-opacity-50' : 'bg-light'
+              }`}
+              style={{
+                border: `2px solid var(--bs-${getRoleBadgeVariant(user.rol)})`,
+                width: '48px',
+                height: '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: darkMode ? 'var(--bs-light)' : 'var(--bs-dark)',
+                flexShrink: 0
+              }}
+            >
+              {getAvatarByRole(user.rol)}
+            </div>
+          </Col>
+          <Col className="min-width-0">
+            <div className="d-flex flex-column h-100">
               <h6
                 className={`mb-1 text-truncate fw-bold ${
                   darkMode ? 'text-white' : 'text-dark'
                 }`}
                 title={`${user.nombre} ${user.apellido}`}
+                style={{ fontSize: '0.95rem', lineHeight: '1.2' }}
               >
                 {truncateString(user.nombre, 15)}{' '}
                 {truncateString(user.apellido, 15)}
@@ -100,24 +113,28 @@ const UserCard = ({ user, darkMode, className }) => {
                 className={`d-flex align-items-center small mb-2 ${
                   darkMode ? 'text-light' : 'text-secondary'
                 }`}
+                style={{ minHeight: '24px' }}
               >
-                <FaEnvelope className="me-2" size={12} />
-                <span
-                  ref={emailRef}
-                  title={user.email}
-                  className="text-truncate me-2"
-                >
-                  {user.email}
-                </span>
-                <Button
-                  ref={copyButtonRef}
-                  variant={darkMode ? 'outline-light' : 'outline-secondary'}
-                  size="sm"
-                  className="py-0 px-2"
-                  onClick={handleCopyEmail}
-                >
-                  <FaCopy size={12} />
-                </Button>
+                <FaEnvelope className="me-2 flex-shrink-0" size={12} />
+                <div className="d-flex align-items-center flex-grow-1 min-width-0">
+                  <span
+                    ref={emailRef}
+                    title={user.email}
+                    className="text-truncate me-2"
+                  >
+                    {user.email}
+                  </span>
+                  <Button
+                    ref={copyButtonRef}
+                    variant={darkMode ? 'outline-light' : 'outline-secondary'}
+                    size="sm"
+                    className="py-0 px-2 flex-shrink-0"
+                    style={{ height: '20px' }}
+                    onClick={handleCopyEmail}
+                  >
+                    <FaCopy size={12} />
+                  </Button>
+                </div>
                 <Overlay
                   target={copyButtonRef.current}
                   show={showTooltip}
@@ -129,12 +146,13 @@ const UserCard = ({ user, darkMode, className }) => {
               <Badge
                 bg={getRoleBadgeVariant(user.rol)}
                 className="align-self-start px-2 py-1 text-white"
+                style={{ fontSize: '0.75rem' }}
               >
                 {capitalizeFirstLetter(user.rol)}
               </Badge>
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   )

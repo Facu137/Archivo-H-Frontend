@@ -69,17 +69,11 @@ const RightSidebar = ({ isOpen, onClose }) => {
       </Offcanvas.Header>
       <Offcanvas.Body>
         <div className="d-flex flex-column align-items-center">
-          <div className="w-100 px-2">
-            <UserCard
-              user={displayUser}
-              darkMode={isDarkMode}
-              className="mb-3"
-            />
-          </div>
+          <UserCard user={displayUser} darkMode={isDarkMode} className="mb-3" />
 
           {displayUser.rol === 'empleado' && (
             <Card
-              className={`mb-3 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
+              className={`mb-3  ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
             >
               <Card.Body className="p-3">
                 <div className="d-flex align-items-center justify-content-between">
@@ -99,7 +93,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
 
           {permisosHabilitados.length > 0 && (
             <Card
-              className={`mb-4 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
+              className={`mb-4 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
             >
               <Card.Header className="border-bottom border-secondary py-2">
                 <h6 className="mb-0">Permisos Habilitados</h6>
@@ -126,7 +120,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
             </Card>
           )}
 
-          <div className="d-grid gap-2">
+          <div className="d-flex flex-column">
             <Link to="/profile" className="text-decoration-none">
               <Button
                 variant={isDarkMode ? 'outline-light' : 'outline-dark'}
