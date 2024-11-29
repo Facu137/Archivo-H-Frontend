@@ -1,14 +1,15 @@
 // src/components/RequestEmployeeCard/RequestEmployeeCard.jsx
 import React, { useState } from 'react'
 import trabajo from '../../../assets/topaz-CasaArchivo.avif'
-import './RequestEmployeeCard.css'
 import { useNotification } from '../../../hooks/useNotification'
 import { useAuth } from '../../../context/AuthContext'
+import { Card, Form, Button, Container } from 'react-bootstrap'
 
 const RequestEmployeeCard = () => {
   const [claveConversion, setClaveConversion] = useState('')
   const showNotification = useNotification()
   const { user, token } = useAuth()
+  const isDarkMode = localStorage.getItem('mode') === 'dark'
 
   const handleChange = (e) => {
     setClaveConversion(e.target.value)
@@ -40,35 +41,50 @@ const RequestEmployeeCard = () => {
   }
 
   return (
-    <div className="request-employee-card">
-      <h3>¿Quieres ser parte de nuestro equipo?</h3>
-      <img
-        src={trabajo} // Ruta a la imagen motivadora
-        alt="Motivational"
-        className="motivational-image"
-      />
-      <p>
-        Completa los datos de usuario y manda la solicitud para ser empleado.
-        <br />
-        Empieza una nueva aventura con nosotros.
-      </p>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="claveConversion">Clave de Convocatoria:</label>
-          <input
-            type="password"
-            id="claveConversion"
-            name="claveConversion"
-            value={claveConversion}
-            onChange={handleChange}
-            required
+    <Container className="py-4">
+      <Card
+        className={`shadow ${isDarkMode ? 'bg-dark text-white' : 'bg-light'}`}
+      >
+        <Card.Header
+          className={`${isDarkMode ? 'bg-dark' : 'bg-light'} border-bottom`}
+        >
+          <h2 className="mb-0">¿Quieres ser parte de nuestro equipo?</h2>
+        </Card.Header>
+        <Card.Body>
+          <img
+            src={trabajo}
+            alt="Motivational"
+            className="img-fluid rounded mb-4"
           />
-        </div>
-        <button type="submit" className="request-button">
-          Solicitar ser empleado
-        </button>
-      </form>
-    </div>
+          <p className="text-center mb-4">
+            Completa los datos de usuario y manda la solicitud para ser
+            empleado.
+            <br />
+            Empieza una nueva aventura con nosotros.
+          </p>
+
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Clave de Convocatoria:</Form.Label>
+              <Form.Control
+                type="password"
+                name="claveConversion"
+                value={claveConversion}
+                onChange={handleChange}
+                required
+                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+              />
+            </Form.Group>
+
+            <div className="d-grid">
+              <Button variant="primary" type="submit" className="py-2">
+                Solicitar ser empleado
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
   )
 }
 
