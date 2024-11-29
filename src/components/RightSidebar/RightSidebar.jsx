@@ -68,78 +68,84 @@ const RightSidebar = ({ isOpen, onClose }) => {
         </Button>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <div className="mb-4">
-          <UserCard user={displayUser} darkMode={isDarkMode} />
-        </div>
+        <div className="d-flex flex-column align-items-center">
+          <div className="w-100 px-2">
+            <UserCard
+              user={displayUser}
+              darkMode={isDarkMode}
+              className="mb-3"
+            />
+          </div>
 
-        {displayUser.rol === 'empleado' && (
-          <Card
-            className={`mb-3 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
-          >
-            <Card.Body className="p-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <h6 className="mb-0">Estado</h6>
-                <Badge
-                  bg={displayUser.activo ? 'success' : 'danger'}
-                  className="px-3 py-2"
-                >
-                  {displayUser.activo
-                    ? 'Empleado Habilitado'
-                    : 'Empleado Sin Habilitar'}
-                </Badge>
-              </div>
-            </Card.Body>
-          </Card>
-        )}
-
-        {permisosHabilitados.length > 0 && (
-          <Card
-            className={`mb-4 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
-          >
-            <Card.Header className="border-bottom border-secondary py-2">
-              <h6 className="mb-0">Permisos Habilitados</h6>
-            </Card.Header>
-            <ListGroup
-              variant={isDarkMode ? 'dark' : 'light'}
-              className="list-group-flush"
+          {displayUser.rol === 'empleado' && (
+            <Card
+              className={`mb-3 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
             >
-              {permisosHabilitados.map((permiso) => (
-                <ListGroup.Item
-                  key={permiso}
-                  className={`
-                    ${isDarkMode ? 'bg-dark text-white border-secondary' : ''}
-                    d-flex align-items-center justify-content-between py-3
-                  `}
-                >
-                  <span>{permissionNames[permiso] || permiso}</span>
-                  <Badge bg="success" className="px-3">
-                    Habilitado
+              <Card.Body className="p-3">
+                <div className="d-flex align-items-center justify-content-between">
+                  <h6 className="mb-0">Estado</h6>
+                  <Badge
+                    bg={displayUser.activo ? 'success' : 'danger'}
+                    className="px-3 py-2"
+                  >
+                    {displayUser.activo
+                      ? 'Empleado Habilitado'
+                      : 'Empleado Sin Habilitar'}
                   </Badge>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Card>
-        )}
+                </div>
+              </Card.Body>
+            </Card>
+          )}
 
-        <div className="d-grid gap-2">
-          <Link to="/profile" className="text-decoration-none">
-            <Button
-              variant={isDarkMode ? 'outline-light' : 'outline-dark'}
-              className="w-100 mb-2 d-flex align-items-center justify-content-center py-2"
-              onClick={onClose}
+          {permisosHabilitados.length > 0 && (
+            <Card
+              className={`mb-4 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
             >
-              <FaEdit className="me-2" />
-              <span>Editar Perfil</span>
+              <Card.Header className="border-bottom border-secondary py-2">
+                <h6 className="mb-0">Permisos Habilitados</h6>
+              </Card.Header>
+              <ListGroup
+                variant={isDarkMode ? 'dark' : 'light'}
+                className="list-group-flush"
+              >
+                {permisosHabilitados.map((permiso) => (
+                  <ListGroup.Item
+                    key={permiso}
+                    className={`
+                      ${isDarkMode ? 'bg-dark text-white border-secondary' : ''}
+                      d-flex align-items-center justify-content-between py-3
+                    `}
+                  >
+                    <span>{permissionNames[permiso] || permiso}</span>
+                    <Badge bg="success" className="px-3">
+                      Habilitado
+                    </Badge>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Card>
+          )}
+
+          <div className="d-grid gap-2">
+            <Link to="/profile" className="text-decoration-none">
+              <Button
+                variant={isDarkMode ? 'outline-light' : 'outline-dark'}
+                className="w-100 mb-2 d-flex align-items-center justify-content-center py-2"
+                onClick={onClose}
+              >
+                <FaEdit className="me-2" />
+                <span>Editar Perfil</span>
+              </Button>
+            </Link>
+            <Button
+              variant={isDarkMode ? 'danger' : 'outline-danger'}
+              onClick={handleLogout}
+              className="w-100 d-flex align-items-center justify-content-center py-2"
+            >
+              <FaSignOutAlt className="me-2" />
+              <span>Cerrar Sesión</span>
             </Button>
-          </Link>
-          <Button
-            variant={isDarkMode ? 'danger' : 'outline-danger'}
-            onClick={handleLogout}
-            className="w-100 d-flex align-items-center justify-content-center py-2"
-          >
-            <FaSignOutAlt className="me-2" />
-            <span>Cerrar Sesión</span>
-          </Button>
+          </div>
         </div>
       </Offcanvas.Body>
     </Offcanvas>

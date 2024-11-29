@@ -1,8 +1,8 @@
 // src/components/UserCard/UserCard.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaUserTie, FaUserShield } from 'react-icons/fa'
-import './UserCard.css'
+import { FaUser, FaUserTie, FaUserShield, FaEnvelope } from 'react-icons/fa'
+import { Card, Badge } from 'react-bootstrap'
 
 const UserCard = ({ user, darkMode, className }) => {
   if (!user || !user.rol) {
@@ -24,61 +24,82 @@ const UserCard = ({ user, darkMode, className }) => {
     }
   }
 
-  const getAvatarColorByRole = (role) => {
+  const getRoleBadgeVariant = (role) => {
     switch (role.toLowerCase()) {
       case 'administrador':
-        return '#FF5733'
+        return 'danger'
       case 'empleado':
-        return '#33FF57'
+        return 'success'
       default:
-        return '#3357FF'
+        return 'primary'
     }
   }
 
   const truncateString = (str, maxLength) => {
+    if (!str) return ''
     return str.length > maxLength
       ? str.substring(0, maxLength - 3) + '...'
       : str
   }
 
-  const roleColor = getAvatarColorByRole(user.rol)
-
   return (
-    <div
-      className={`user-card ${darkMode ? 'dark-mode' : ''} ${className || ''}`}
+    <Card
+      className={`border shadow-sm ${
+        darkMode
+          ? 'bg-dark text-white border-secondary'
+          : 'bg-white border-light'
+      } ${className || ''}`}
     >
-      <div className="user-card-content">
-        <div className="user-avatar" style={{ backgroundColor: roleColor }}>
-          {getAvatarByRole(user.rol)}
+      <Card.Body className="p-3">
+        <div className="d-flex align-items-start">
+          <div
+            className={`rounded-circle p-2 me-3 ${
+              darkMode ? 'bg-dark bg-opacity-50' : 'bg-light'
+            }`}
+            style={{
+              border: `2px solid var(--bs-${getRoleBadgeVariant(user.rol)})`,
+              minWidth: '48px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: darkMode ? 'var(--bs-light)' : 'var(--bs-dark)'
+            }}
+          >
+            {getAvatarByRole(user.rol)}
+          </div>
+          <div className="flex-grow-1 min-width-0">
+            <div className="d-flex flex-column">
+              <h6
+                className={`mb-1 text-truncate fw-bold ${
+                  darkMode ? 'text-white' : 'text-dark'
+                }`}
+                title={`${user.nombre} ${user.apellido}`}
+              >
+                {truncateString(user.nombre, 15)}{' '}
+                {truncateString(user.apellido, 15)}
+              </h6>
+              <div
+                className={`d-flex align-items-center small mb-2 ${
+                  darkMode ? 'text-light' : 'text-secondary'
+                }`}
+              >
+                <FaEnvelope className="me-2" size={12} />
+                <span title={user.email} className="text-truncate">
+                  {user.email}
+                </span>
+              </div>
+              <Badge
+                bg={getRoleBadgeVariant(user.rol)}
+                className="align-self-start px-2 py-1 text-white"
+              >
+                {capitalizeFirstLetter(user.rol)}
+              </Badge>
+            </div>
+          </div>
         </div>
-        <div className="user-info">
-          <div className="user-info-item">
-            <strong style={{ color: roleColor }}>Nombres:</strong>
-            <span title={user.nombre}>
-              {truncateString(user.nombre || '', 20)}
-            </span>
-          </div>
-          <div className="user-info-item">
-            <strong style={{ color: roleColor }}>Apellidos:</strong>
-            <span title={user.apellido}>
-              {truncateString(user.apellido || '', 20)}
-            </span>
-          </div>
-          <div className="user-info-item">
-            <strong style={{ color: roleColor }}>Email:</strong>
-            <span title={user.email}>
-              {truncateString(user.email || '', 20)}
-            </span>
-          </div>
-          <div className="user-info-item">
-            <strong style={{ color: roleColor }}>Rol:</strong>
-            <span title={capitalizeFirstLetter(user.rol)}>
-              {truncateString(capitalizeFirstLetter(user.rol), 20)}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   )
 }
 
