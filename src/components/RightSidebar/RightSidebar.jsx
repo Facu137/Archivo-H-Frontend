@@ -5,7 +5,7 @@ import { FaSignOutAlt, FaEdit, FaTimes } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
 import UserCard from '../UserCard/UserCard'
-import { Offcanvas, Button, ListGroup, Badge } from 'react-bootstrap'
+import { Offcanvas, Button, ListGroup, Badge, Card } from 'react-bootstrap'
 import localforage from 'localforage'
 
 const permissionNames = {
@@ -73,59 +73,72 @@ const RightSidebar = ({ isOpen, onClose }) => {
         </div>
 
         {displayUser.rol === 'empleado' && (
-          <div className="mb-3">
-            <h6 className={isDarkMode ? 'text-light' : 'text-dark'}>
-              Estado:{' '}
-              <Badge bg={displayUser.activo ? 'success' : 'danger'}>
-                {displayUser.activo
-                  ? 'Empleado Habilitado'
-                  : 'Empleado Sin Habilitar'}
-              </Badge>
-            </h6>
-          </div>
+          <Card
+            className={`mb-3 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
+          >
+            <Card.Body className="p-3">
+              <div className="d-flex align-items-center justify-content-between">
+                <h6 className="mb-0">Estado</h6>
+                <Badge
+                  bg={displayUser.activo ? 'success' : 'danger'}
+                  className="px-3 py-2"
+                >
+                  {displayUser.activo
+                    ? 'Empleado Habilitado'
+                    : 'Empleado Sin Habilitar'}
+                </Badge>
+              </div>
+            </Card.Body>
+          </Card>
         )}
 
         {permisosHabilitados.length > 0 && (
-          <div className="mb-4">
-            <h6 className={isDarkMode ? 'text-light' : 'text-dark'}>
-              Permisos Habilitados
-            </h6>
-            <ListGroup variant={isDarkMode ? 'dark' : 'light'}>
+          <Card
+            className={`mb-4 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
+          >
+            <Card.Header className="border-bottom border-secondary py-2">
+              <h6 className="mb-0">Permisos Habilitados</h6>
+            </Card.Header>
+            <ListGroup
+              variant={isDarkMode ? 'dark' : 'light'}
+              className="list-group-flush"
+            >
               {permisosHabilitados.map((permiso) => (
                 <ListGroup.Item
                   key={permiso}
-                  className={
-                    isDarkMode ? 'bg-dark text-white border-secondary' : ''
-                  }
+                  className={`
+                    ${isDarkMode ? 'bg-dark text-white border-secondary' : ''}
+                    d-flex align-items-center justify-content-between py-3
+                  `}
                 >
-                  <strong>{permissionNames[permiso] || permiso}</strong>
-                  <Badge bg="success" className="ms-2">
+                  <span>{permissionNames[permiso] || permiso}</span>
+                  <Badge bg="success" className="px-3">
                     Habilitado
                   </Badge>
                 </ListGroup.Item>
               ))}
             </ListGroup>
-          </div>
+          </Card>
         )}
 
         <div className="d-grid gap-2">
           <Link to="/profile" className="text-decoration-none">
             <Button
               variant={isDarkMode ? 'outline-light' : 'outline-dark'}
-              className="w-100 mb-2"
+              className="w-100 mb-2 d-flex align-items-center justify-content-center py-2"
               onClick={onClose}
             >
               <FaEdit className="me-2" />
-              Editar Perfil
+              <span>Editar Perfil</span>
             </Button>
           </Link>
           <Button
             variant={isDarkMode ? 'danger' : 'outline-danger'}
             onClick={handleLogout}
-            className="w-100"
+            className="w-100 d-flex align-items-center justify-content-center py-2"
           >
             <FaSignOutAlt className="me-2" />
-            Cerrar Sesión
+            <span>Cerrar Sesión</span>
           </Button>
         </div>
       </Offcanvas.Body>
