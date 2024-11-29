@@ -111,7 +111,7 @@ export const App = () => {
 
             {/* Rutas protegidas */}
             <Route element={<AuthenticatedRoute />}>
-              <Route path="/editar-usuario" element={<EditUser />} />
+              <Route path="/editar-perfil" element={<EditUser />} />
               <Route path="/gestion" element={<GestionArchivo />} />
             </Route>
 

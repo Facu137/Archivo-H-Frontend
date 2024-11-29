@@ -121,7 +121,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
           )}
 
           <div className="d-flex flex-column">
-            <Link to="/profile" className="text-decoration-none">
+            <Link to="/editar-perfil" className="text-decoration-none">
               <Button
                 variant={isDarkMode ? 'outline-light' : 'outline-dark'}
                 className="w-100 mb-2 d-flex align-items-center justify-content-center py-2"
