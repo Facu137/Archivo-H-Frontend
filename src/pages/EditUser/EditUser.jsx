@@ -14,10 +14,10 @@ export const EditUser = () => {
     >
       <Container>
         <Row className="g-4">
-          <Col lg={7} className="order-1 order-lg-0">
+          <Col lg={6} className="order-1 order-lg-0">
             <ProfileForm />
           </Col>
-          <Col lg={5} className="order-0 order-lg-1">
+          <Col lg={6} className="order-1 order-lg-0">
             <RequestEmployeeCard />
           </Col>
         </Row>

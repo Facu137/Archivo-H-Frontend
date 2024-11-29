@@ -174,20 +174,14 @@ const ProfileForm = () => {
 
             <Row className="mt-4">
               <Col xs={12} className="d-grid gap-3">
-                <Button
-                  variant="primary"
-                  type="submit"
-                  size="lg"
-                  className={`py-2 ${isDarkMode ? 'btn-dark' : ''}`}
-                >
+                <Button variant="primary" type="submit" className={`py-2`}>
                   Guardar Cambios
                 </Button>
                 <Button
                   variant="danger"
                   type="button"
                   onClick={handleDeleteAccount}
-                  size="lg"
-                  className={`py-2 ${isDarkMode ? 'btn-dark' : ''}`}
+                  className={`py-2`}
                 >
                   Eliminar Cuenta
                 </Button>
