@@ -1,9 +1,9 @@
 // src/components/RequestEmployeeCard/RequestEmployeeCard.jsx
 import React, { useState } from 'react'
-import trabajo from '../../assets/topaz-CasaArchivo.avif'
+import trabajo from '../../../assets/topaz-CasaArchivo.avif'
 import './RequestEmployeeCard.css'
-import { useNotification } from '../../hooks/useNotification'
-import { useAuth } from '../../context/AuthContext'
+import { useNotification } from '../../../hooks/useNotification'
+import { useAuth } from '../../../context/AuthContext'
 
 const RequestEmployeeCard = () => {
   const [claveConversion, setClaveConversion] = useState('')
