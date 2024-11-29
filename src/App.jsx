@@ -2,16 +2,18 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAuth } from './context/AuthContext'
+// components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
+// pages
 import { Home } from './pages/Home/Home'
-import Institucional from './pages/Institucional/Institucional' // Importación corregida
+import Institucional from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
-import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
+import AgregarArchivo from './pages/AgregarArchivo/AgregarArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
@@ -19,7 +21,7 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
-import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados' // Importa el componente de Archivos Eliminados
+import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados'
 // hooks
 import {
   NotificationProvider,
@@ -107,12 +109,11 @@ export const App = () => {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/buscador" element={<Buscador />} />
             <Route path="/visor" element={<VerArchivo />} />
-            <Route path="/agregar-archivo" element={<GestionArchivo />} />
 
             {/* Rutas protegidas */}
             <Route element={<AuthenticatedRoute />}>
               <Route path="/editar-perfil" element={<EditUser />} />
-              <Route path="/gestion" element={<GestionArchivo />} />
+              <Route path="/agregar-archivo" element={<AgregarArchivo />} />
             </Route>
 
             {/* Ruta protegida para administradores */}
