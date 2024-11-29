@@ -1,10 +1,20 @@
 // src/components/UserCard/UserCard.jsx
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { FaUser, FaUserTie, FaUserShield, FaEnvelope } from 'react-icons/fa'
-import { Card, Badge } from 'react-bootstrap'
+import {
+  FaUser,
+  FaUserTie,
+  FaUserShield,
+  FaEnvelope,
+  FaCopy
+} from 'react-icons/fa'
+import { Card, Badge, Button, Overlay, Tooltip } from 'react-bootstrap'
 
 const UserCard = ({ user, darkMode, className }) => {
+  const [showTooltip, setShowTooltip] = useState(false)
+  const emailRef = useRef(null)
+  const copyButtonRef = useRef(null)
+
   if (!user || !user.rol) {
     return null
   }
@@ -40,6 +50,13 @@ const UserCard = ({ user, darkMode, className }) => {
     return str.length > maxLength
       ? str.substring(0, maxLength - 3) + '...'
       : str
+  }
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(user.email).then(() => {
+      setShowTooltip(true)
+      setTimeout(() => setShowTooltip(false), 1500)
+    })
   }
 
   return (
@@ -85,9 +102,29 @@ const UserCard = ({ user, darkMode, className }) => {
                 }`}
               >
                 <FaEnvelope className="me-2" size={12} />
-                <span title={user.email} className="text-truncate">
+                <span
+                  ref={emailRef}
+                  title={user.email}
+                  className="text-truncate me-2"
+                >
                   {user.email}
                 </span>
+                <Button
+                  ref={copyButtonRef}
+                  variant={darkMode ? 'outline-light' : 'outline-secondary'}
+                  size="sm"
+                  className="py-0 px-2"
+                  onClick={handleCopyEmail}
+                >
+                  <FaCopy size={12} />
+                </Button>
+                <Overlay
+                  target={copyButtonRef.current}
+                  show={showTooltip}
+                  placement="top"
+                >
+                  {(props) => <Tooltip {...props}>¡Correo copiado!</Tooltip>}
+                </Overlay>
               </div>
               <Badge
                 bg={getRoleBadgeVariant(user.rol)}
