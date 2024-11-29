@@ -3,7 +3,7 @@ import { useAuth } from '../../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../../schemas/authSchema'
 import { useNotification } from '../../../hooks/useNotification'
-import './ProfileForm.css'
+import { Form, Button, Card, Alert, Container, Row, Col } from 'react-bootstrap'
 
 const ProfileForm = () => {
   const { user, logout } = useAuth()
@@ -18,6 +18,7 @@ const ProfileForm = () => {
   })
   const [error, setError] = useState('')
   const [serverError, setServerError] = useState('')
+  const isDarkMode = localStorage.getItem('mode') === 'dark'
 
   const fetchUserData = useCallback(() => {
     setFormData({
@@ -96,78 +97,106 @@ const ProfileForm = () => {
   }
 
   return (
-    <div className="edit-user-form">
-      <h2>Editar Usuario</h2>
-      {error && <div className="error-message">{error}</div>}
-      {serverError && <p className="error-message">{serverError}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Nueva Contraseña (opcional):</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            autoComplete="new-password"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="confirmPassword">Confirmar Nueva Contraseña:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            autoComplete="new-password"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="nombre">Nombre:</label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="apellido">Apellido:</label>
-          <input
-            type="text"
-            id="apellido"
-            name="apellido"
-            value={formData.apellido}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="button" className="submit-button" onClick={handleSubmit}>
-          Guardar Cambios
-        </button>
-        <button
-          type="button"
-          className="delete-button"
-          onClick={handleDeleteAccount}
+    <Container className="py-4">
+      <Card
+        className={`shadow ${isDarkMode ? 'bg-dark text-white' : 'bg-light'}`}
+      >
+        <Card.Header
+          className={`${isDarkMode ? 'bg-dark' : 'bg-light'} border-bottom`}
         >
-          Eliminar Cuenta
-        </button>
-      </form>
-    </div>
+          <h2 className="mb-0">Editar Usuario</h2>
+        </Card.Header>
+        <Card.Body>
+          {(error || serverError) && (
+            <Alert variant="danger">{error || serverError}</Alert>
+          )}
+
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Nombre</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Apellido</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="apellido"
+                    value={formData.apellido}
+                    onChange={handleChange}
+                    className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Nueva Contraseña (opcional)</Form.Label>
+              <Form.Control
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Confirmar Nueva Contraseña</Form.Label>
+              <Form.Control
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+              />
+            </Form.Group>
+
+            <Row className="mt-4">
+              <Col xs={12} className="d-grid gap-3">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  size="lg"
+                  className={`py-2 ${isDarkMode ? 'btn-dark' : ''}`}
+                >
+                  Guardar Cambios
+                </Button>
+                <Button
+                  variant="danger"
+                  type="button"
+                  onClick={handleDeleteAccount}
+                  size="lg"
+                  className={`py-2 ${isDarkMode ? 'btn-dark' : ''}`}
+                >
+                  Eliminar Cuenta
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
   )
 }
 

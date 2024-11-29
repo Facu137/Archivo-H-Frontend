@@ -1,16 +1,27 @@
 // src/pages/EditUser/EditUser.jsx
 import React from 'react'
+import { Container, Row, Col } from 'react-bootstrap'
 import RequestEmployeeCard from './RequestEmployeeCard/RequestEmployeeCard'
 import ProfileForm from './ProfileForm/ProfileForm'
-import './EditUser.css'
 
 export const EditUser = () => {
+  const isDarkMode = localStorage.getItem('mode') === 'dark'
+
   return (
-    <div className="edit-user-container">
-      <div className="edit-user-content">
-        <RequestEmployeeCard />
-        <ProfileForm />
-      </div>
-    </div>
+    <Container
+      fluid
+      className={`py-4 min-vh-100 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+    >
+      <Container>
+        <Row className="g-4">
+          <Col lg={7} className="order-1 order-lg-0">
+            <ProfileForm />
+          </Col>
+          <Col lg={5} className="order-0 order-lg-1">
+            <RequestEmployeeCard />
+          </Col>
+        </Row>
+      </Container>
+    </Container>
   )
 }

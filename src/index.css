@@ -244,10 +244,6 @@ span, b, i, strong, em, a, code {
 /* Estilos globales */
 ** { min-width: 0; }
 
-button {
-  font-family: var(--font-family-primary);
-}
-
 img, video, svg {
   display: block;
   height: auto;
