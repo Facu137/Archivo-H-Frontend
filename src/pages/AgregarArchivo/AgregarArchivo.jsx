@@ -37,28 +37,31 @@ const AgregarArchivo = () => {
     creadorId: user?.id || '',
     personaNombre: '',
     personaTipo: 'Persona Física',
-    personaRol: ''
+    personaRol: '',
+    lugar: '',
+    propiedad: '',
+    departamentoNombreActual: '',
+    departamentoNombreAntiguo: '',
+    departamentoEsActual: true
   })
 
   const [archivos, setArchivos] = useState([])
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     let finalValue = value
-    // Validación especial para campos esBis
 
     if (name === 'legajoEsBis' || name === 'expedienteEsBis') {
       const numValue = parseInt(value)
-
       if (numValue < 0) finalValue = '0'
       else if (numValue > 100) finalValue = '100'
     }
 
     setFormData((prev) => ({
       ...prev,
-
       [name]: type === 'checkbox' ? checked : finalValue
     }))
   }
@@ -69,18 +72,15 @@ const AgregarArchivo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     setLoading(true)
-
     setError('')
-
     setSuccess('')
 
     const formDataToSend = new FormData()
 
     // Agregar todos los archivos
     archivos.forEach((archivo) => {
-      formDataToSend.append('archivo', archivo) // Asegúrate que este nombre coincida con el esperado en el backend
+      formDataToSend.append('archivo', archivo)
     })
 
     // Agregar el resto de los campos
@@ -89,13 +89,15 @@ const AgregarArchivo = () => {
     })
 
     try {
-      const response = await instance.post(
-        '/api/documents/upload/general',
-        formDataToSend
-      )
+      const endpoint =
+        formData.tipoDocumento === 'Mensura'
+          ? '/api/documents/upload/mensura'
+          : '/api/documents/upload/general'
 
-      if (response.data.success) {
-        setSuccess(response.data.message)
+      const response = await instance.post(endpoint, formDataToSend)
+
+      if (response.data.success || response.data.message) {
+        setSuccess(response.data.message || 'Documento subido exitosamente')
         // Limpiar el formulario
         setFormData({
           legajoNumero: '',
@@ -113,7 +115,12 @@ const AgregarArchivo = () => {
           creadorId: user?.id || '',
           personaNombre: '',
           personaTipo: 'Persona Física',
-          personaRol: ''
+          personaRol: '',
+          lugar: '',
+          propiedad: '',
+          departamentoNombreActual: '',
+          departamentoNombreAntiguo: '',
+          departamentoEsActual: true
         })
         setArchivos([])
       }
@@ -387,6 +394,71 @@ const AgregarArchivo = () => {
             </Form.Group>
           </Col>
         </Row>
+
+        {formData.tipoDocumento === 'Mensura' && (
+          <Row>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Lugar</Form.Label>
+
+                <Form.Control
+                  type="text"
+                  name="lugar"
+                  value={formData.lugar}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Propiedad</Form.Label>
+
+                <Form.Control
+                  type="text"
+                  name="propiedad"
+                  value={formData.propiedad}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        )}
+
+        {formData.tipoDocumento === 'Mensura' && (
+          <Row>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Departamento Actual</Form.Label>
+
+                <Form.Control
+                  type="text"
+                  name="departamentoNombreActual"
+                  value={formData.departamentoNombreActual}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Departamento Histórico</Form.Label>
+
+                <Form.Control
+                  type="text"
+                  name="departamentoNombreAntiguo"
+                  value={formData.departamentoNombreAntiguo}
+                  onChange={handleInputChange}
+                />
+                <Form.Text className="text-muted">
+                  Nombre histórico del departamento (si aplica)
+                </Form.Text>
+              </Form.Group>
+            </Col>
+          </Row>
+        )}
 
         <Form.Group className="mb-3">
           <Form.Label>Archivos</Form.Label>
