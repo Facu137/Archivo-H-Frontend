@@ -42,7 +42,13 @@ const AgregarArchivo = () => {
     propiedad: '',
     departamentoNombreActual: '',
     departamentoNombreAntiguo: '',
-    departamentoEsActual: true
+    departamentoEsActual: true,
+    registro: '',
+    protocolo: '',
+    mesInicio: '',
+    mesFin: '',
+    escrituraNro: '',
+    negocioJuridico: ''
   })
 
   const [archivos, setArchivos] = useState([])
@@ -89,10 +95,13 @@ const AgregarArchivo = () => {
     })
 
     try {
-      const endpoint =
-        formData.tipoDocumento === 'Mensura'
-          ? '/api/documents/upload/mensura'
-          : '/api/documents/upload/general'
+      let endpoint = '/api/documents/upload/general'
+
+      if (formData.tipoDocumento === 'Mensura') {
+        endpoint = '/api/documents/upload/mensura'
+      } else if (formData.tipoDocumento === 'Notarial') {
+        endpoint = '/api/documents/upload/notarial'
+      }
 
       const response = await instance.post(endpoint, formDataToSend)
 
@@ -120,7 +129,13 @@ const AgregarArchivo = () => {
           propiedad: '',
           departamentoNombreActual: '',
           departamentoNombreAntiguo: '',
-          departamentoEsActual: true
+          departamentoEsActual: true,
+          registro: '',
+          protocolo: '',
+          mesInicio: '',
+          mesFin: '',
+          escrituraNro: '',
+          negocioJuridico: ''
         })
         setArchivos([])
       }
@@ -458,6 +473,95 @@ const AgregarArchivo = () => {
               </Form.Group>
             </Col>
           </Row>
+        )}
+
+        {formData.tipoDocumento === 'Notarial' && (
+          <>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Registro</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="registro"
+                    value={formData.registro}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Protocolo</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="protocolo"
+                    value={formData.protocolo}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Mes Inicio</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="mesInicio"
+                    value={formData.mesInicio}
+                    onChange={handleInputChange}
+                    min="1"
+                    max="12"
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Mes Fin</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="mesFin"
+                    value={formData.mesFin}
+                    onChange={handleInputChange}
+                    min="1"
+                    max="12"
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Número de Escritura</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="escrituraNro"
+                    value={formData.escrituraNro}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Negocio Jurídico</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="negocioJuridico"
+                    value={formData.negocioJuridico}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </>
         )}
 
         <Form.Group className="mb-3">
