@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FaMapMarkerAlt, FaPhone, FaFacebookF } from 'react-icons/fa'
 import logo from '../../assets/logo.svg'
+import { Link } from 'react-router-dom'
 import './Footer.css'
 
 export const Footer = ({ isDarkMode }) => {
@@ -13,7 +14,11 @@ export const Footer = ({ isDarkMode }) => {
       <div className="container">
         <div className="row mb-4">
           <div className="col-lg-4 mb-4 mb-lg-0">
-            <div className="d-flex align-items-center">
+            <Link
+              to="/"
+              className="d-flex align-items-center brand-hover text-decoration-none"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <img
                 src={logo}
                 alt="Logo"
@@ -23,7 +28,7 @@ export const Footer = ({ isDarkMode }) => {
               <h5 className="mb-0 text-start text-uppercase footer-brand fw-bold">
                 Archivo Histórico Santiago del Estero
               </h5>
-            </div>
+            </Link>
             <p className="mt-3 text-start">
               Fundado el 26 de Agosto de 1910, el Archivo General de Santiago
               del Estero preserva y gestiona documentos históricos fundamentales
