@@ -1,19 +1,60 @@
 /* src/components/Footer/Footer.css */
 .footer {
-  padding: 40px 0 20px;
-  font-family: 'Arial', sans-serif;
-  transition: background-color 0.3s, color 0.3s;
+  width: 100%;
+  padding: 2rem 0;
 }
 
-.footer.dark-mode {
-  background: linear-gradient(to top, #191929, #191929);
-    color: #ffffff;
+.vertical-line {
+  height: 40px;
+  border-left: 2px solid;
+  opacity: 0.5;
 }
 
-.footer.light-mode {
-  background: linear-gradient(to top, #c8cdd0, #c8cdd0);
-    color: #000000;
+.footer-logo {
+  transition: transform 0.3s ease;
 }
+
+.footer-logo:hover {
+  transform: scale(1.1);
+}
+
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info a {
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.contact-info a:hover {
+  opacity: 0.8;
+}
+
+/* Dark mode styles */
+.bg-dark {
+  background-color: #1a1a1a !important;
+}
+
+.bg-dark .vertical-line {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Light mode styles */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.bg-light .vertical-line {
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+.footer-brand {
+  padding-left: 10px;
+  border-left: 3px solid;
+;}
 
 .footer-container {
   max-width: 1200px;

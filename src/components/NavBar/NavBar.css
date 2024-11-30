@@ -1,126 +1,67 @@
 /* src/components/NavBar/NavBar.css */
-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 10px 0px;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-  position: fixed;
-}
-
 .navbar {
-  width: 90%;
-  max-width: 80%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.dark-mode header {
-  background: linear-gradient(to top, #191929, #191929);
-  color: white; /* Asegúrate de que el texto del header sea legible en modo oscuro */
+.navbar-brand {
+  gap: 0.5rem;
 }
 
-.light-mode header {
-  background: linear-gradient(to top, #c8cdd0, #c8cdd0);
-  color: black;
+.navbar-logo {
+  height: 40px;
+  width: auto;
 }
 
-.first-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo-container {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-}
-
-.logo {
-  height: 50px;
-  margin-right: 10px;
-  position: relative;
-  bottom: 5px;
-}
-
-.dark-mode .title {
+.navbar-brand h6 {
   margin: 0;
-  text-align: left;
-  border-left: #fff 5px solid;
   padding-left: 10px;
+  border-left: 3px solid;
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
-.light-mode .title {
-  margin: 0;
-  text-align: left;
-  border-left: #000 5px solid;
-  padding-left: 10px;
+.dark-mode .navbar-brand h6 {
+  border-color: #fff;
 }
 
-.spacer {
-  flex-grow: 1;
+.light-mode .navbar-brand h6 {
+  border-color: #000;
 }
 
-.nav-links {
+.nav-item {
+  margin: 0 0.25rem;
+}
+
+.nav-link {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
 }
 
-.nav-button {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-  border: none;
+.nav-link:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+/* Reset button styles */
+button.nav-link {
   background: none;
+  border: none;
+  width: 100%;
   cursor: pointer;
-  border-radius: 20px;
-  border-width: 2px;
-  border-style: solid;
-  background-color: transparent; /* Fondo transparente por defecto */
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: left;
+  padding: 0.5rem 1rem;
 }
 
-.dark-mode .nav-button {
-  background-color: #0a0a0a; /* Fondo oscuro solo en modo oscuro */
-  color: white; /* Asegúrate de que el texto sea legible */
-}
-
-.light-mode .nav-button {
-  color: black; /* Puedes agregar un estilo específico para el modo claro si lo deseas */
-}
-
-.nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Hover sigue siendo claro */
-}
-
-.nav-text {
-  margin-left: 5px;
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    grid-template-columns: auto 1fr;
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding: 1rem 0;
   }
-
-  .nav-buttons {
-    grid-column: 2 / 3;
-    justify-content: flex-end;
-  }
-
-  .title {
-    font-size: 0.8rem;
-  }
-
-  .nav-text {
-    display: none;
+  
+  .nav-item {
+    margin: 0.25rem 0;
   }
 }

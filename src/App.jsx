@@ -2,16 +2,18 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAuth } from './context/AuthContext'
+// components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import LeftSidebar from './components/LeftSidebar/LeftSidebar'
 import NotificationBar from './components/NotificationBar/NotificationBar'
 import { Footer } from './components/Footer/Footer'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
+// pages
 import { Home } from './pages/Home/Home'
-import Institucional from './pages/Institucional/Institucional' // Importación corregida
+import Institucional from './pages/Institucional/Institucional'
 import { Login } from './pages/Login/Login'
-import { GestionArchivo } from './pages/GestionArchivo/GestionArchivo'
+import AgregarArchivo from './pages/AgregarArchivo/AgregarArchivo'
 import { VerArchivo } from './pages/VerArchivo/VerArchivo'
 import { Registrar } from './pages/Registrar/Registrar'
 import { EditUser } from './pages/EditUser/EditUser'
@@ -19,7 +21,7 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
-import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados' // Importa el componente de Archivos Eliminados
+import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados'
 // hooks
 import {
   NotificationProvider,
@@ -43,6 +45,12 @@ export const App = () => {
 
   useEffect(() => {
     localStorage.setItem('mode', isDarkMode ? 'dark' : 'light')
+  }, [isDarkMode])
+
+  useEffect(() => {
+    document.body.className = isDarkMode
+      ? 'bg-dark text-white'
+      : 'bg-light text-dark'
   }, [isDarkMode])
 
   const toggleSidebar = (side) => {
@@ -73,80 +81,69 @@ export const App = () => {
   return (
     <NotificationProvider showNotification={showNotification}>
       <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-        <AxiosConfig notificationHandler={showNotificationFromContext} />{' '}
-        {/*  showNotificationFromContext */}
-        <div className="main-container">
-          <div className="content">
-            <NavBar
-              toggleSidebar={toggleSidebar}
-              toggleDarkMode={toggleDarkMode}
-              isDarkMode={isDarkMode}
+        <AxiosConfig notificationHandler={showNotificationFromContext} />
+        <NavBar
+          toggleSidebar={toggleSidebar}
+          toggleDarkMode={toggleDarkMode}
+          isDarkMode={isDarkMode}
+        />
+        {user && (
+          <RightSidebar
+            isOpen={isSidebarOpen.right}
+            onClose={() => toggleSidebar('right')}
+          />
+        )}
+        {user && (
+          <LeftSidebar
+            isOpen={isSidebarOpen.left}
+            onClose={() => toggleSidebar('left')}
+          />
+        )}
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/institucional" element={<Institucional />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registrar" element={<Registrar />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/buscador" element={<Buscador />} />
+            <Route path="/visor" element={<VerArchivo />} />
+
+            {/* Rutas protegidas */}
+            <Route element={<AuthenticatedRoute />}>
+              <Route path="/editar-perfil" element={<EditUser />} />
+              <Route path="/agregar-archivo" element={<AgregarArchivo />} />
+            </Route>
+
+            {/* Ruta protegida para administradores */}
+
+            <Route
+              element={<AuthenticatedRoute allowedRoles={['administrador']} />}
+            >
+              <Route
+                path="/gestionar-empleados"
+                element={<GestionarEmpleados />}
+              />
+            </Route>
+
+            <Route
+              path="/archivos-eliminados"
+              element={<ArchivosEliminados />} // Protege la ruta
             />
-            {user && (
-              <RightSidebar
-                isOpen={isSidebarOpen.right}
-                onClose={() => toggleSidebar('right')}
-              />
-            )}
-            {user && (
-              <LeftSidebar
-                isOpen={isSidebarOpen.left}
-                onClose={() => toggleSidebar('left')}
-              />
-            )}
 
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/institucional" element={<Institucional />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/registrar" element={<Registrar />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/buscador" element={<Buscador />} />
-                <Route path="/visor" element={<VerArchivo />} />
-                <Route path="/agregar-archivo" element={<GestionArchivo />} />
-
-                {/* Rutas protegidas */}
-                <Route element={<AuthenticatedRoute />}>
-                  <Route path="/editar-usuario" element={<EditUser />} />
-                  <Route path="/gestion" element={<GestionArchivo />} />
-                </Route>
-
-                {/* Ruta protegida para administradores */}
-
-                <Route
-                  element={
-                    <AuthenticatedRoute allowedRoles={['administrador']} />
-                  }
-                >
-                  <Route
-                    path="/gestionar-empleados"
-                    element={<GestionarEmpleados />}
-                  />
-                </Route>
-
-                <Route
-                  path="/archivos-eliminados"
-                  element={<ArchivosEliminados />} // Protege la ruta
-                />
-
-                <Route path="/*" element={<Navigate to="/" />} />
-              </Routes>
-            </main>
-
-            <Footer isDarkMode={isDarkMode} />
-
-            {notification && (
-              <NotificationBar
-                message={notification.message}
-                type={notification.type}
-                duration={notification.duration}
-                onClose={closeNotification}
-              />
-            )}
-          </div>
-        </div>
+            <Route path="/*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
+        <Footer isDarkMode={isDarkMode} />
+        {notification && (
+          <NotificationBar
+            message={notification.message}
+            type={notification.type}
+            duration={notification.duration}
+            onClose={closeNotification}
+          />
+        )}
       </div>
     </NotificationProvider>
   )
