@@ -58,14 +58,17 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
         isDarkMode ? 'navbar-dark bg-dark' : 'navbar-light bg-light'
       }`}
     >
-      <div className="container-fluid">
+      <div className="container">
         <Link
-          className="navbar-brand d-flex align-items-center"
+          className="navbar-brand d-flex align-items-center brand-hover"
           to="/"
-          onClick={closeNavbar}
+          onClick={(e) => {
+            closeNavbar()
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
         >
           <img src={logo} alt="Logo" className="navbar-logo" />
-          <h6>
+          <h6 className="mb-0 ms-2">
             ARCHIVO HISTORICO
             <br />
             SANTIAGO DEL ESTERO
@@ -85,20 +88,25 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            {isAdminOrEmployee && (
-              <li className="nav-item">
-                <button onClick={handleAdminClick} className="nav-link">
-                  <FontAwesomeIcon icon={faCog} className="me-2" />
-                  <span>Administración</span>
-                </button>
-              </li>
-            )}
+        <div
+          className="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul className="navbar-nav align-items-center gap-2">
+            <li className="nav-item">
+              <Link
+                to="/buscador"
+                className={`nav-link d-flex align-items-center ${isDarkMode ? 'text-light' : 'text-dark'}`}
+                onClick={closeNavbar}
+              >
+                <FontAwesomeIcon icon={faSearch} className="me-2" />
+                <span>Buscar</span>
+              </Link>
+            </li>
             <li className="nav-item">
               <Link
                 to="/institucional"
-                className="nav-link"
+                className={`nav-link d-flex align-items-center ${isDarkMode ? 'text-light' : 'text-dark'}`}
                 onClick={closeNavbar}
               >
                 <FontAwesomeIcon icon={faBuilding} className="me-2" />
@@ -106,13 +114,10 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/buscador" className="nav-link" onClick={closeNavbar}>
-                <FontAwesomeIcon icon={faSearch} className="me-2" />
-                <span>Buscar</span>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <button onClick={handleDarkModeClick} className="nav-link">
+              <button
+                onClick={handleDarkModeClick}
+                className={`btn ${isDarkMode ? 'btn-dark' : 'btn-light'} d-flex align-items-center`}
+              >
                 <FontAwesomeIcon
                   icon={isDarkMode ? faSun : faMoon}
                   className="me-2"
@@ -120,13 +125,27 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
                 <span>{isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}</span>
               </button>
             </li>
+            {isAdminOrEmployee && (
+              <li className="nav-item">
+                <button
+                  onClick={handleAdminClick}
+                  className={`btn ${isDarkMode ? 'btn-dark' : 'btn-light'} d-flex align-items-center`}
+                >
+                  <FontAwesomeIcon icon={faCog} className="me-2" />
+                  <span>Administración</span>
+                </button>
+              </li>
+            )}
             <li className="nav-item">
-              <button onClick={handleAccountClick} className="nav-link">
+              <button
+                onClick={handleAccountClick}
+                className={`btn ${isDarkMode ? 'btn-dark' : 'btn-light'} d-flex align-items-center`}
+              >
                 <FontAwesomeIcon
                   icon={user ? faUser : faSignInAlt}
                   className="me-2"
                 />
-                <span>{user ? 'Cuenta' : 'Iniciar sesión'}</span>
+                <span>{user ? 'Mi Cuenta' : 'Iniciar sesión'}</span>
               </button>
             </li>
           </ul>
