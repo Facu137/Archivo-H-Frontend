@@ -126,7 +126,7 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
                   icon={user ? faUser : faSignInAlt}
                   className="me-2"
                 />
-                <span>{user ? 'Cuenta' : 'Iniciar sesión'}</span>
+                <span>{user ? 'Mi Cuenta' : 'Iniciar sesión'}</span>
               </button>
             </li>
           </ul>

@@ -1,7 +1,7 @@
 // src/components/RightSidebar/RightSidebar.jsx
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { FaSignOutAlt, FaEdit, FaTimes } from 'react-icons/fa'
+import { FaSignOutAlt, FaEdit, FaTimes, FaUser } from 'react-icons/fa'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
 import UserCard from '../UserCard/UserCard'
@@ -57,8 +57,11 @@ const RightSidebar = ({ isOpen, onClose }) => {
       placement="end"
       className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
     >
-      <Offcanvas.Header>
-        <Offcanvas.Title>Mi Cuenta</Offcanvas.Title>
+      <Offcanvas.Header className="border-bottom border-secondary">
+        <Offcanvas.Title className="d-flex align-items-center">
+          <FaUser className="me-2" />
+          <span>Mi Cuenta</span>
+        </Offcanvas.Title>
         <Button
           variant="link"
           onClick={onClose}
@@ -95,8 +98,11 @@ const RightSidebar = ({ isOpen, onClose }) => {
             <Card
               className={`mb-4 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
             >
-              <Card.Header className="border-bottom border-secondary py-2">
-                <h6 className="mb-0">Permisos Habilitados</h6>
+              <Card.Header className="border-bottom border-secondary py-3">
+                <h5 className="mb-0 d-flex align-items-center fw-bold text-primary">
+                  <FaEdit className="me-2" />
+                  Permisos
+                </h5>
               </Card.Header>
               <ListGroup
                 variant={isDarkMode ? 'dark' : 'light'}
@@ -105,7 +111,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
                 {permisosHabilitados.map((permiso) => (
                   <ListGroup.Item
                     key={permiso}
-                    className={`
+                    className={` 
                       ${isDarkMode ? 'bg-dark text-white border-secondary' : ''}
                       d-flex align-items-center justify-content-between py-3
                     `}

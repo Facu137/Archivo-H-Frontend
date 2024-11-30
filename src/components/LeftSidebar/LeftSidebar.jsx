@@ -93,11 +93,11 @@ const LeftSidebar = ({ isOpen, onClose }) => {
         <Card
           className={`mb-4 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
         >
-          <Card.Header className="border-bottom border-secondary py-2">
-            <h6 className="mb-0 d-flex align-items-center">
+          <Card.Header className="border-bottom border-secondary py-3">
+            <h5 className="mb-0 d-flex align-items-center fw-bold text-primary">
               <FaFileAlt className="me-2" />
               Gestión de Archivos
-            </h6>
+            </h5>
           </Card.Header>
           <ListGroup
             variant={isDarkMode ? 'dark' : 'light'}
@@ -134,11 +134,11 @@ const LeftSidebar = ({ isOpen, onClose }) => {
           <Card
             className={`mb-4 col-12 ${isDarkMode ? 'bg-dark text-white border-secondary' : 'bg-light'}`}
           >
-            <Card.Header className="border-bottom border-secondary py-2">
-              <h6 className="mb-0 d-flex align-items-center">
+            <Card.Header className="border-bottom border-secondary py-3">
+              <h5 className="mb-0 d-flex align-items-center fw-bold text-primary">
                 <FaUserShield className="me-2" />
                 Administración
-              </h6>
+              </h5>
             </Card.Header>
             <ListGroup
               variant={isDarkMode ? 'dark' : 'light'}
