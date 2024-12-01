@@ -107,7 +107,10 @@ export const NavBar = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
               <Link
                 to="/institucional"
                 className={`nav-link d-flex align-items-center ${isDarkMode ? 'text-light' : 'text-dark'}`}
-                onClick={closeNavbar}
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                  closeNavbar()
+                }}
               >
                 <FontAwesomeIcon icon={faBuilding} className="me-2" />
                 <span>Institucional</span>
