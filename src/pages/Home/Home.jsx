@@ -1,5 +1,5 @@
 // src/pages/Home/Home.jsx
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Container, Row, Col, Card, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../../context/ThemeContext'
@@ -9,6 +9,10 @@ import { FaSearch } from 'react-icons/fa'
 export const Home = () => {
   const { isDarkMode } = useTheme()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   const handleSearchClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
