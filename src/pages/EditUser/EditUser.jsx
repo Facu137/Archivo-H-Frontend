@@ -3,9 +3,10 @@ import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import RequestEmployeeCard from './RequestEmployeeCard/RequestEmployeeCard'
 import ProfileForm from './ProfileForm/ProfileForm'
+import { useTheme } from '../../context/ThemeContext'
 
 export const EditUser = () => {
-  const isDarkMode = localStorage.getItem('mode') === 'dark'
+  const { isDarkMode } = useTheme()
 
   return (
     <div className={`min-vh-100 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}>

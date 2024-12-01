@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import trabajo from '../../../assets/topaz-CasaArchivo.avif'
 import { useNotification } from '../../../hooks/useNotification'
 import { useAuth } from '../../../context/AuthContext'
+import { useTheme } from '../../../context/ThemeContext'
 import { Card, Form, Button, Container } from 'react-bootstrap'
 
 const RequestEmployeeCard = () => {
   const [claveConversion, setClaveConversion] = useState('')
   const showNotification = useNotification()
   const { user, token } = useAuth()
-  const isDarkMode = localStorage.getItem('mode') === 'dark'
+  const { isDarkMode } = useTheme()
 
   const handleChange = (e) => {
     setClaveConversion(e.target.value)
