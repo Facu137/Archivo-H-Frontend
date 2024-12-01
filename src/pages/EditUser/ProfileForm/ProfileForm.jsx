@@ -3,12 +3,14 @@ import { useAuth } from '../../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { updateUserSchema } from '../../../schemas/authSchema'
 import { useNotification } from '../../../hooks/useNotification'
+import { useTheme } from '../../../context/ThemeContext'
 import { Form, Button, Card, Alert, Container, Row, Col } from 'react-bootstrap'
 
 const ProfileForm = () => {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const showNotification = useNotification()
+  const { isDarkMode } = useTheme()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -18,7 +20,6 @@ const ProfileForm = () => {
   })
   const [error, setError] = useState('')
   const [serverError, setServerError] = useState('')
-  const isDarkMode = localStorage.getItem('mode') === 'dark'
 
   const fetchUserData = useCallback(() => {
     setFormData({
@@ -97,7 +98,7 @@ const ProfileForm = () => {
   }
 
   return (
-    <Container className="py-4">
+    <Container className="py-4 d-flex justify-content-center">
       <Card
         className={`shadow ${isDarkMode ? 'bg-dark text-white' : 'bg-light'}`}
       >

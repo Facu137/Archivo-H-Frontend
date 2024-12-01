@@ -31,10 +31,17 @@ const RightSidebar = ({ isOpen, onClose }) => {
     getLocalUser()
   }, [])
 
-  const handleLogout = () => {
-    logout()
-    onClose()
-    navigate('/')
+  const handleLogout = async () => {
+    try {
+      await logout()
+      onClose()
+      navigate('/', { replace: true })
+    } catch (error) {
+      console.error('Error during logout:', error)
+      // Si falla el logout, intentamos limpiar el estado local de todos modos
+      onClose()
+      navigate('/', { replace: true })
+    }
   }
 
   if (!user && !localUser) {
