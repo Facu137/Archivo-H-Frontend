@@ -42,7 +42,7 @@ const RequestEmployeeCard = () => {
   }
 
   return (
-    <Container className="py-4">
+    <Container className="py-4 d-flex justify-content-center">
       <Card
         className={`shadow ${isDarkMode ? 'bg-dark text-white' : 'bg-light'}`}
       >
