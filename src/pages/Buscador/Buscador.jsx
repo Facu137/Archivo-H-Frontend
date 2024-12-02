@@ -26,12 +26,15 @@ const Buscador = () => {
 
   const handleDelete = async (documentoId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/documents/${documentoId}`, {
-        // Usa axios directamente
-        headers: {
-          Authorization: `Bearer ${token}`
+      await axios.delete(
+        `http://localhost:3000/api/deleted/documents/${documentoId}`,
+        {
+          // Usa axios directamente
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       // Realiza alguna acción después de eliminar el documento, como actualizar la lista
     } catch (error) {
       console.error('Error al eliminar el documento:', error)
