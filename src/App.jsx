@@ -23,6 +23,7 @@ import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
 import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
 import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados'
+import NotFound from './pages/NotFound/NotFound' // Import NotFound page
 // hooks
 import {
   NotificationProvider,
@@ -111,6 +112,10 @@ export const App = () => {
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/buscador" element={<Buscador />} />
               <Route path="/visor" element={<VerArchivo />} />
+              <Route
+                path="/archivos-eliminados"
+                element={<ArchivosEliminados />}
+              />
 
               {/* Rutas protegidas */}
               <Route element={<AuthenticatedRoute />}>
@@ -131,11 +136,7 @@ export const App = () => {
                 />
               </Route>
 
-              <Route
-                path="/archivos-eliminados"
-                element={<ArchivosEliminados />} // Protege la ruta
-              />
-
+              <Route path="*" element={<NotFound />} />
               <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
           </main>

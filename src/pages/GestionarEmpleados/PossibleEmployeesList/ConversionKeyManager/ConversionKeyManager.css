@@ -10,18 +10,91 @@
     box-sizing: border-box;
 }
 
+.conversion-key-manager {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.conversion-key-manager .search-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.conversion-key-manager .form-switch {
+  padding-left: 2.5em;
+}
+
+.conversion-key-manager .form-switch .form-check-input {
+  height: 1.25em;
+  width: 2.5em;
+  cursor: pointer;
+}
+
+.form-switch-lg {
+  padding-left: 2.8em;
+}
+
+.form-switch-lg .form-check-input {
+  width: 3em;
+  height: 1.5em;
+  margin-left: -2.8em;
+}
+
+.conversion-key-manager .form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.conversion-key-manager .bg-dark-subtle {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.conversion-key-manager .bg-light-subtle {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+.conversion-key-manager .form-control:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.conversion-key-manager .text-muted {
+  opacity: 0.8;
+}
+
+/* Dark mode styles */
+.conversion-key-manager .bg-dark .form-control {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.conversion-key-manager .bg-dark .form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.dark .conversion-key-manager .form-control:disabled {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dark .conversion-key-manager .bg-dark-subtle {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.conversion-key-manager .card {
+  transition: all 0.3s ease-in-out;
+}
+
 .card-config {
     background-color: var(--bg-color);
     border: none;
-    /* Sin borde */
     border-radius: 12px;
-    /* Borde más redondeado */
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     flex: 1;
     text-align: left;
     transition: all 0.3s ease;
-    /* Transición para hover */
 }
 
 .card-config:hover {
@@ -33,12 +106,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.search-image {
-    width: 100%;
-    border-radius: 6px;
-    margin-bottom: 20px;
 }
 
 .description-card h3, .settings-card h3 {
@@ -64,30 +131,25 @@
     margin-bottom: 10px;
     border-radius: 8px;
     background-color: #ddd;
-    /* Fondo diferenciador */
 }
 
 .dark-mode .search-config,
 .dark-mode .conversion-key-config {
     background-color: #333;
-    /* Fondo diferenciador en modo oscuro */
 }
 
 .search-toggle {
     display: flex;
     flex-direction: column;
-    /* Apila la etiqueta y el ToggleSwitch */
     align-items: flex-start;
     margin-bottom: 1.5rem;
 }
 
 .search-toggle label {
     margin-bottom: 0.5rem;
-    /* Espacio entre la etiqueta y el ToggleSwitch */
 }
 
 .search-toggle>div {
-    /* Centra el ToggleSwitch */
     display: flex;
     align-items: center;
 }
@@ -100,7 +162,6 @@
 .conversion-key-input {
     display: flex;
     flex-direction: column;
-    /* Apila los elementos verticalmente */
     margin-top: 1rem;
 }
 
@@ -111,10 +172,8 @@
 
 .conversion-key-input input {
     padding: 0.8rem;
-    /* Más padding */
     border: 1px solid #ccc;
     border-radius: 8px;
-    /* Borde más redondeado */
     font-size: 1rem;
     transition: border-color 0.3s, background-color 0.3s, color 0.3s;
 }
@@ -123,27 +182,20 @@
     background-color: #4caf50;
     color: white;
     padding: 0.8rem 1.5rem;
-    /* Más padding */
     border: none;
     border-radius: 8px;
-    /* Borde más redondeado */
     font-size: 1rem;
     cursor: pointer;
     margin-top: 1rem;
-    /* Margen superior */
     transition: background-color 0.3s, opacity 0.3s;
     align-self: flex-start;
-    /* Alinea el botón a la izquierda */
 }
 
 .search-status {
     font-weight: 600;
-    /* Texto en negrita */
     margin-left: 1rem;
-    /* Espacio a la izquierda */
 }
 
-/* Estilos para el input y el botón deshabilitados */
 .conversion-key-input input:disabled {
     background-color: #eee;
     color: #999;
@@ -156,7 +208,6 @@
     cursor: not-allowed;
 }
 
-/* Adaptación al modo oscuro */
 .dark-mode .card-config {
     background-color: #222;
     color: #fff;
@@ -174,14 +225,12 @@
 
 .dark-mode .description-card p {
     color: #ccc;
-    /* Color del texto descriptivo en modo oscuro */
 }
 
 .dark-mode .card-title {
     background-color: #607d8b;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .conversion-key-manager-container {
         flex-direction: column;

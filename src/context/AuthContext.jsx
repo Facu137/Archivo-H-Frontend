@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
     if (!isOnline || !token) return
 
     try {
-      const response = await window.axiosInstance.post('/auth/refresh')
+      const response = await window.axiosInstance.post('/auth/refresh-token')
       const { accessToken } = response.data
 
       // Solo actualizar si el token es diferente
