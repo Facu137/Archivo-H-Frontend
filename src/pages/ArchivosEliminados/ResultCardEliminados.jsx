@@ -46,31 +46,57 @@ const ResultCardEliminados = ({ result, onDeletePermanently, onRestore }) => {
     })
 
     if (confirmDelete.isConfirmed) {
-      try {
-        await axios.delete(
-          `http://localhost:3000/api/documents/${documento_id}/permanente`,
-          {
-            data: {
-              contraseniaAdmin: 'contraseña' // Reemplaza con la lógica para obtener la contraseña
-            },
-            headers: {
-              Authorization: `Bearer ${token}`
+      // Solicitar contraseña de administrador
+      const { value: adminPassword, isConfirmed: passwordProvided } =
+        await Swal.fire({
+          title: 'Contraseña de Administrador',
+          input: 'password',
+          inputLabel: 'Por favor, ingrese la contraseña de administrador',
+          inputPlaceholder: 'Contraseña',
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar',
+          cancelButtonText: 'Cancelar',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Debe ingresar una contraseña'
             }
           }
-        )
-        onDeletePermanently(documento_id)
-        Swal.fire({
-          title: 'Eliminado',
-          text: 'El archivo se eliminó permanentemente.',
-          icon: 'success'
         })
-      } catch (error) {
-        console.error('Error al eliminar permanentemente:', error)
-        Swal.fire({
-          title: 'Error',
-          text: 'No se pudo eliminar el archivo.',
-          icon: 'error'
-        })
+
+      if (passwordProvided) {
+        try {
+          await axios.delete(
+            `http://localhost:3000/api/deleted/documents/${documento_id}/permanente`,
+            {
+              data: {
+                contraseniaAdmin: adminPassword
+              },
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          onDeletePermanently(documento_id)
+          Swal.fire({
+            title: 'Eliminado',
+            text: 'El archivo se eliminó permanentemente.',
+            icon: 'success'
+          })
+        } catch (error) {
+          console.error('Error al eliminar permanentemente:', error)
+          let errorMessage = 'No se pudo eliminar el archivo.'
+
+          // Si el error es por contraseña incorrecta (401)
+          if (error.response && error.response.status === 401) {
+            errorMessage = 'Contraseña de administrador incorrecta.'
+          }
+
+          Swal.fire({
+            title: 'Error',
+            text: errorMessage,
+            icon: 'error'
+          })
+        }
       }
     }
   }
@@ -90,7 +116,8 @@ const ResultCardEliminados = ({ result, onDeletePermanently, onRestore }) => {
       try {
         // Realiza la petición PUT al backend para restaurar el archivo
         const response = await axios.put(
-          `http://localhost:3000/api/documents/${documento_id}/restore`,
+          `http://localhost:3000/api/deleted/documents/${documento_id}/restore`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`

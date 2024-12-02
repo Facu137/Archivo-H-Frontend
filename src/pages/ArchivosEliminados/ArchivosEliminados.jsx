@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ResultsContainerEliminados from './ResultsContainerEliminados' // Importa el nuevo componente
 import { useAuth } from '../../context/AuthContext'
-import Swal from 'sweetalert2'
 
 const ArchivosEliminados = () => {
   const [deletedFiles, setDeletedFiles] = useState([])
@@ -14,15 +13,18 @@ const ArchivosEliminados = () => {
   useEffect(() => {
     const fetchDeletedFiles = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/deleted', {
-          params: {
-            page,
-            pageSize
-          },
-          headers: {
-            Authorization: `Bearer ${token}`
+        const response = await axios.get(
+          'http://localhost:3000/api/deleted/deleted',
+          {
+            params: {
+              page,
+              pageSize
+            },
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
-        })
+        )
         setDeletedFiles(response.data.results)
         setTotalCount(response.data.totalCount)
       } catch (error) {
