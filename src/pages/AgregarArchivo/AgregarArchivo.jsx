@@ -1,5 +1,13 @@
-import React, { useState } from 'react'
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Alert,
+  Modal
+} from 'react-bootstrap'
 import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
 
@@ -21,6 +29,7 @@ instance.interceptors.request.use((config) => {
 
 const AgregarArchivo = () => {
   const { user } = useAuth()
+  const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
     legajoNumero: '',
     legajoEsBis: 0,
@@ -55,6 +64,10 @@ const AgregarArchivo = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -107,6 +120,8 @@ const AgregarArchivo = () => {
 
       if (response.data.success || response.data.message) {
         setSuccess(response.data.message || 'Documento subido exitosamente')
+        setShowModal(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         // Limpiar el formulario
         setFormData({
           legajoNumero: '',
@@ -152,17 +167,39 @@ const AgregarArchivo = () => {
       <h2 className="mb-4">Agregar Nuevo Documento</h2>
 
       {error && <Alert variant="danger">{error}</Alert>}
-
       {success && <Alert variant="success">{success}</Alert>}
 
       <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Número de Legajo</Form.Label>
-
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group>
+              <Form.Label>Tipo de Documento</Form.Label>
               <Form.Control
-                type="text"
+                as="select"
+                name="tipoDocumento"
+                value={formData.tipoDocumento}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Seleccione un tipo...</option>
+                <option value="Gobierno">Gobierno</option>
+                <option value="Mensura">Mensura</option>
+                <option value="Notarial">Notarial</option>
+                <option value="Correspondencia">Correspondencia</option>
+                <option value="Tierras_Fiscales">Tierras Fiscales</option>
+                <option value="Tribunales">Tribunales</option>
+                <option value="Leyes_Decretos">Leyes y Decretos</option>
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group>
+              <Form.Label>Número de Legajo</Form.Label>
+              <Form.Control
+                type="number"
                 name="legajoNumero"
                 value={formData.legajoNumero}
                 onChange={handleInputChange}
@@ -170,11 +207,9 @@ const AgregarArchivo = () => {
               />
             </Form.Group>
           </Col>
-
           <Col md={6}>
-            <Form.Group className="mb-3">
+            <Form.Group>
               <Form.Label>Legajo Es Bis (0-100)</Form.Label>
-
               <Form.Control
                 type="number"
                 name="legajoEsBis"
@@ -187,13 +222,12 @@ const AgregarArchivo = () => {
           </Col>
         </Row>
 
-        <Row>
+        <Row className="mb-3">
           <Col md={6}>
-            <Form.Group className="mb-3">
+            <Form.Group>
               <Form.Label>Número de Expediente</Form.Label>
-
               <Form.Control
-                type="text"
+                type="number"
                 name="expedienteNumero"
                 value={formData.expedienteNumero}
                 onChange={handleInputChange}
@@ -201,11 +235,9 @@ const AgregarArchivo = () => {
               />
             </Form.Group>
           </Col>
-
           <Col md={6}>
-            <Form.Group className="mb-3">
+            <Form.Group>
               <Form.Label>Expediente Es Bis (0-100)</Form.Label>
-
               <Form.Control
                 type="number"
                 name="expedienteEsBis"
@@ -218,92 +250,57 @@ const AgregarArchivo = () => {
           </Col>
         </Row>
 
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Tipo de Documento</Form.Label>
-
-              <Form.Select
-                name="tipoDocumento"
-                value={formData.tipoDocumento}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Seleccione un tipo</option>
-
-                <option value="Gobierno">Gobierno</option>
-
-                <option value="Mensura">Mensura</option>
-
-                <option value="Notarial">Notarial</option>
-
-                <option value="Correspondencia">Correspondencia</option>
-
-                <option value="Tierras_Fiscales">Tierras Fiscales</option>
-
-                <option value="Tribunales">Tribunales</option>
-
-                <option value="Leyes_Decretos">Leyes y Decretos</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Tema</Form.Label>
-
+        <Row className="mb-3">
+          <Col md={4}>
+            <Form.Group>
+              <Form.Label>Día</Form.Label>
               <Form.Control
-                type="text"
-                name="tema"
-                value={formData.tema}
+                type="number"
+                min="1"
+                max="31"
+                name="dia"
+                value={formData.dia}
                 onChange={handleInputChange}
-                required
               />
             </Form.Group>
           </Col>
-        </Row>
-
-        <Row>
           <Col md={4}>
-            <Form.Group className="mb-3">
-              <Form.Label>Año</Form.Label>
-
+            <Form.Group>
+              <Form.Label>Mes</Form.Label>
               <Form.Control
                 type="number"
+                min="1"
+                max="12"
+                name="mes"
+                value={formData.mes}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group>
+              <Form.Label>Año</Form.Label>
+              <Form.Control
+                type="number"
+                min="1400"
+                max="2099"
                 name="anio"
                 value={formData.anio}
                 onChange={handleInputChange}
-                required
               />
             </Form.Group>
           </Col>
+        </Row>
 
-          <Col md={4}>
-            <Form.Group className="mb-3">
-              <Form.Label>Mes</Form.Label>
-
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group>
+              <Form.Label>Carátula/Asunto/Extracto</Form.Label>
               <Form.Control
-                type="number"
-                name="mes"
-                min="1"
-                max="12"
-                value={formData.mes}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-          </Col>
-
-          <Col md={4}>
-            <Form.Group className="mb-3">
-              <Form.Label>Día</Form.Label>
-
-              <Form.Control
-                type="number"
-                name="dia"
-                min="1"
-                max="31"
-                value={formData.dia}
+                as="textarea"
+                rows={3}
+                name="caratulaAsuntoExtracto"
+                value={formData.caratulaAsuntoExtracto}
                 onChange={handleInputChange}
                 required
               />
@@ -311,83 +308,35 @@ const AgregarArchivo = () => {
           </Col>
         </Row>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Carátula/Asunto/Extracto</Form.Label>
-
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="caratulaAsuntoExtracto"
-            value={formData.caratulaAsuntoExtracto}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
-
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Folios</Form.Label>
-
-              <Form.Control
-                type="number"
-                name="folios"
-                value={formData.folios}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-          </Col>
-
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label="Es Público"
-                name="esPublico"
-                checked={formData.esPublico}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row>
+        <Row className="mb-3">
           <Col md={4}>
-            <Form.Group className="mb-3">
+            <Form.Group>
               <Form.Label>Nombre de Persona</Form.Label>
-
               <Form.Control
                 type="text"
                 name="personaNombre"
                 value={formData.personaNombre}
                 onChange={handleInputChange}
-                required
               />
             </Form.Group>
           </Col>
-
           <Col md={4}>
-            <Form.Group className="mb-3">
+            <Form.Group>
               <Form.Label>Tipo de Persona</Form.Label>
-
-              <Form.Select
+              <Form.Control
+                as="select"
                 name="personaTipo"
                 value={formData.personaTipo}
                 onChange={handleInputChange}
-                required
               >
                 <option value="Persona Física">Persona Física</option>
-
                 <option value="Persona Jurídica">Persona Jurídica</option>
-              </Form.Select>
+              </Form.Control>
             </Form.Group>
           </Col>
-
           <Col md={4}>
-            <Form.Group className="mb-3">
+            <Form.Group>
               <Form.Label>Rol de Persona</Form.Label>
-
               <Form.Select
                 name="personaRol"
                 value={formData.personaRol}
@@ -395,15 +344,10 @@ const AgregarArchivo = () => {
                 required
               >
                 <option value="">Seleccione un rol</option>
-
                 <option value="Iniciador">Iniciador</option>
-
                 <option value="Titular">Titular</option>
-
                 <option value="Escribano">Escribano</option>
-
                 <option value="Emisor">Emisor</option>
-
                 <option value="Destinatario">Destinatario</option>
               </Form.Select>
             </Form.Group>
@@ -411,152 +355,52 @@ const AgregarArchivo = () => {
         </Row>
 
         {formData.tipoDocumento === 'Mensura' && (
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Lugar</Form.Label>
-
-                <Form.Control
-                  type="text"
-                  name="lugar"
-                  value={formData.lugar}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Propiedad</Form.Label>
-
-                <Form.Control
-                  type="text"
-                  name="propiedad"
-                  value={formData.propiedad}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-        )}
-
-        {formData.tipoDocumento === 'Mensura' && (
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Departamento Actual</Form.Label>
-
-                <Form.Control
-                  type="text"
-                  name="departamentoNombreActual"
-                  value={formData.departamentoNombreActual}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Departamento Histórico</Form.Label>
-
-                <Form.Control
-                  type="text"
-                  name="departamentoNombreAntiguo"
-                  value={formData.departamentoNombreAntiguo}
-                  onChange={handleInputChange}
-                />
-                <Form.Text className="text-muted">
-                  Nombre histórico del departamento (si aplica)
-                </Form.Text>
-              </Form.Group>
-            </Col>
-          </Row>
-        )}
-
-        {formData.tipoDocumento === 'Notarial' && (
           <>
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Registro</Form.Label>
+                <Form.Group>
+                  <Form.Label>Lugar</Form.Label>
                   <Form.Control
                     type="text"
-                    name="registro"
-                    value={formData.registro}
+                    name="lugar"
+                    value={formData.lugar}
                     onChange={handleInputChange}
-                    required
                   />
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Protocolo</Form.Label>
+                <Form.Group>
+                  <Form.Label>Propiedad</Form.Label>
                   <Form.Control
                     type="text"
-                    name="protocolo"
-                    value={formData.protocolo}
+                    name="propiedad"
+                    value={formData.propiedad}
                     onChange={handleInputChange}
-                    required
                   />
                 </Form.Group>
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Mes Inicio</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="mesInicio"
-                    value={formData.mesInicio}
-                    onChange={handleInputChange}
-                    min="1"
-                    max="12"
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Mes Fin</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="mesFin"
-                    value={formData.mesFin}
-                    onChange={handleInputChange}
-                    min="1"
-                    max="12"
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Número de Escritura</Form.Label>
+                <Form.Group>
+                  <Form.Label>Departamento Actual</Form.Label>
                   <Form.Control
                     type="text"
-                    name="escrituraNro"
-                    value={formData.escrituraNro}
+                    name="departamentoNombreActual"
+                    value={formData.departamentoNombreActual}
                     onChange={handleInputChange}
-                    required
                   />
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Negocio Jurídico</Form.Label>
+                <Form.Group>
+                  <Form.Label>Departamento Histórico</Form.Label>
                   <Form.Control
                     type="text"
-                    name="negocioJuridico"
-                    value={formData.negocioJuridico}
+                    name="departamentoNombreAntiguo"
+                    value={formData.departamentoNombreAntiguo}
                     onChange={handleInputChange}
-                    required
                   />
                 </Form.Group>
               </Col>
@@ -564,30 +408,163 @@ const AgregarArchivo = () => {
           </>
         )}
 
-        <Form.Group className="mb-3">
-          <Form.Label>Archivos</Form.Label>
+        {formData.tipoDocumento === 'Notarial' && (
+          <>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Registro</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="registro"
+                    value={formData.registro}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Protocolo</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="protocolo"
+                    value={formData.protocolo}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
 
-          <Form.Control
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            required
-          />
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Mes Inicio</Form.Label>
+                  <Form.Control
+                    type="number"
+                    min="1"
+                    max="12"
+                    name="mesInicio"
+                    value={formData.mesInicio}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Mes Fin</Form.Label>
+                  <Form.Control
+                    type="number"
+                    min="1"
+                    max="12"
+                    name="mesFin"
+                    value={formData.mesFin}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
 
-          <Form.Text className="text-muted">
-            Puede seleccionar múltiples archivos
-          </Form.Text>
-        </Form.Group>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Número de Escritura</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="escrituraNro"
+                    value={formData.escrituraNro}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Negocio Jurídico</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="negocioJuridico"
+                    value={formData.negocioJuridico}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </>
+        )}
+
+        <Row className="mb-3">
+          <Col md={4}>
+            <Form.Group>
+              <Form.Label>Tema</Form.Label>
+              <Form.Control
+                type="text"
+                name="tema"
+                value={formData.tema}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+          </Col>
+
+          <Col md={4}>
+            <Form.Group>
+              <Form.Label>Folios</Form.Label>
+              <Form.Control
+                type="number"
+                name="folios"
+                value={formData.folios}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group>
+              <Form.Label>Visibilidad</Form.Label>
+              <Form.Check
+                type="switch"
+                id="esPublico-switch"
+                name="esPublico"
+                label="Es Público"
+                checked={formData.esPublico}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group>
+              <Form.Label>Archivos</Form.Label>
+              <Form.Control
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
         <Button
           variant="primary"
           type="submit"
           disabled={loading}
-          className="mt-3"
+          className="w-100"
         >
-          {loading ? 'Subiendo...' : 'Subir Documento'}
+          {loading ? 'Cargando...' : 'Guardar Documento'}
         </Button>
       </Form>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>¡Éxito!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{success}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   )
 }
