@@ -1,12 +1,14 @@
 // src/pages/Buscador/AdvancedSearchForm.jsx
 import React, { useState, useEffect } from 'react'
-import './AdvancedSearchForm.css'
 import axios from 'axios'
 import PropTypes from 'prop-types'
+import { Form, Row, Col, Button, Card } from 'react-bootstrap'
+import { useTheme } from '../../context/ThemeContext'
 
 const AdvancedSearchForm = ({ onSearch }) => {
   const [categoria, setCategoria] = useState('mensura')
   const [camposBusqueda, setCamposBusqueda] = useState({})
+  const { isDarkMode } = useTheme()
 
   useEffect(() => {
     mostrarCamposBusqueda(categoria)
@@ -180,35 +182,58 @@ const AdvancedSearchForm = ({ onSearch }) => {
   }
 
   return (
-    <form id="advanced-search-form" onSubmit={handleSubmit}>
-      <label htmlFor="categoria">Categoría:</label>
-      <select
-        id="categoria"
-        value={categoria}
-        onChange={(e) => setCategoria(e.target.value.toLowerCase())}
-      >
-        <option value="mensura">Mensura</option>
-        <option value="notarial">Notarial</option>
-        <option value="correspondencia">Correspondencia</option>
-        <option value="leyesdecretos">Leyes Decretos</option>
-        <option value="gobierno">Gobierno</option>
-        <option value="tierrasfiscales">Tierras Fiscales</option>
-        <option value="tribunales">Tribunales</option>
-      </select>
-      <div id="campos-busqueda">
-        {Object.keys(camposBusqueda).map((key) => (
-          <input
-            key={key}
-            type="text"
-            id={key}
-            placeholder={key}
-            value={camposBusqueda[key]}
-            onChange={handleChange}
-          />
-        ))}
-      </div>
-      <button type="submit">Buscar</button>
-    </form>
+    <Card className={`mb-4 ${isDarkMode ? 'bg-dark text-light' : 'bg-light'}`}>
+      <Card.Body>
+        <Form onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Col xs={12} md={6} lg={12}>
+              <Form.Group controlId="categoria">
+                <Form.Label>Categoría:</Form.Label>
+                <Form.Select
+                  value={categoria}
+                  onChange={(e) => setCategoria(e.target.value.toLowerCase())}
+                  className={isDarkMode ? 'bg-dark text-light' : 'bg-light'}
+                >
+                  <option value="mensura">Mensura</option>
+                  <option value="notarial">Notarial</option>
+                  <option value="correspondencia">Correspondencia</option>
+                  <option value="leyesdecretos">Leyes Decretos</option>
+                  <option value="gobierno">Gobierno</option>
+                  <option value="tierrasfiscales">Tierras Fiscales</option>
+                  <option value="tribunales">Tribunales</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Row className="g-3">
+            {Object.keys(camposBusqueda).map((key) => (
+              <Col key={key} xs={12} sm={6} md={4} lg={3}>
+                <Form.Group controlId={key}>
+                  <Form.Label>{key}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={camposBusqueda[key]}
+                    onChange={handleChange}
+                    placeholder={`Ingrese ${key.toLowerCase()}`}
+                    className={isDarkMode ? 'bg-dark text-light' : 'bg-light'}
+                  />
+                </Form.Group>
+              </Col>
+            ))}
+          </Row>
+
+          <div className="d-flex justify-content-end mt-4">
+            <Button
+              type="submit"
+              variant={isDarkMode ? 'outline-light' : 'primary'}
+            >
+              Buscar
+            </Button>
+          </div>
+        </Form>
+      </Card.Body>
+    </Card>
   )
 }
 

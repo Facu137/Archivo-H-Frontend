@@ -2,22 +2,20 @@
 import React from 'react'
 import axios from 'axios'
 import SearchContainer from './SearchContainer'
-import './Buscador.css'
 import { useAuth } from '../../context/AuthContext'
+import { Container } from 'react-bootstrap'
+import { useTheme } from '../../context/ThemeContext'
 
 const Buscador = () => {
   const { token } = useAuth()
+  const { isDarkMode } = useTheme()
 
   const handleSearch = (results) => {
-    // Aquí puedes actualizar el estado global si es necesario
-    // o realizar alguna acción con los resultados
     console.log('Resultados de la búsqueda:', results)
   }
 
   const handleEdit = async (documentoId) => {
     try {
-      // Aquí puedes implementar la lógica para editar el documento
-      // Por ejemplo, abrir un modal o redirigir a una página de edición
       console.log(`Editando: ${documentoId}`)
     } catch (error) {
       console.error('Error al editar el documento:', error)
@@ -29,27 +27,30 @@ const Buscador = () => {
       await axios.delete(
         `http://localhost:3000/api/deleted/documents/${documentoId}`,
         {
-          // Usa axios directamente
           headers: {
             Authorization: `Bearer ${token}`
           }
         }
       )
-      // Realiza alguna acción después de eliminar el documento, como actualizar la lista
     } catch (error) {
       console.error('Error al eliminar el documento:', error)
     }
   }
 
   return (
-    <div className="buscador-container">
-      <h1>Búsqueda</h1>
-      <SearchContainer
-        onSearch={handleSearch}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+    <Container
+      fluid
+      className={`py-4 ${isDarkMode ? 'bg-dark text-light' : 'bg-light text-dark'}`}
+    >
+      <Container className={isDarkMode ? 'text-light' : 'text-dark'}>
+        <h1 className="mb-4">Búsqueda</h1>
+        <SearchContainer
+          onSearch={handleSearch}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </Container>
+    </Container>
   )
 }
 

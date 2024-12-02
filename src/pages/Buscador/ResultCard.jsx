@@ -1,10 +1,11 @@
 // src/pages/Buscador/ResultCard.jsx
 import React from 'react'
-import './ResultCard.css'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { FaStar, FaEdit, FaTrash, FaFileImage, FaFilePdf } from 'react-icons/fa'
+import { FaEdit, FaTrash, FaFileImage, FaFilePdf } from 'react-icons/fa'
 import PropTypes from 'prop-types'
+import { Card, Row, Col, Button } from 'react-bootstrap'
+import { useTheme } from '../../context/ThemeContext'
 
 const ResultCard = ({ result, onEdit, onDelete }) => {
   const {
@@ -26,12 +27,12 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
     mensura_lugar,
     mensura_propiedad,
     notarial_registro,
-    notarial_protocolo,
-    isFavorite
+    notarial_protocolo
   } = result
 
   const navigate = useNavigate()
-  const { user, addFavorite, removeFavorite } = useAuth()
+  const { user } = useAuth()
+  const { isDarkMode } = useTheme()
 
   const handleClick = () => {
     const fileUrl = imagen_url
@@ -41,21 +42,13 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
     navigate(`/visor?file=${encodeURIComponent(fileUrl)}&type=${fileType}`)
   }
 
-  const handleFavorite = () => {
-    if (result.isFavorite) {
-      removeFavorite(documento_id)
-    } else {
-      addFavorite(documento_id)
-    }
-  }
-
   const handleEdit = (e) => {
-    e.stopPropagation() // Evita que el clic se propague al padre
+    e.stopPropagation()
     onEdit(documento_id)
   }
 
   const handleDelete = (e) => {
-    e.stopPropagation() // Evita que el clic se propague al padre
+    e.stopPropagation()
     onDelete(documento_id)
   }
 
@@ -65,15 +58,14 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
   let thumbnailIcon = null
   if (imagen_url) {
     if (imagen_url.endsWith('.pdf')) {
-      thumbnailIcon = <FaFilePdf />
+      thumbnailIcon = <FaFilePdf size={24} />
     } else {
-      thumbnailIcon = <FaFileImage />
+      thumbnailIcon = <FaFileImage size={24} />
     }
   }
 
   // Construcción de la fecha
   let fecha = ''
-
   if (anio) {
     fecha += anio
     if (mes) {
@@ -81,110 +73,114 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
       if (dia) {
         fecha += `-${dia}`
       } else {
-        fecha += ' - Sin día' // Agrega "Sin día" si no hay día
+        fecha += ' - Sin día'
       }
     } else {
-      fecha += ' - Sin mes' // Agrega "Sin mes" si no hay mes
+      fecha += ' - Sin mes'
     }
   } else {
-    fecha = 'Sin año' // Muestra "Sin año" si no hay año
+    fecha = 'Sin año'
   }
 
   return (
-    <div className="result-card">
-      <div className="card-content">
-        <p>
-          <strong>Tipo de Documento:</strong> {tipo_documento}
-        </p>
-        <p>
-          <strong>Fecha:</strong> {fecha}
-        </p>
-        <p>
-          <strong>Carátula/Asunto/Extracto:</strong> {caratula_asunto_extracto}
-        </p>
-        <p>
-          <strong>Tema:</strong> {tema}
-        </p>
-        <p>
-          <strong>Folios:</strong> {folios}
-        </p>
-        <p>
-          <strong>Rol de Persona:</strong> {persona_rol}
-        </p>
-        <p>
-          <strong>Nombre de Persona:</strong> {persona_nombre}
-        </p>
-        <p>
-          <strong>Tipo de Persona:</strong> {persona_tipo}
-        </p>
-        <p>
-          <strong>Departamento:</strong> {departamento_nombre}
-        </p>
-        <p>
-          <strong>Legajo Número:</strong> {legajo_numero}
-        </p>
-        <p>
-          <strong>Expediente Número:</strong> {expediente_numero}
-        </p>
-        <p>
-          <strong>Lugar de Mensura:</strong> {mensura_lugar}
-        </p>
-        <p>
-          <strong>Propiedad de Mensura:</strong> {mensura_propiedad}
-        </p>
-        <p>
-          <strong>Registro Notarial:</strong> {notarial_registro}
-        </p>
-        <p>
-          <strong>Protocolo Notarial:</strong> {notarial_protocolo}
-        </p>
-      </div>
+    <Card
+      className={`mb-3 ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-light'}`}
+      style={{ cursor: imagen_url ? 'pointer' : 'default' }}
+      onClick={imagen_url ? handleClick : undefined}
+    >
+      <Card.Body>
+        <Row>
+          <Col xs={12} md={thumbnailIcon ? 10 : 12}>
+            <Row className="g-3">
+              <Col xs={12} sm={6} md={4}>
+                <p className="mb-2">
+                  <strong>Tipo de Documento:</strong> {tipo_documento}
+                </p>
+                <p className="mb-2">
+                  <strong>Fecha:</strong> {fecha}
+                </p>
+                <p className="mb-2">
+                  <strong>Carátula/Asunto/Extracto:</strong>{' '}
+                  {caratula_asunto_extracto}
+                </p>
+              </Col>
+              <Col xs={12} sm={6} md={4}>
+                <p className="mb-2">
+                  <strong>Tema:</strong> {tema}
+                </p>
+                <p className="mb-2">
+                  <strong>Folios:</strong> {folios}
+                </p>
+                <p className="mb-2">
+                  <strong>Departamento:</strong> {departamento_nombre}
+                </p>
+              </Col>
+              <Col xs={12} sm={6} md={4}>
+                <p className="mb-2">
+                  <strong>Persona:</strong> {persona_nombre} ({persona_tipo} -{' '}
+                  {persona_rol})
+                </p>
+                <p className="mb-2">
+                  <strong>Legajo:</strong> {legajo_numero}
+                </p>
+                <p className="mb-2">
+                  <strong>Expediente:</strong> {expediente_numero}
+                </p>
+              </Col>
+              {(mensura_lugar || mensura_propiedad) && (
+                <Col xs={12}>
+                  <p className="mb-2">
+                    <strong>Mensura:</strong> {mensura_lugar} -{' '}
+                    {mensura_propiedad}
+                  </p>
+                </Col>
+              )}
+              {(notarial_registro || notarial_protocolo) && (
+                <Col xs={12}>
+                  <p className="mb-2">
+                    <strong>Notarial:</strong> Registro {notarial_registro} -
+                    Protocolo {notarial_protocolo}
+                  </p>
+                </Col>
+              )}
+            </Row>
+          </Col>
+          {thumbnailIcon && (
+            <Col
+              xs={12}
+              md={2}
+              className="d-flex align-items-center justify-content-center mt-3 mt-md-0"
+            >
+              <div className="text-center">
+                {thumbnailIcon}
+                <div className="mt-2 small">Click para ver</div>
+              </div>
+            </Col>
+          )}
+        </Row>
 
-      {/* Miniatura con ícono */}
-      {thumbnailIcon && (
-        <div className="miniatura" onClick={handleClick}>
-          {thumbnailIcon}
-          {/* Elemento vacío para el title */}
-        </div>
-      )}
-
-      {/* Mostrar botón de favorito solo para usuarios autenticados que NO son admin ni empleado */}
-      {user && !isAdminOrEmployee && (
-        <button
-          className="favorite-button"
-          onClick={handleFavorite}
-          title="Agregar a favoritos"
-        >
-          <FaStar color={result.isFavorite ? 'gold' : 'gray'} />
-        </button>
-      )}
-
-      {/* Mostrar botones de editar y eliminar solo para admin y empleados */}
-      {isAdminOrEmployee && (
-        <div className="admin-actions">
-          {' '}
-          {/* Volvemos a agregar el div admin-actions */}
-          <button className="edit-button" onClick={handleEdit} title="Editar">
-            <FaEdit className="edit-icon" />{' '}
-            {/* Agrega la clase "edit-icon" al icono de FaEdit */}
-          </button>
-          <button
-            className="delete-button"
-            onClick={handleDelete}
-            title="Eliminar"
-          >
-            <FaTrash />
-          </button>
-          <button
-            className="favorite-button"
-            onClick={handleFavorite}
-            title="Agregar a favoritos"
-          >
-            <FaStar color={result.isFavorite ? 'gold' : 'gray'} />
-          </button>
-        </div>
-      )}
-    </div>
+        {isAdminOrEmployee && (
+          <div className="mt-3 d-flex gap-2 justify-content-end">
+            <Button
+              variant={isDarkMode ? 'outline-light' : 'outline-primary'}
+              size="sm"
+              onClick={handleEdit}
+              title="Editar"
+            >
+              <FaEdit /> Editar
+            </Button>
+            <Button
+              variant={isDarkMode ? 'outline-danger' : 'danger'}
+              size="sm"
+              onClick={handleDelete}
+              title="Eliminar"
+            >
+              <FaTrash /> Eliminar
+            </Button>
+          </div>
+        )}
+      </Card.Body>
+    </Card>
   )
 }
 
@@ -201,7 +197,7 @@ ResultCard.propTypes = {
     persona_rol: PropTypes.string.isRequired,
     persona_nombre: PropTypes.string.isRequired,
     persona_tipo: PropTypes.string.isRequired,
-    departamento_nombre: PropTypes.string,
+    departamento_nombre: PropTypes.string.isRequired,
     imagen_url: PropTypes.string,
     legajo_numero: PropTypes.string,
     expediente_numero: PropTypes.string,
@@ -209,7 +205,7 @@ ResultCard.propTypes = {
     mensura_propiedad: PropTypes.string,
     notarial_registro: PropTypes.string,
     notarial_protocolo: PropTypes.string,
-    isFavorite: PropTypes.bool.isRequired
+    isFavorite: PropTypes.bool
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
