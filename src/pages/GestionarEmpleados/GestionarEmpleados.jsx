@@ -1,14 +1,17 @@
 // src/pages/GestionarEmpleados/GestionarEmpleados.jsx
 import React, { useEffect, useState, useCallback } from 'react'
+import { Container, Row, Col, Spinner, Alert, Card } from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext'
+import { useTheme } from '../../context/ThemeContext'
 import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
 import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
 import { useNetwork } from '../../context/NetworkContext'
 import { useNotification } from '../../hooks/useNotification'
-import '../GestionarEmpleados/GestionarEmpleados.css'
+import topazImage from '../../assets/topaz-museo_historico_4.avif'
 
 export const GestionarEmpleados = () => {
   const { user, isLoading: authLoading } = useAuth()
+  const { isDarkMode } = useTheme()
   const [isLoading, setIsLoading] = useState(true)
   const [possibleEmployees, setPossibleEmployees] = useState([])
   const [currentEmployees, setCurrentEmployees] = useState([])
@@ -18,9 +21,7 @@ export const GestionarEmpleados = () => {
 
   const handleError = useCallback(
     (error) => {
-      // Simplificado: Mostrar solo una notificación genérica de error de red.
       if (error.message === 'Network Error' || error.response?.status >= 500) {
-        // O error del servidor
         showNotification(
           'Error de red o servidor. Por favor, inténtalo de nuevo más tarde.',
           'error'
@@ -36,9 +37,7 @@ export const GestionarEmpleados = () => {
           'error'
         )
       }
-
-      console.error('Detalles del error para depuración:', error) // Log para desarrollo.
-
+      console.error('Detalles del error para depuración:', error)
       setError(
         'Hubo un error. Por favor, verifica tu conexión e inténtalo de nuevo.'
       )
@@ -48,12 +47,11 @@ export const GestionarEmpleados = () => {
 
   const fetchData = useCallback(async () => {
     if (!isOnline) {
-      // Verifica si hay conexión
       showNotification(
         'No hay conexión a internet. No se pueden cargar los datos.',
         'error'
       )
-      return // No intentes hacer la petición
+      return
     }
 
     setIsLoading(true)
@@ -64,7 +62,7 @@ export const GestionarEmpleados = () => {
       ])
       setPossibleEmployees(possibleEmpResponse.data)
       setCurrentEmployees(currentEmpResponse.data)
-      setError(null) // Limpia cualquier error previo si las peticiones son exitosas.
+      setError(null)
     } catch (error) {
       handleError(error)
     } finally {
@@ -73,7 +71,6 @@ export const GestionarEmpleados = () => {
   }, [handleError, isOnline, showNotification])
 
   const fetchCurrentEmployees = useCallback(async () => {
-    // Movida fuera de fetchData
     try {
       const response = await window.axiosInstance.get('/admin/list-employees')
       setCurrentEmployees(response.data)
@@ -92,15 +89,29 @@ export const GestionarEmpleados = () => {
   }, [user, authLoading, showNotification, fetchData])
 
   if (authLoading || isLoading) {
-    return <div>Cargando...</div>
+    return (
+      <Container className="min-vh-100 d-flex align-items-center justify-content-center">
+        <Spinner animation="border" variant={isDarkMode ? 'light' : 'dark'} />
+      </Container>
+    )
   }
 
   if (error) {
-    return <div className="error-message">{error}</div> // Muestra un mensaje de error genérico.
+    return (
+      <Container className="py-5">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    )
   }
 
   if (!user || user.rol !== 'administrador') {
-    return <div>No tienes permisos para acceder a esta página.</div>
+    return (
+      <Container className="py-5">
+        <Alert variant="warning">
+          No tienes permisos para acceder a esta página.
+        </Alert>
+      </Container>
+    )
   }
 
   const handleAcceptConversion = async (employeeId) => {
@@ -128,30 +139,64 @@ export const GestionarEmpleados = () => {
         possibleEmployees.filter((employee) => employee.id !== employeeId)
       )
     } catch (error) {
-      console.error('Error al rechazar la conversión:', error)
       handleError(error)
     }
   }
 
   return (
-    <div className="gestion-main-container">
-      <div className="gestion-section-container">
-        <h2>Gestionar Nuevos Empleados</h2>
-        <PossibleEmployeesList
-          possibleEmployees={possibleEmployees}
-          onAccept={handleAcceptConversion}
-          onReject={handleRejectConversion}
-          onUpdateCurrentEmployees={fetchCurrentEmployees} // Pasa fetchCurrentEmployees como prop
-        />
-      </div>
-      <div className="gestion-section-container">
-        <h2>Gestionar Empleados Actuales</h2>
-        <CurrentEmployeesList
-          employees={currentEmployees}
-          setCurrentEmployees={setCurrentEmployees}
-          fetchCurrentEmployees={fetchCurrentEmployees} // Pasa fetchCurrentEmployees como prop
-        />
-      </div>
+    <div className="min-vh-100 py-5">
+      <Container fluid className="px-4">
+        <Row className="justify-content-center">
+          <Col xs={12} lg={11} xxl={10}>
+            <Card
+              className={`border-0 shadow-sm overflow-hidden ${
+                isDarkMode ? 'bg-dark text-light' : 'bg-light'
+              }`}
+            >
+              <div
+                className="position-relative"
+                style={{ height: '200px', overflow: 'hidden' }}
+              >
+                <img
+                  src={topazImage}
+                  alt="Banner"
+                  className="w-100 h-100"
+                  style={{ objectFit: 'cover' }}
+                />
+                <div
+                  className="position-absolute w-100 h-100 top-0 start-0"
+                  style={{
+                    background:
+                      'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6))'
+                  }}
+                />
+                <h1 className="position-absolute bottom-0 start-0 text-white p-4 m-0">
+                  Gestión de Empleados
+                </h1>
+              </div>
+              <Card.Body className="p-4">
+                <Row className="g-4">
+                  <Col xs={12} xl={6}>
+                    <PossibleEmployeesList
+                      possibleEmployees={possibleEmployees}
+                      onAccept={handleAcceptConversion}
+                      onReject={handleRejectConversion}
+                      onUpdateCurrentEmployees={fetchCurrentEmployees}
+                    />
+                  </Col>
+                  <Col xs={12} xl={6}>
+                    <CurrentEmployeesList
+                      employees={currentEmployees}
+                      setCurrentEmployees={setCurrentEmployees}
+                      fetchCurrentEmployees={fetchCurrentEmployees}
+                    />
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }

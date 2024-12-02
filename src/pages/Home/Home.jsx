@@ -118,13 +118,16 @@ export const Home = () => {
                 </div>
                 <footer
                   className={`blockquote-footer text-end mt-4 mb-2 me-3 ${
-                    isDarkMode
-                      ? 'text-light opacity-75'
-                      : 'text-dark opacity-25'
+                    isDarkMode ? 'text-light opacity-75' : 'text-dark'
                   }`}
                   style={{ borderRadius: '0.5rem' }}
                 >
-                  <cite title="Autor" className={`fs-6 fw-semibold text-white`}>
+                  <cite
+                    title="Autor"
+                    className={`fs-6 fw-semibold ${
+                      isDarkMode ? 'text-white' : 'text-dark'
+                    }`}
+                  >
                     Juan Manuel Viaña
                   </cite>
                 </footer>
@@ -188,13 +191,16 @@ export const Home = () => {
                 </div>
                 <footer
                   className={`blockquote-footer text-end mt-4 mb-2 me-3 ${
-                    isDarkMode
-                      ? 'text-light opacity-75'
-                      : 'text-dark opacity-25'
+                    isDarkMode ? 'text-light opacity-75' : 'text-dark'
                   }`}
                   style={{ borderRadius: '0.5rem' }}
                 >
-                  <cite title="Autor" className={`fs-6 fw-semibold text-white`}>
+                  <cite
+                    title="Autor"
+                    className={`fs-6 fw-semibold ${
+                      isDarkMode ? 'text-white' : 'text-dark'
+                    }`}
+                  >
                     Juan Manuel Viaña
                   </cite>
                 </footer>

@@ -1,8 +1,10 @@
 // src/pages/GestionarEmpleados/PossibleEmployeesList/PossibleEmployeesList.jsx
+import React from 'react'
 import PropTypes from 'prop-types'
-import ScrollableCardList from '../../../components/ScrollableCardList/ScrollableCardList'
+import { Card, Button, Alert, Container, Row, Col } from 'react-bootstrap'
+import { useTheme } from '../../../context/ThemeContext'
 import ConversionKeyManager from './ConversionKeyManager/ConversionKeyManager'
-import './PossibleEmployeesList.css'
+import UserCard from '../../../components/UserCard/UserCard'
 
 const PossibleEmployeesList = ({
   possibleEmployees,
@@ -10,34 +12,98 @@ const PossibleEmployeesList = ({
   onReject,
   onUpdateCurrentEmployees
 }) => {
+  const { isDarkMode } = useTheme()
+
   if (possibleEmployees.length === 0) {
-    return <div>No se encontraron posibles empleados.</div>
+    return (
+      <Container fluid className="p-0">
+        <Alert
+          variant={isDarkMode ? 'dark' : 'info'}
+          className="m-0 border-0 rounded-3"
+        >
+          <span className={isDarkMode ? 'text-light' : ''}>
+            No se encontraron posibles empleados.
+          </span>
+        </Alert>
+      </Container>
+    )
   }
 
   return (
-    <div className="possible-employees-section-container">
-      <ConversionKeyManager />
-      <ScrollableCardList
-        title="Solicitudes de Nuevos Empleados"
-        description="Aquí puedes aceptar o rechazar las solicitudes de nuevos empleados. En ambos casos, los usuarios serán notificados por correo electrónico."
-        items={possibleEmployees}
-        cardClassName="possible-employees-list-card"
-        listClassName="possible-employee-list"
-        itemClassName="possible-employee-listcard-container"
-        onAccept={onAccept} // Pasa la función onAccept como prop
-        onReject={onReject} // Pasa la función onReject como prop
-        onUpdateCurrentEmployees={onUpdateCurrentEmployees} // Pasa onUpdateCurrentEmployees como prop
+    <Container fluid className="p-0">
+      <Card
+        className={`border-0 shadow-sm ${
+          isDarkMode ? 'bg-dark text-light' : 'bg-light'
+        }`}
       >
-        {(
-          item // Pasa una función como children
-        ) => (
-          <div className="buttons-container">
-            <button onClick={() => onAccept(item.id)}>Aceptar</button>
-            <button onClick={() => onReject(item.id)}>Rechazar</button>
-          </div>
-        )}
-      </ScrollableCardList>
-    </div>
+        <Card.Header
+          className={`border-bottom py-3 ${
+            isDarkMode ? 'bg-dark' : 'bg-light'
+          }`}
+        >
+          <h3 className={`h4 mb-0 ${isDarkMode ? 'text-light' : ''}`}>
+            Solicitudes de Nuevos Empleados
+          </h3>
+        </Card.Header>
+        <Card.Body className="p-4">
+          <Row className="mb-4">
+            <Col>
+              <p className={isDarkMode ? 'text-light' : 'text-muted'}>
+                Aquí puedes aceptar o rechazar las solicitudes de nuevos
+                empleados. En ambos casos, los usuarios serán notificados por
+                correo electrónico.
+              </p>
+            </Col>
+          </Row>
+
+          <Row className="mb-4">
+            <Col>
+              <ConversionKeyManager />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <div className="d-flex flex-column gap-3">
+                {possibleEmployees.map((employee) => (
+                  <div
+                    key={employee.id}
+                    className="position-relative rounded-3 overflow-hidden"
+                  >
+                    <UserCard
+                      user={employee}
+                      darkMode={isDarkMode}
+                      className="mb-0 border-0 shadow-sm"
+                    />
+                    <div
+                      className="position-absolute top-0 end-0 p-3 d-flex gap-2"
+                      style={{ zIndex: 1 }}
+                    >
+                      <Button
+                        variant={isDarkMode ? 'light' : 'success'}
+                        size="sm"
+                        className="px-3 py-2 rounded-3"
+                        onClick={() => onAccept(employee.id)}
+                      >
+                        Aceptar
+                      </Button>
+                      <Button
+                        variant={isDarkMode ? 'light' : 'danger'}
+                        size="sm"
+                        className="px-3 py-2 rounded-3"
+                        onClick={() => onReject(employee.id)}
+                      >
+                        Rechazar
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </Container>
   )
 }
 

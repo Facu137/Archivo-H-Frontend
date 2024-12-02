@@ -1,10 +1,10 @@
 // src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeList.jsx
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Tooltip from '../../../../components/Tooltip/Tooltip'
-import ScrollableCardList from '../../../../components/ScrollableCardList/ScrollableCardList'
+import { Button, Modal, Card } from 'react-bootstrap'
+import { useTheme } from '../../../../context/ThemeContext'
+import UserCard from '../../../../components/UserCard/UserCard'
 import EmployeeDetails from '../EmployeeDetails/EmployeeDetails'
-import './EmployeeList.css'
 
 const EmployeeList = ({
   employees,
@@ -16,8 +16,10 @@ const EmployeeList = ({
   successor,
   fetchSuccessor
 }) => {
+  const { isDarkMode } = useTheme()
   const [editingEmployeeId, setEditingEmployeeId] = useState(null)
   const [editedEmployeeData, setEditedEmployeeData] = useState(null)
+  const [showModal, setShowModal] = useState(false)
   const allowedUpdates = [
     'activo',
     'permiso_crear',
@@ -33,20 +35,20 @@ const EmployeeList = ({
       (employee) => employee.id === employeeId
     )
     setEditedEmployeeData({ ...employeeToEdit })
+    setShowModal(true)
   }
 
-  const handleCancelClick = () => {
+  const handleCloseModal = () => {
+    setShowModal(false)
     setEditingEmployeeId(null)
     setEditedEmployeeData(null)
   }
 
   const handleInputChange = (event) => {
-    const { name, checked } = event.target // Extraemos name y checked del evento
-    console.log(`Campo actualizado: ${name}, Valor: ${checked}`)
-    // Actualiza el estado de manera inmutable
+    const { name, checked } = event.target
     setEditedEmployeeData((prevData) => ({
       ...prevData,
-      [name]: checked // Solo se actualiza el campo del toggle switch
+      [name]: checked
     }))
   }
 
@@ -68,8 +70,7 @@ const EmployeeList = ({
       )
 
       showNotification('Empleado actualizado con éxito', 'success')
-      setEditingEmployeeId(null)
-      setEditedEmployeeData(null)
+      handleCloseModal()
       fetchCurrentEmployees()
     } catch (error) {
       console.error('Error al actualizar empleado:', error)
@@ -101,7 +102,10 @@ const EmployeeList = ({
       ) {
         showNotification(error.response.data.message, 'error')
       } else {
-        showNotification('Error al establecer sucesor', 'error')
+        showNotification(
+          'Error al establecer el sucesor. Por favor, inténtalo de nuevo.',
+          'error'
+        )
       }
     }
   }
@@ -116,85 +120,114 @@ const EmployeeList = ({
           }
         }
       )
-      showNotification('Empleado eliminado correctamente', 'success')
-      fetchCurrentEmployees()
+      showNotification('Empleado eliminado con éxito', 'success')
+      setCurrentEmployees((prevEmployees) =>
+        prevEmployees.filter((emp) => emp.id !== employeeId)
+      )
     } catch (error) {
       console.error('Error al eliminar empleado:', error)
-      if (error.response) {
-        if (error.response.status === 400) {
-          showNotification(error.response.data.message, 'error')
-        } else if (error.response.status === 404) {
-          showNotification('Empleado no encontrado', 'error')
-        } else {
-          showNotification('Error al eliminar empleado', 'error')
-        }
-      } else {
-        showNotification('Error al eliminar empleado', 'error')
-      }
+      showNotification('Error al eliminar empleado', 'error')
     }
   }
 
-  const isRemovable = (employee) => {
-    return !employee.activo && (!successor || successor.id !== employee.id)
-  }
-
-  if (employees.length === 0) {
-    return <div>No se encontraron empleados actuales.</div>
-  }
-
   return (
-    <ScrollableCardList
-      title="Lista de Empleados Actuales"
-      description="Gestiona los permisos y el estado de los empleados actuales. Puedes establecer un sucesor para el administrador, modificar permisos, desactivar empleados o eliminarlos del sistema."
-      items={employees}
-      cardClassName="current-employee-list-card" // Nueva clase para la tarjeta
-      listClassName="current-employee-list"
-      itemClassName="current-employee-card-container"
-    >
-      {(
-        item // Pasa una función como children
-      ) => (
-        <>
-          {editingEmployeeId === item.id ? (
-            <>
-              <EmployeeDetails
-                employee={item} // Usa "item" en lugar de "employee"
-                isEditing={true}
-                editedEmployeeData={editedEmployeeData}
-                onChange={handleInputChange}
-              />
-              <div className="current-employee-buttons-container">
-                <button onClick={handleSaveChanges}>Guardar Cambios</button>
-                <button onClick={() => handleSetSuccessor(item.id)}>
-                  Establecer Sucesor
-                </button>
-                <Tooltip content="No se puede eliminar un empleado que está activo o es sucesor.">
-                  <span>
-                    <button
-                      onClick={() => handleRemoveEmployee(item.id)}
-                      disabled={!isRemovable(item)}
+    <div className="employee-list">
+      <div className="row g-4">
+        {employees.map((employee) => (
+          <div key={employee.id} className="col-12">
+            <Card
+              className={`border-0 shadow-sm ${
+                isDarkMode ? 'bg-dark text-light' : 'bg-white'
+              }`}
+            >
+              <Card.Body className="p-0">
+                <div className="position-relative">
+                  <UserCard
+                    user={employee}
+                    darkMode={isDarkMode}
+                    className="border-0 mb-0"
+                  />
+                  <div
+                    className="position-absolute top-0 end-0 p-3 d-flex gap-2"
+                    style={{ zIndex: 1 }}
+                  >
+                    <Button
+                      variant={isDarkMode ? 'outline-light' : 'outline-primary'}
+                      size="sm"
+                      className="d-flex align-items-center gap-1"
+                      onClick={() => handleEditClick(employee.id)}
                     >
-                      Eliminar Empleado
-                    </button>
-                  </span>
-                </Tooltip>
-                <button onClick={handleCancelClick}>Cancelar</button>
-              </div>
-            </>
-          ) : (
-            <>
-              <EmployeeDetails employee={item} isEditing={false} />{' '}
-              {/* Usa "item" en lugar de "employee" */}
-              <button onClick={() => handleEditClick(item.id)}>
-                {' '}
-                {/* Usa "item" en lugar de "employee" */}
-                Modificar Empleado
-              </button>
-            </>
+                      <i className="bi bi-pencil-square"></i>
+                      <span>Editar</span>
+                    </Button>
+                    {employee.id !== successor?.id && (
+                      <Button
+                        variant={
+                          isDarkMode ? 'outline-light' : 'outline-success'
+                        }
+                        size="sm"
+                        className="d-flex align-items-center gap-1"
+                        onClick={() => handleSetSuccessor(employee.id)}
+                      >
+                        <i className="bi bi-person-check"></i>
+                        <span>Sucesor</span>
+                      </Button>
+                    )}
+                    <Button
+                      variant={isDarkMode ? 'outline-light' : 'outline-danger'}
+                      size="sm"
+                      className="d-flex align-items-center gap-1"
+                      onClick={() => handleRemoveEmployee(employee.id)}
+                    >
+                      <i className="bi bi-trash"></i>
+                      <span>Eliminar</span>
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
+      </div>
+
+      <Modal
+        show={showModal}
+        onHide={handleCloseModal}
+        centered
+        size="lg"
+        className={isDarkMode ? 'dark-mode' : ''}
+      >
+        <Modal.Header
+          closeButton
+          className={`border-bottom ${isDarkMode ? 'bg-dark text-light' : ''}`}
+        >
+          <Modal.Title>Editar Permisos de Empleado</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className={isDarkMode ? 'bg-dark text-light' : ''}>
+          {editedEmployeeData && (
+            <EmployeeDetails
+              employee={editedEmployeeData}
+              isEditing={true}
+              editedEmployeeData={editedEmployeeData}
+              onChange={handleInputChange}
+            />
           )}
-        </>
-      )}
-    </ScrollableCardList>
+        </Modal.Body>
+        <Modal.Footer
+          className={`border-top ${isDarkMode ? 'bg-dark text-light' : ''}`}
+        >
+          <Button
+            variant={isDarkMode ? 'light' : 'secondary'}
+            onClick={handleCloseModal}
+          >
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={handleSaveChanges}>
+            Guardar Cambios
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   )
 }
 
@@ -205,8 +238,8 @@ EmployeeList.propTypes = {
   user: PropTypes.object.isRequired,
   showNotification: PropTypes.func.isRequired,
   fetchCurrentEmployees: PropTypes.func.isRequired,
-  successor: PropTypes.object, // Agrega successor como prop
-  fetchSuccessor: PropTypes.func.isRequired // Agrega fetchSuccessor como prop
+  successor: PropTypes.object,
+  fetchSuccessor: PropTypes.func.isRequired
 }
 
 export default EmployeeList

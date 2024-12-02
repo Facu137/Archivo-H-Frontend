@@ -1,23 +1,25 @@
 // src/pages/GestionarEmpleados/PossibleEmployeesList/ConversionKeyManager/ConversionKeyManager.jsx
 import React, { useEffect, useState } from 'react'
+import { Form, Card, Button, InputGroup } from 'react-bootstrap'
 import { useAuth } from '../../../../context/AuthContext'
 import { useNotification } from '../../../../hooks/useNotification'
 import { useNetwork } from '../../../../context/NetworkContext'
-import ToggleSwitch from '../../../../components/ToggleSwitch/ToggleSwitch'
+import { useTheme } from '../../../../context/ThemeContext'
 import searchEmployeeImage from '../../../../assets/topaz-inaguracion-AH.avif'
 import './ConversionKeyManager.css'
 
 const ConversionKeyManager = () => {
   const { user, token } = useAuth()
+  const { isDarkMode } = useTheme()
   const [conversionKey, setConversionKey] = useState('')
   const [isSearchEnabled, setIsSearchEnabled] = useState(false)
   const [newConversionKey, setNewConversionKey] = useState('')
-  const [error, setError] = useState(null) // Estado para el mensaje de error
+  const [error, setError] = useState(null)
   const showNotification = useNotification()
   const isOnline = useNetwork()
 
   useEffect(() => {
-    let ignore = false // Para evitar actualizaciones de estado en componentes desmontados
+    let ignore = false
 
     const fetchKeyAndStatus = async () => {
       try {
@@ -41,22 +43,20 @@ const ConversionKeyManager = () => {
           )
         }
       } catch (error) {
-        // Maneja el error aquí. Puedes mostrar una notificación o establecer un estado de error.
         showNotification('Error al obtener la configuración', 'error')
-        setError(error.message) // Guardar el error en el estado
+        setError(error.message)
         console.error('Error fetching key and status:', error)
       }
     }
 
     if (user && user.rol === 'administrador' && isOnline) {
-      // Verifica si hay conexión
       fetchKeyAndStatus()
     }
 
     return () => {
-      ignore = true // Limpieza para evitar memory leaks
+      ignore = true
     }
-  }, [user, token, showNotification, isOnline]) // Añade user, token y isOnline como dependencias
+  }, [user, token, showNotification, isOnline])
 
   useEffect(() => {
     setNewConversionKey(conversionKey)
@@ -94,7 +94,6 @@ const ConversionKeyManager = () => {
     } catch (error) {
       console.error('Error al actualizar el estado de la búsqueda:', error)
       showNotification('Error al actualizar el estado de la búsqueda', 'error')
-      // Revertimos el cambio en caso de error
       setIsSearchEnabled(!newIsEnabled)
     }
   }
@@ -134,70 +133,112 @@ const ConversionKeyManager = () => {
   }
 
   if (error) {
-    return <div className="error-message">Error: {error}</div>
+    return (
+      <div className="alert alert-danger" role="alert">
+        Error: {error}
+      </div>
+    )
   }
 
   return (
-    <div className="conversion-key-manager-container">
-      <div className="card-config description-card">
-        <h3>Configurar Búsqueda de Nuevos Empleados</h3> {/* Título primero */}
-        <img
-          src={searchEmployeeImage}
-          alt="Búsqueda de Empleados"
-          className="search-image"
-        />{' '}
-        {/* Luego la imagen */}
-        <p>
-          Habilita la búsqueda de nuevos empleados para que los usuarios puedan
-          solicitar unirse al equipo.
-        </p>
-        <p>
-          Define una clave secreta que los usuarios deberán ingresar para enviar
-          su solicitud.
-        </p>
-      </div>
-      <div className="card-config settings-card">
-        <div className="search-config">
-          <h3 className="card-title">Habilitar Búsqueda</h3>
-          <div className="search-toggle">
-            {/* Toggle y span juntos */}
-            <label>
-              haz click para habilitar o deshabilitar la búsqueda de nuevos
-              empleados:
-            </label>
-            <div>
-              <ToggleSwitch
-                isOn={Boolean(isSearchEnabled)}
-                handleToggle={handleSearchEnabledChange}
-                onColor="#4BD865"
-              />
-              <span className="search-status">
-                {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="conversion-key-config">
-          <h3 className="card-title">Clave para nuevos empleados</h3>
-          <div className="conversion-key-input">
-            <label htmlFor="conversionKey">
-              Cambiar la clave para que los usuarios puedan solicitar ser nuevos
-              empleados:
-            </label>
-            <input
-              type="text"
-              id="conversionKey"
-              value={newConversionKey}
-              onChange={handleConversionKeyChange}
-              disabled={!isSearchEnabled}
-            />
-            <button
-              onClick={handleSaveConversionKey}
-              disabled={!isSearchEnabled}
+    <div className="conversion-key-manager min-vh-100 py-5">
+      <div className="container px-4">
+        <div className="row justify-content-center g-4">
+          <div className="col-12 col-lg-8">
+            <Card
+              className={`border-0 shadow mb-4 ${
+                isDarkMode ? 'bg-dark text-light' : 'bg-light'
+              }`}
             >
-              Guardar Nueva Clave {/* Nuevo texto del botón */}
-            </button>{' '}
-            {/* Botón debajo del input */}
+              <Card.Header
+                className={`border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+              >
+                <div className="text-center mb-4">
+                  <img
+                    src={searchEmployeeImage}
+                    alt="Búsqueda de Empleados"
+                    className="search-image rounded-3 mb-3"
+                    style={{ maxHeight: '200px', objectFit: 'cover' }}
+                  />
+                  <h3 className="h3 mb-2">Configurar Búsqueda de Empleados</h3>
+                  <p
+                    className={`${isDarkMode ? 'text-light-emphasis' : 'text-muted'} mb-0`}
+                  >
+                    Gestiona la búsqueda de nuevos empleados y configura la
+                    clave de acceso
+                  </p>
+                </div>
+              </Card.Header>
+              <Card.Body className="p-4">
+                <div className="mb-4">
+                  <h4 className="mb-3 h5">Estado de Búsqueda</h4>
+                  <div
+                    className={`p-4 rounded-3 ${
+                      isDarkMode
+                        ? 'bg-dark-subtle border border-secondary'
+                        : 'bg-light-subtle border'
+                    }`}
+                  >
+                    <Form.Check
+                      type="switch"
+                      id="search-enabled"
+                      label={
+                        <span
+                          className={isDarkMode ? 'text-light' : 'text-dark'}
+                        >
+                          Búsqueda de empleados{' '}
+                          <span
+                            className={`badge ${isSearchEnabled ? 'bg-success' : 'bg-secondary'}`}
+                          >
+                            {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
+                          </span>
+                        </span>
+                      }
+                      checked={isSearchEnabled}
+                      onChange={handleSearchEnabledChange}
+                      className="mb-0 form-switch-lg"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="mb-3 h5">Clave de Conversión</h4>
+                  <div
+                    className={`p-4 rounded-3 ${
+                      isDarkMode
+                        ? 'bg-dark-subtle border border-secondary'
+                        : 'bg-light-subtle border'
+                    }`}
+                  >
+                    <InputGroup className="mb-3">
+                      <Form.Control
+                        type="text"
+                        value={newConversionKey}
+                        onChange={handleConversionKeyChange}
+                        disabled={!isSearchEnabled}
+                        placeholder="Ingrese la clave de conversión"
+                        className={
+                          isDarkMode
+                            ? 'bg-dark text-light border-secondary'
+                            : ''
+                        }
+                      />
+                      <Button
+                        variant={isDarkMode ? 'light' : 'primary'}
+                        onClick={handleSaveConversionKey}
+                        disabled={!isSearchEnabled}
+                      >
+                        Guardar Cambios
+                      </Button>
+                    </InputGroup>
+                    <small className={isDarkMode ? 'text-light' : 'text-muted'}>
+                      Esta clave será requerida para que los usuarios puedan
+                      solicitar unirse como empleados.
+                    </small>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
           </div>
         </div>
       </div>
