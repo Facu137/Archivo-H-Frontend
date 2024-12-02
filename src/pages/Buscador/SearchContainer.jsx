@@ -1,10 +1,11 @@
 // src/pages/Buscador/SearchContainer.jsx
 import React, { useState } from 'react'
-import './SearchContainer.css'
 import AdvancedSearchForm from './AdvancedSearchForm'
 import SimpleSearchForm from './SimpleSearchForm'
 import ResultsContainer from './ResultsContainer'
 import PropTypes from 'prop-types'
+import { Button, ButtonGroup, Card } from 'react-bootstrap'
+import { useTheme } from '../../context/ThemeContext'
 
 const SearchContainer = ({ onSearch, onEdit, onDelete }) => {
   const [searchType, setSearchType] = useState('simple')
@@ -13,68 +14,117 @@ const SearchContainer = ({ onSearch, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
   const [currentSearchTerm, setCurrentSearchTerm] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const { isDarkMode } = useTheme()
 
-  const handleSearch = (data) => {
-    setSearchResults(data.results)
-    setTotalCount(data.totalCount)
-    setCurrentPage(data.page)
-    setVisibleResults(data.pageSize)
+  const handleSearch = async (data) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const response = data
+      setSearchResults(response.results)
+      setTotalCount(response.totalCount)
+      setCurrentPage(response.page)
+      setVisibleResults(response.pageSize)
+    } catch (err) {
+      setError(err)
+      setSearchResults([])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const handleSimpleSearch = (data) => {
+  const handleSimpleSearch = async (data) => {
     setCurrentSearchTerm(data.search)
-    handleSearch(data)
+    await handleSearch(data)
   }
 
-  const handleLoadMore = () => {
-    setCurrentPage((prevPage) => prevPage + 1)
-
-    // Realiza una nueva petición al backend con la nueva página
-    onSearch({
-      search: currentSearchTerm,
-      page: currentPage + 1,
-      pageSize: 100
-    })
+  const handleLoadMore = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const nextPage = currentPage + 1
+      setCurrentPage(nextPage)
+      const response = await onSearch({
+        search: currentSearchTerm,
+        page: nextPage,
+        pageSize: 100
+      })
+      setSearchResults([...searchResults, ...response.results])
+      setVisibleResults((prev) => prev + response.pageSize)
+    } catch (err) {
+      setError(err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div className="search-container">
-      <div className="search-type-buttons">
-        <input
-          type="radio"
-          id="simple-search"
-          name="search-type"
-          checked={searchType === 'simple'}
-          onChange={() => setSearchType('simple')}
-        />
-        <label htmlFor="simple-search">Simple</label>
-        <input
-          type="radio"
-          id="advanced-search"
-          name="search-type"
-          checked={searchType === 'advanced'}
-          onChange={() => setSearchType('advanced')}
-        />
-        <label htmlFor="advanced-search">Avanzada</label>
-      </div>
-      {searchType === 'simple' ? (
-        <SimpleSearchForm onSearch={handleSimpleSearch} />
-      ) : (
-        <AdvancedSearchForm onSearch={handleSearch} />
-      )}
+    <Card
+      className={`p-4 ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-light'}`}
+    >
+      <Card.Body>
+        <div className="mb-4">
+          <ButtonGroup className="w-100 mb-4">
+            <Button
+              variant={
+                searchType === 'simple'
+                  ? 'primary'
+                  : isDarkMode
+                    ? 'outline-light'
+                    : 'outline-primary'
+              }
+              active={searchType === 'simple'}
+              onClick={() => setSearchType('simple')}
+              className="w-50"
+            >
+              Búsqueda Simple
+            </Button>
+            <Button
+              variant={
+                searchType === 'advanced'
+                  ? 'primary'
+                  : isDarkMode
+                    ? 'outline-light'
+                    : 'outline-primary'
+              }
+              active={searchType === 'advanced'}
+              onClick={() => setSearchType('advanced')}
+              className="w-50"
+            >
+              Búsqueda Avanzada
+            </Button>
+          </ButtonGroup>
 
-      {/* Mostrar solo las tarjetas visibles */}
-      <ResultsContainer
-        results={searchResults.slice(0, visibleResults)}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
+          {searchType === 'simple' ? (
+            <SimpleSearchForm onSearch={handleSimpleSearch} />
+          ) : (
+            <AdvancedSearchForm onSearch={handleSearch} />
+          )}
+        </div>
 
-      {/* Botón "Cargar más" */}
-      {visibleResults < totalCount && (
-        <button onClick={handleLoadMore}>Cargar más</button>
-      )}
-    </div>
+        <ResultsContainer
+          results={searchResults.slice(0, visibleResults)}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          isLoading={isLoading}
+          error={error}
+        />
+
+        {!isLoading && !error && visibleResults < totalCount && (
+          <div className="text-center mt-4">
+            <Button
+              variant={isDarkMode ? 'light' : 'primary'}
+              onClick={handleLoadMore}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Cargando...' : 'Cargar más resultados'}
+            </Button>
+          </div>
+        )}
+      </Card.Body>
+    </Card>
   )
 }
 

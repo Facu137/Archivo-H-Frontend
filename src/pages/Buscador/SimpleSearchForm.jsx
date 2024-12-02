@@ -1,18 +1,25 @@
 // src/pages/Buscador/SimpleSearchForm.jsx
 import React, { useState } from 'react'
-import './SimpleSearchForm.css'
 import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
+import { Form, InputGroup, Button, Spinner } from 'react-bootstrap'
+import { FaSearch, FaTimes } from 'react-icons/fa'
+import PropTypes from 'prop-types'
+import { useTheme } from '../../context/ThemeContext'
 
 const SimpleSearchForm = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [page, setPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
   const pageSize = 100
   const { token } = useAuth()
+  const { isDarkMode } = useTheme()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!searchTerm.trim()) return
 
+    setIsLoading(true)
     const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
     try {
@@ -31,26 +38,78 @@ const SimpleSearchForm = ({ onSearch }) => {
       console.error('Error al hacer la búsqueda:', error)
       if (error.response && error.response.status === 401) {
         console.log('Token inválido')
-        // Lógica para manejar el error 401 (redirigir al login, mostrar un mensaje, etc.)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
+  const handleClear = () => {
+    setSearchTerm('')
+  }
+
   return (
-    <form id="simple-search-form" onSubmit={handleSubmit}>
-      <div className="search-bar-container">
-        <input
+    <Form onSubmit={handleSubmit} className="search-form">
+      <InputGroup size="lg" className="mb-3 shadow-sm">
+        <Form.Control
           type="text"
-          id="simple-search-input"
-          placeholder="Buscar..."
+          placeholder="Ingrese su búsqueda aquí..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label="Término de búsqueda"
+          className={`
+            ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-white'}
+            border-end-0
+            ${searchTerm ? 'pe-5' : ''}
+          `}
+          style={{
+            transition: 'all 0.3s ease',
+            fontSize: '1.1rem'
+          }}
+          disabled={isLoading}
         />
-        <span className="search-icon"></span>
-      </div>
-      <button type="submit">Buscar</button>
-    </form>
+        {searchTerm && (
+          <Button
+            variant="link"
+            onClick={handleClear}
+            className="position-absolute end-0 z-1 border-0 bg-transparent"
+            style={{ right: '70px', zIndex: 10, padding: '12px' }}
+          >
+            <FaTimes className={isDarkMode ? 'text-light' : 'text-secondary'} />
+          </Button>
+        )}
+        <Button
+          variant={isDarkMode ? 'light' : 'primary'}
+          type="submit"
+          className="d-flex align-items-center gap-2 px-4"
+          style={{ transition: 'all 0.3s ease' }}
+          disabled={!searchTerm.trim() || isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              <span>Buscando...</span>
+            </>
+          ) : (
+            <>
+              <FaSearch />
+              <span>Buscar</span>
+            </>
+          )}
+        </Button>
+      </InputGroup>
+    </Form>
   )
+}
+
+SimpleSearchForm.propTypes = {
+  onSearch: PropTypes.func.isRequired
 }
 
 export default SimpleSearchForm
