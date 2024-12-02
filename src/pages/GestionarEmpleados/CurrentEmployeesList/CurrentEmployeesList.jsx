@@ -69,40 +69,70 @@ const CurrentEmployeesList = ({
                 isDarkMode ? 'bg-dark text-light' : 'bg-white'
               }`}
             >
-              <Card.Body>
-                <Card.Title as="h4" className="mb-4">
+              <Card.Header
+                className={`border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+              >
+                <h4 className="text-center m-0 h3">
                   Gestionar Empleados Actuales
-                </Card.Title>
-                <Image
-                  src={manageEmployeesImage}
-                  alt="Gestionar Empleados"
-                  className="w-100 rounded-3 mb-4"
-                  style={{ objectFit: 'cover', height: '200px' }}
-                />
-                <Card.Text className="mb-4">
+                </h4>
+              </Card.Header>
+              <Card.Body className="p-4">
+                <div className="text-center mb-4">
+                  <Image
+                    src={manageEmployeesImage}
+                    alt="Gestionar Empleados"
+                    className="img-fluid rounded-3"
+                    style={{ maxHeight: '200px', objectFit: 'cover' }}
+                  />
+                </div>
+                <p className="lead mb-4">
                   En esta sección puedes administrar los empleados actuales del
                   sistema. Gestiona sus permisos y accesos de manera eficiente.
-                </Card.Text>
+                </p>
                 <div
-                  className={`rounded-3 p-3 ${isDarkMode ? 'bg-dark-subtle' : 'bg-light'}`}
+                  className={`rounded-3 p-4 ${isDarkMode ? 'bg-dark border border-secondary' : 'bg-white border'}`}
                 >
-                  <h5 className="h6 mb-3">Funciones Disponibles:</h5>
+                  <h5 className="h6 mb-3 fw-bold">Funciones Disponibles:</h5>
                   <ul className="list-unstyled mb-0">
-                    <li className="mb-2 d-flex align-items-center gap-2">
-                      <i className="bi bi-person-check text-success"></i>
-                      <span>Visualizar el sucesor del administrador</span>
+                    <li className="mb-3 d-flex align-items-center gap-3">
+                      <div
+                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-success bg-opacity-10' : 'bg-success bg-opacity-10'}`}
+                      >
+                        <i className="bi bi-person-check text-success"></i>
+                      </div>
+                      <span className={isDarkMode ? 'text-light' : 'text-dark'}>
+                        Visualizar el sucesor del administrador
+                      </span>
                     </li>
-                    <li className="mb-2 d-flex align-items-center gap-2">
-                      <i className="bi bi-shield-check text-primary"></i>
-                      <span>Modificar estados y permisos</span>
+                    <li className="mb-3 d-flex align-items-center gap-3">
+                      <div
+                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-primary bg-opacity-10' : 'bg-primary bg-opacity-10'}`}
+                      >
+                        <i className="bi bi-shield-check text-primary"></i>
+                      </div>
+                      <span className={isDarkMode ? 'text-light' : 'text-dark'}>
+                        Modificar estados y permisos
+                      </span>
                     </li>
-                    <li className="mb-2 d-flex align-items-center gap-2">
-                      <i className="bi bi-person-x text-danger"></i>
-                      <span>Eliminar empleados</span>
+                    <li className="mb-3 d-flex align-items-center gap-3">
+                      <div
+                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-danger bg-opacity-10' : 'bg-danger bg-opacity-10'}`}
+                      >
+                        <i className="bi bi-person-x text-danger"></i>
+                      </div>
+                      <span className={isDarkMode ? 'text-light' : 'text-dark'}>
+                        Eliminar empleados
+                      </span>
                     </li>
-                    <li className="d-flex align-items-center gap-2">
-                      <i className="bi bi-person-plus text-success"></i>
-                      <span>Establecer nuevo sucesor</span>
+                    <li className="d-flex align-items-center gap-3">
+                      <div
+                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-success bg-opacity-10' : 'bg-success bg-opacity-10'}`}
+                      >
+                        <i className="bi bi-person-plus text-success"></i>
+                      </div>
+                      <span className={isDarkMode ? 'text-light' : 'text-dark'}>
+                        Establecer nuevo sucesor
+                      </span>
                     </li>
                   </ul>
                 </div>

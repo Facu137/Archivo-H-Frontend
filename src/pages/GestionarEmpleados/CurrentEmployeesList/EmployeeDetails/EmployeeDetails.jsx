@@ -1,7 +1,7 @@
 // src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeDetails/EmployeeDetails.jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Card, Badge } from 'react-bootstrap'
+import { Form, Card } from 'react-bootstrap'
 import { useTheme } from '../../../../context/ThemeContext'
 
 const permissionsMap = [
@@ -63,12 +63,15 @@ const EmployeeDetails = ({
                   className="m-0"
                 />
               ) : (
-                <Badge
-                  bg={employee.activo ? 'success' : 'danger'}
-                  className="px-3 py-2"
+                <div
+                  className={`p-3 rounded ${isDarkMode ? 'bg-dark-subtle' : 'bg-white'} d-flex align-items-center gap-3`}
                 >
-                  {employee.activo ? 'Activo' : 'Inactivo'}
-                </Badge>
+                  <span
+                    className={`${employee.activo ? 'text-success' : 'text-danger'}`}
+                  >
+                    {employee.activo ? 'Activo' : 'Inactivo'}
+                  </span>
+                </div>
               )}
             </div>
           </div>
@@ -102,12 +105,15 @@ const EmployeeDetails = ({
                     className="m-0"
                   />
                 ) : (
-                  <Badge
-                    bg={employee[backend] ? 'success' : 'danger'}
-                    className="px-3 py-2"
+                  <div
+                    className={`p-3 rounded ${isDarkMode ? 'bg-dark-subtle' : 'bg-white'} d-flex align-items-center gap-3`}
                   >
-                    {employee[backend] ? 'Sí' : 'No'}
-                  </Badge>
+                    <span
+                      className={`${employee[backend] ? 'text-success' : 'text-danger'}`}
+                    >
+                      {employee[backend] ? 'Sí' : 'No'}
+                    </span>
+                  </div>
                 )}
               </div>
             </div>

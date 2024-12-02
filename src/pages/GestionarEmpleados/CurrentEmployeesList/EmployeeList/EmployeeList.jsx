@@ -1,4 +1,4 @@
-// src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeList.jsx
+// src/pages/GestionarEmpleados/CurrentEmployeesList/EmployeeList/EmployeeList.jsx
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Modal, Card } from 'react-bootstrap'
@@ -195,15 +195,17 @@ const EmployeeList = ({
         onHide={handleCloseModal}
         centered
         size="lg"
-        className={isDarkMode ? 'dark-mode' : ''}
+        className={isDarkMode ? 'modal-dark' : ''}
       >
         <Modal.Header
           closeButton
-          className={`border-bottom ${isDarkMode ? 'bg-dark text-light' : ''}`}
+          className={
+            isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-light'
+          }
         >
           <Modal.Title>Editar Permisos de Empleado</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={isDarkMode ? 'bg-dark text-light' : ''}>
+        <Modal.Body className={isDarkMode ? 'bg-dark text-light' : 'bg-light'}>
           {editedEmployeeData && (
             <EmployeeDetails
               employee={editedEmployeeData}
@@ -214,7 +216,9 @@ const EmployeeList = ({
           )}
         </Modal.Body>
         <Modal.Footer
-          className={`border-top ${isDarkMode ? 'bg-dark text-light' : ''}`}
+          className={
+            isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-light'
+          }
         >
           <Button
             variant={isDarkMode ? 'light' : 'secondary'}
