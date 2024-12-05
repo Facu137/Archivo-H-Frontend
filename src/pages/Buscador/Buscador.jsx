@@ -43,7 +43,7 @@ const Buscador = () => {
       className={`py-4 ${isDarkMode ? 'bg-dark text-light' : 'bg-light text-dark'}`}
     >
       <Container className={isDarkMode ? 'text-light' : 'text-dark'}>
-        <h1 className="mb-4">Búsqueda</h1>
+        <h1 className="mb-4">Búsqueda de Archivos Historicos</h1>
         <SearchContainer
           onSearch={handleSearch}
           onEdit={handleEdit}
