@@ -178,9 +178,6 @@ const AgregarArchivo = () => {
     <Container className="py-4">
       <h2 className="mb-4">Agregar Nuevo Documento</h2>
 
-      {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">{success}</Alert>}
-
       <Form onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Col md={12}>
@@ -325,6 +322,18 @@ const AgregarArchivo = () => {
                 value={formData.legajoNumero}
                 onChange={handleInputChange}
                 required
+                autoComplete="off"
+                min="1"
+                max="999999999"
+                step="1"
+                pattern="[0-9]{1,9}"
+                title="El número de legajo debe estar entre 1 y 999999999"
+                aria-describedby="legajoHelp"
+                isValid={
+                  formData.legajoNumero >= 1 &&
+                  formData.legajoNumero <= 999999999
+                }
+                isInvalid={formData.legajoNumero === '0'}
               />
             </Form.Group>
           </Col>
@@ -338,6 +347,13 @@ const AgregarArchivo = () => {
                 max="100"
                 value={formData.legajoEsBis}
                 onChange={handleInputChange}
+                autoComplete="off"
+                isInvalid={
+                  formData.legajoEsBis < 0 || formData.legajoEsBis > 100
+                }
+                isValid={
+                  formData.legajoEsBis >= 0 && formData.legajoEsBis <= 100
+                }
               />
             </Form.Group>
           </Col>
@@ -353,6 +369,18 @@ const AgregarArchivo = () => {
                 value={formData.expedienteNumero}
                 onChange={handleInputChange}
                 required
+                autoComplete="off"
+                min="1"
+                max="999999999"
+                step="1"
+                pattern="[0-9]{1,9}"
+                title="El número de expediente debe estar entre 1 y 999999999"
+                aria-describedby="expedienteHelp"
+                isValid={
+                  formData.expedienteNumero >= 1 &&
+                  formData.expedienteNumero <= 999999999
+                }
+                isInvalid={formData.expedienteNumero === '0'}
               />
             </Form.Group>
           </Col>
@@ -366,6 +394,14 @@ const AgregarArchivo = () => {
                 max="100"
                 value={formData.expedienteEsBis}
                 onChange={handleInputChange}
+                autoComplete="off"
+                isInvalid={
+                  formData.expedienteEsBis < 0 || formData.expedienteEsBis > 100
+                }
+                isValid={
+                  formData.expedienteEsBis >= 0 &&
+                  formData.expedienteEsBis <= 100
+                }
               />
             </Form.Group>
           </Col>
@@ -382,6 +418,14 @@ const AgregarArchivo = () => {
                 name="dia"
                 value={formData.dia}
                 onChange={handleInputChange}
+                autoComplete="off"
+                isInvalid={
+                  (formData.dia < 1 || formData.dia > 31) && formData.dia !== ''
+                }
+                isValid={
+                  (formData.dia >= 1 && formData.dia <= 31) ||
+                  formData.dia === ''
+                }
               />
             </Form.Group>
           </Col>
@@ -395,6 +439,14 @@ const AgregarArchivo = () => {
                 name="mes"
                 value={formData.mes}
                 onChange={handleInputChange}
+                autoComplete="off"
+                isInvalid={
+                  (formData.mes < 1 || formData.mes > 12) && formData.mes !== ''
+                }
+                isValid={
+                  (formData.mes >= 1 && formData.mes <= 12) ||
+                  formData.mes === ''
+                }
               />
             </Form.Group>
           </Col>
@@ -408,6 +460,15 @@ const AgregarArchivo = () => {
                 name="anio"
                 value={formData.anio}
                 onChange={handleInputChange}
+                autoComplete="off"
+                isInvalid={
+                  (formData.anio < 1400 || formData.anio > 2099) &&
+                  formData.anio !== ''
+                }
+                isValid={
+                  (formData.anio >= 1400 && formData.anio <= 2099) ||
+                  formData.anio === ''
+                }
               />
             </Form.Group>
           </Col>
@@ -424,6 +485,10 @@ const AgregarArchivo = () => {
                 value={formData.caratulaAsuntoExtracto}
                 onChange={handleInputChange}
                 placeholder="Ingrese la carátula, el asunto y el extracto del documento"
+                isValid={
+                  formData.caratulaAsuntoExtracto.length <= 1000 &&
+                  formData.caratulaAsuntoExtracto === ''
+                }
               />
             </Form.Group>
           </Col>
@@ -440,6 +505,15 @@ const AgregarArchivo = () => {
                 onChange={handleInputChange}
                 required
                 placeholder="Ingrese el nombre de la persona"
+                autoComplete="off"
+                isValid={
+                  formData.personaNombre.length <= 100 &&
+                  formData.personaNombre !== ''
+                }
+                isInvalid={
+                  formData.personaNombre.length > 100 &&
+                  formData.personaNombre !== ''
+                }
               />
             </Form.Group>
           </Col>
@@ -597,6 +671,18 @@ const AgregarArchivo = () => {
                     name="lugar"
                     value={formData.lugar}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el lugar de la mensura"
+                    autoComplete="off"
+                    isValid={
+                      formData.lugar.length <= 100 &&
+                      formData.lugar.length >= 3 &&
+                      formData.lugar !== ''
+                    }
+                    isInvalid={
+                      formData.lugar.length > 100 &&
+                      formData.lugar.length < 3 &&
+                      formData.lugar === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -608,6 +694,18 @@ const AgregarArchivo = () => {
                     name="propiedad"
                     value={formData.propiedad}
                     onChange={handleInputChange}
+                    placeholder="Ingrese la propiedad de la mensura"
+                    autoComplete="off"
+                    isValid={
+                      formData.propiedad.length <= 100 &&
+                      formData.propiedad.length >= 3 &&
+                      formData.propiedad !== ''
+                    }
+                    isInvalid={
+                      formData.propiedad.length > 100 &&
+                      formData.propiedad.length < 3 &&
+                      formData.propiedad === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -622,6 +720,18 @@ const AgregarArchivo = () => {
                     name="departamentoNombreActual"
                     value={formData.departamentoNombreActual}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el nombre del departamento actual de la mensura"
+                    autoComplete="off"
+                    isValid={
+                      formData.departamentoNombreActual.length <= 100 &&
+                      formData.departamentoNombreActual.length >= 3 &&
+                      formData.departamentoNombreActual !== ''
+                    }
+                    isInvalid={
+                      formData.departamentoNombreActual.length > 100 &&
+                      formData.departamentoNombreActual.length < 3 &&
+                      formData.departamentoNombreActual === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -633,6 +743,18 @@ const AgregarArchivo = () => {
                     name="departamentoNombreAntiguo"
                     value={formData.departamentoNombreAntiguo}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el nombre antiguo del departamento de la mensura"
+                    autoComplete="off"
+                    isValid={
+                      formData.departamentoNombreAntiguo.length <= 100 &&
+                      formData.departamentoNombreAntiguo.length >= 3 &&
+                      formData.departamentoNombreAntiguo !== ''
+                    }
+                    isInvalid={
+                      formData.departamentoNombreAntiguo.length > 100 &&
+                      formData.departamentoNombreAntiguo.length < 3 &&
+                      formData.departamentoNombreAntiguo === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -651,6 +773,18 @@ const AgregarArchivo = () => {
                     name="registro"
                     value={formData.registro}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el registro de la notaria"
+                    autoComplete="off"
+                    isValid={
+                      formData.registro.length <= 100 &&
+                      formData.registro.length >= 3 &&
+                      formData.registro !== ''
+                    }
+                    isInvalid={
+                      formData.registro.length > 100 &&
+                      formData.registro.length < 3 &&
+                      formData.registro === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -662,6 +796,18 @@ const AgregarArchivo = () => {
                     name="protocolo"
                     value={formData.protocolo}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el protocolo de la notaria"
+                    autoComplete="off"
+                    isValid={
+                      formData.protocolo.length <= 100 &&
+                      formData.protocolo.length >= 3 &&
+                      formData.protocolo !== ''
+                    }
+                    isInvalid={
+                      formData.protocolo.length > 100 &&
+                      formData.protocolo.length < 3 &&
+                      formData.protocolo === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -678,6 +824,16 @@ const AgregarArchivo = () => {
                     name="mesInicio"
                     value={formData.mesInicio}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el mes de inicio de la notaria"
+                    autoComplete="off"
+                    isInvalid={
+                      (formData.mes < 1 || formData.mes > 12) &&
+                      formData.mes !== ''
+                    }
+                    isValid={
+                      (formData.mes >= 1 && formData.mes <= 12) ||
+                      formData.mes === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -691,6 +847,16 @@ const AgregarArchivo = () => {
                     name="mesFin"
                     value={formData.mesFin}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el mes de fin de la notaria"
+                    autoComplete="off"
+                    isInvalid={
+                      (formData.mes < 1 || formData.mes > 12) &&
+                      formData.mes !== ''
+                    }
+                    isValid={
+                      (formData.mes >= 1 && formData.mes <= 12) ||
+                      formData.mes === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -705,6 +871,15 @@ const AgregarArchivo = () => {
                     name="escrituraNro"
                     value={formData.escrituraNro}
                     onChange={handleInputChange}
+                    min="1"
+                    max="9999999999"
+                    placeholder="Ingrese el número de escritura"
+                    autoComplete="off"
+                    isValid={
+                      formData.escrituraNro >= 1 &&
+                      formData.escrituraNro <= 9999999999
+                    }
+                    isInvalid={formData.escrituraNro === '0'}
                   />
                 </Form.Group>
               </Col>
@@ -716,6 +891,18 @@ const AgregarArchivo = () => {
                     name="negocioJuridico"
                     value={formData.negocioJuridico}
                     onChange={handleInputChange}
+                    placeholder="Ingrese el negocio jurídico"
+                    autoComplete="off"
+                    isValid={
+                      formData.negocioJuridico.length <= 100 &&
+                      formData.negocioJuridico.length >= 3 &&
+                      formData.negocioJuridico !== ''
+                    }
+                    isInvalid={
+                      formData.negocioJuridico.length > 100 &&
+                      formData.negocioJuridico.length < 3 &&
+                      formData.negocioJuridico === ''
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -733,18 +920,35 @@ const AgregarArchivo = () => {
                 value={formData.tema}
                 onChange={handleInputChange}
                 placeholder="Ingrese el tema del documento"
+                autoComplete="off"
+                isValid={
+                  formData.tema.length <= 100 &&
+                  formData.tema.length >= 3 &&
+                  formData.tema !== ''
+                }
+                isInvalid={
+                  formData.tema.length > 100 &&
+                  formData.tema.length < 3 &&
+                  formData.tema === ''
+                }
               />
             </Form.Group>
           </Col>
 
           <Col md={4}>
             <Form.Group>
-              <Form.Label>Folios</Form.Label>
+              <Form.Label>Folios/Fojas</Form.Label>
               <Form.Control
                 type="number"
                 name="folios"
                 value={formData.folios}
                 onChange={handleInputChange}
+                min="1"
+                max="9999999999"
+                placeholder="Ingrese el número de folios"
+                autoComplete="off"
+                isValid={formData.folios >= 1 && formData.folios <= 9999999999}
+                isInvalid={formData.folios === '0'}
               />
             </Form.Group>
           </Col>
@@ -766,16 +970,19 @@ const AgregarArchivo = () => {
         <Row className="mb-3">
           <Col md={12}>
             <Form.Group>
-              <Form.Label>Archivos</Form.Label>
+              <Form.Label>Imagenes</Form.Label>
               <Form.Control
                 type="file"
+                accept="image/*, application/pdf" // Aceptar solo archivos de imagen y pdf
                 multiple
                 onChange={handleFileChange}
-                required
               />
             </Form.Group>
           </Col>
         </Row>
+
+        {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">{success}</Alert>}
 
         <Button
           variant="primary"
