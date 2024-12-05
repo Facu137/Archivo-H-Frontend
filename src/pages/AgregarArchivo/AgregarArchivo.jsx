@@ -10,6 +10,7 @@ import {
 } from 'react-bootstrap'
 import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
+import { useTheme } from '../../context/ThemeContext'
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000',
@@ -29,13 +30,15 @@ instance.interceptors.request.use((config) => {
 
 const AgregarArchivo = () => {
   const { user } = useAuth()
+  const { isDarkMode } = useTheme()
   const [showModal, setShowModal] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   const [formData, setFormData] = useState({
     legajoNumero: '',
     legajoEsBis: 0,
     expedienteNumero: '',
     expedienteEsBis: 0,
-    tipoDocumento: '',
+    tipoDocumento: 'Correspondencia',
     anio: '',
     mes: '',
     dia: '',
@@ -46,7 +49,7 @@ const AgregarArchivo = () => {
     creadorId: user?.id || '',
     personaNombre: '',
     personaTipo: 'Persona Física',
-    personaRol: '',
+    personaRol: 'Titular',
     lugar: '',
     propiedad: '',
     departamentoNombreActual: '',
@@ -67,6 +70,15 @@ const AgregarArchivo = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const handleInputChange = (e) => {
@@ -128,7 +140,7 @@ const AgregarArchivo = () => {
           legajoEsBis: 0,
           expedienteNumero: '',
           expedienteEsBis: 0,
-          tipoDocumento: '',
+          tipoDocumento: 'Correspondencia',
           anio: '',
           mes: '',
           dia: '',
@@ -139,7 +151,7 @@ const AgregarArchivo = () => {
           creadorId: user?.id || '',
           personaNombre: '',
           personaTipo: 'Persona Física',
-          personaRol: '',
+          personaRol: 'Titular',
           lugar: '',
           propiedad: '',
           departamentoNombreActual: '',
@@ -174,22 +186,131 @@ const AgregarArchivo = () => {
           <Col md={12}>
             <Form.Group>
               <Form.Label>Tipo de Documento</Form.Label>
-              <Form.Control
-                as="select"
-                name="tipoDocumento"
-                value={formData.tipoDocumento}
-                onChange={handleInputChange}
-                required
+              <div
+                className={`btn-group w-100 ${isMobile ? 'btn-group-vertical' : ''}`}
+                role="group"
+                aria-label="Tipo de documento toggle button group"
               >
-                <option value="">Seleccione un tipo...</option>
-                <option value="Gobierno">Gobierno</option>
-                <option value="Mensura">Mensura</option>
-                <option value="Notarial">Notarial</option>
-                <option value="Correspondencia">Correspondencia</option>
-                <option value="Tierras_Fiscales">Tierras Fiscales</option>
-                <option value="Tribunales">Tribunales</option>
-                <option value="Leyes_Decretos">Leyes y Decretos</option>
-              </Form.Control>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-correspondencia"
+                  value="Correspondencia"
+                  checked={formData.tipoDocumento === 'Correspondencia'}
+                  onChange={handleInputChange}
+                  required
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-correspondencia"
+                >
+                  Correspondencia
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-gobierno"
+                  value="Gobierno"
+                  checked={formData.tipoDocumento === 'Gobierno'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-gobierno"
+                >
+                  Gobierno
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-leyes"
+                  value="Leyes_Decretos"
+                  checked={formData.tipoDocumento === 'Leyes_Decretos'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-leyes"
+                >
+                  Leyes y Decretos
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-mensura"
+                  value="Mensura"
+                  checked={formData.tipoDocumento === 'Mensura'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-mensura"
+                >
+                  Mensura
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-notarial"
+                  value="Notarial"
+                  checked={formData.tipoDocumento === 'Notarial'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-notarial"
+                >
+                  Notarial
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-tierras"
+                  value="Tierras_Fiscales"
+                  checked={formData.tipoDocumento === 'Tierras_Fiscales'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-tierras"
+                >
+                  Tierras Fiscales
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="tipoDocumento"
+                  id="tipo-tribunales"
+                  value="Tribunales"
+                  checked={formData.tipoDocumento === 'Tribunales'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-tribunales"
+                >
+                  Tribunales
+                </label>
+              </div>
             </Form.Group>
           </Col>
         </Row>
@@ -302,7 +423,7 @@ const AgregarArchivo = () => {
                 name="caratulaAsuntoExtracto"
                 value={formData.caratulaAsuntoExtracto}
                 onChange={handleInputChange}
-                required
+                placeholder="Ingrese la carátula, el asunto y el extracto del documento"
               />
             </Form.Group>
           </Col>
@@ -317,39 +438,150 @@ const AgregarArchivo = () => {
                 name="personaNombre"
                 value={formData.personaNombre}
                 onChange={handleInputChange}
+                required
+                placeholder="Ingrese el nombre de la persona"
               />
             </Form.Group>
           </Col>
           <Col md={4}>
             <Form.Group>
               <Form.Label>Tipo de Persona</Form.Label>
-              <Form.Control
-                as="select"
-                name="personaTipo"
-                value={formData.personaTipo}
-                onChange={handleInputChange}
+              <div
+                className={`btn-group w-100 ${isMobile ? 'btn-group-vertical' : ''}`}
+                role="group"
+                aria-label="Tipo de persona toggle button group"
               >
-                <option value="Persona Física">Persona Física</option>
-                <option value="Persona Jurídica">Persona Jurídica</option>
-              </Form.Control>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaTipo"
+                  id="tipo-fisica"
+                  value="Persona Física"
+                  checked={formData.personaTipo === 'Persona Física'}
+                  onChange={handleInputChange}
+                  required
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-fisica"
+                >
+                  Persona Física
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaTipo"
+                  id="tipo-juridica"
+                  value="Persona Jurídica"
+                  checked={formData.personaTipo === 'Persona Jurídica'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="tipo-juridica"
+                >
+                  Persona Jurídica
+                </label>
+              </div>
             </Form.Group>
           </Col>
           <Col md={4}>
             <Form.Group>
               <Form.Label>Rol de Persona</Form.Label>
-              <Form.Select
-                name="personaRol"
-                value={formData.personaRol}
-                onChange={handleInputChange}
-                required
+              <div
+                className={`btn-group w-100 ${isMobile ? 'btn-group-vertical' : ''}`}
+                role="group"
+                aria-label="Rol de persona toggle button group"
               >
-                <option value="">Seleccione un rol</option>
-                <option value="Iniciador">Iniciador</option>
-                <option value="Titular">Titular</option>
-                <option value="Escribano">Escribano</option>
-                <option value="Emisor">Emisor</option>
-                <option value="Destinatario">Destinatario</option>
-              </Form.Select>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaRol"
+                  id="rol-iniciador"
+                  value="Iniciador"
+                  checked={formData.personaRol === 'Iniciador'}
+                  onChange={handleInputChange}
+                  required
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="rol-iniciador"
+                >
+                  Iniciador
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaRol"
+                  id="rol-titular"
+                  value="Titular"
+                  checked={formData.personaRol === 'Titular'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="rol-titular"
+                >
+                  Titular
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaRol"
+                  id="rol-escribano"
+                  value="Escribano"
+                  checked={formData.personaRol === 'Escribano'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="rol-escribano"
+                >
+                  Escribano
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaRol"
+                  id="rol-emisor"
+                  value="Emisor"
+                  checked={formData.personaRol === 'Emisor'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="rol-emisor"
+                >
+                  Emisor
+                </label>
+
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="personaRol"
+                  id="rol-destinatario"
+                  value="Destinatario"
+                  checked={formData.personaRol === 'Destinatario'}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                />
+                <label
+                  className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
+                  htmlFor="rol-destinatario"
+                >
+                  Destinatario
+                </label>
+              </div>
             </Form.Group>
           </Col>
         </Row>
@@ -500,6 +732,7 @@ const AgregarArchivo = () => {
                 name="tema"
                 value={formData.tema}
                 onChange={handleInputChange}
+                placeholder="Ingrese el tema del documento"
               />
             </Form.Group>
           </Col>

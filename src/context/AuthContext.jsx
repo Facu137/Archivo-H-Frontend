@@ -151,12 +151,18 @@ export const AuthProvider = ({ children }) => {
   // Inicialización
   useEffect(() => {
     const initializeAuth = async () => {
-      const storedToken = localStorage.getItem('accessToken')
-      if (storedToken) {
-        setToken(storedToken)
-        window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${storedToken}`
-        await fetchUser()
-      } else {
+      try {
+        // Recuperar el token almacenado
+        const storedToken = localStorage.getItem('accessToken')
+        if (storedToken) {
+          setToken(storedToken)
+          window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${storedToken}`
+          await fetchUser()
+        } else {
+          setIsLoading(false)
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error)
         setIsLoading(false)
       }
     }
