@@ -485,6 +485,7 @@ const AgregarArchivo = () => {
                 value={formData.caratulaAsuntoExtracto}
                 onChange={handleInputChange}
                 placeholder="Ingrese la carátula, el asunto y el extracto del documento"
+                autoComplete="off"
                 isValid={
                   formData.caratulaAsuntoExtracto.length <= 1000 &&
                   formData.caratulaAsuntoExtracto === ''
@@ -995,12 +996,22 @@ const AgregarArchivo = () => {
       </Form>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
+        <Modal.Header
+          closeButton
+          className={isDarkMode ? 'bg-dark text-light border-secondary' : ''}
+        >
           <Modal.Title>¡Éxito!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{success}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => setShowModal(false)}>
+        <Modal.Body className={isDarkMode ? 'bg-dark text-light' : ''}>
+          {success}
+        </Modal.Body>
+        <Modal.Footer
+          className={isDarkMode ? 'bg-dark text-light border-secondary' : ''}
+        >
+          <Button
+            variant={isDarkMode ? 'outline-light' : 'primary'}
+            onClick={() => setShowModal(false)}
+          >
             Cerrar
           </Button>
         </Modal.Footer>
