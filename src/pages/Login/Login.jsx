@@ -9,7 +9,7 @@ import topazImage from '../../assets/topaz-zamora_museo.avif'
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { login, logout } = useAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const showNotification = useNotification()
@@ -48,21 +48,40 @@ export const Login = () => {
     } else if (searchParams.get('accountDeleted') === 'true') {
       showNotification('Tu cuenta ha sido eliminada con éxito.', 'success')
       if (searchParams.get('logout') === 'true') {
-        logout()
+        // Removed logout() call
         navigate('/', { replace: true })
       }
     }
-  }, [location, showNotification, logout, navigate])
+  }, [location, showNotification, navigate])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
+    // Validate email and password
+    if (!email || !password) {
+      showNotification(
+        'Por favor, ingrese su correo electrónico y contraseña.',
+        'error'
+      )
+      return
+    }
+
     try {
+      console.log('Login form data:', { email, password })
       await login({ email, password })
       navigate(location.state?.from || '/', { replace: true })
     } catch (error) {
+      console.error('Login error details:', {
+        data: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers,
+        requestData: { email, password }
+      })
       if (error.response && error.response.data) {
-        showNotification(error.response.data.message, 'error')
+        showNotification(
+          error.response.data.message || error.response.data.errors?.[0],
+          'error'
+        )
       } else {
         showNotification(
           'Hubo un error al iniciar sesión, inténtelo de nuevo más tarde.',
@@ -83,7 +102,9 @@ export const Login = () => {
               }`}
             >
               <div
-                className={`card-header border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+                className={`card-header border-bottom py-3 ${
+                  isDarkMode ? 'bg-dark' : 'bg-light'
+                }`}
               >
                 <h2 className="text-center m-0 h3">Iniciar Sesión</h2>
               </div>
@@ -148,7 +169,9 @@ export const Login = () => {
               }`}
             >
               <div
-                className={`card-header border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+                className={`card-header border-bottom py-3 ${
+                  isDarkMode ? 'bg-dark' : 'bg-light'
+                }`}
               >
                 <h3 className="text-center m-0 h3">
                   ¡Únete a nuestra comunidad!

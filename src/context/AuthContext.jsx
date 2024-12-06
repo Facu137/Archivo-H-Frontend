@@ -9,6 +9,7 @@ import {
 import PropTypes from 'prop-types'
 import localforage from 'localforage'
 import { useNetwork } from './NetworkContext'
+import { authService } from '../services/auth.service'
 
 const AuthContext = createContext()
 export const useAuth = () => useContext(AuthContext)
@@ -41,14 +42,12 @@ export const AuthProvider = ({ children }) => {
       if (isOnline) {
         const currentToken = localStorage.getItem('accessToken')
         if (currentToken) {
-          window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${currentToken}`
-          await window.axiosInstance.post('/auth/logout')
+          await authService.logout()
         }
       }
 
       // Limpiar todos los datos almacenados
       localStorage.removeItem('accessToken')
-      delete window.axiosInstance.defaults.headers.common.Authorization
       await Promise.all([
         localforage.removeItem('user'),
         localforage.removeItem('lastActivity')
@@ -74,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await window.axiosInstance.get('/auth/me')
+      const response = await authService.me()
       const userData = response.data
 
       // Solo actualizar si los datos del usuario han cambiado
@@ -95,22 +94,20 @@ export const AuthProvider = ({ children }) => {
   }, [isOnline, logout, updateLastActivity, user])
 
   const login = useCallback(
-    async (userData) => {
+    async (credentials) => {
       if (!isOnline) {
         throw new Error('No hay conexión a internet')
       }
 
       setIsLoading(true)
       try {
-        const response = await window.axiosInstance.post(
-          '/auth/login',
-          userData
-        )
-        const { accessToken } = response.data
+        console.log('Attempting login with credentials:', credentials)
+        const response = await authService.login(credentials)
+        console.log('Login response:', response)
 
+        const { accessToken } = response.data
         localStorage.setItem('accessToken', accessToken)
         setToken(accessToken)
-        window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
         updateLastActivity()
         await fetchUser()
 
@@ -129,14 +126,13 @@ export const AuthProvider = ({ children }) => {
     if (!isOnline || !token) return
 
     try {
-      const response = await window.axiosInstance.post('/auth/refresh-token')
+      const response = await authService.refreshToken()
       const { accessToken } = response.data
 
       // Solo actualizar si el token es diferente
       if (accessToken !== token) {
         localStorage.setItem('accessToken', accessToken)
         setToken(accessToken)
-        window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
       }
 
       updateLastActivity()
@@ -156,7 +152,6 @@ export const AuthProvider = ({ children }) => {
         const storedToken = localStorage.getItem('accessToken')
         if (storedToken) {
           setToken(storedToken)
-          window.axiosInstance.defaults.headers.common.Authorization = `Bearer ${storedToken}`
           await fetchUser()
         } else {
           setIsLoading(false)

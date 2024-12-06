@@ -5,6 +5,7 @@ import { useNotification } from '../../../hooks/useNotification'
 import { useAuth } from '../../../context/AuthContext'
 import { useTheme } from '../../../context/ThemeContext'
 import { Card, Form, Button, Container } from 'react-bootstrap'
+import { authService } from '../../../services/auth.service'
 
 const RequestEmployeeCard = () => {
   const [claveConversion, setClaveConversion] = useState('')
@@ -19,17 +20,10 @@ const RequestEmployeeCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await window.axiosInstance.post(
-        '/auth/request-emp-role',
-        {
-          userId: user.id,
-          claveConversion
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+      const response = await authService.requestEmployeeRole(
+        user.id,
+        claveConversion,
+        token
       )
       showNotification(response.data.message, 'success')
     } catch (error) {

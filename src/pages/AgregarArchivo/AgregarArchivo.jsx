@@ -8,25 +8,9 @@ import {
   Alert,
   Modal
 } from 'react-bootstrap'
-import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-
-const instance = axios.create({
-  baseURL: 'http://localhost:3000',
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'multipart/form-data' // Importante para subida de archivos
-  }
-})
-
-instance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
+import { archivoService } from '../../services/archivo.service'
 
 const AgregarArchivo = () => {
   const { user } = useAuth()
@@ -120,15 +104,7 @@ const AgregarArchivo = () => {
     })
 
     try {
-      let endpoint = '/api/documents/upload/general'
-
-      if (formData.tipoDocumento === 'Mensura') {
-        endpoint = '/api/documents/upload/mensura'
-      } else if (formData.tipoDocumento === 'Notarial') {
-        endpoint = '/api/documents/upload/notarial'
-      }
-
-      const response = await instance.post(endpoint, formDataToSend)
+      const response = await archivoService.agregarArchivo(formDataToSend)
 
       if (response.data.success || response.data.message) {
         setSuccess(response.data.message || 'Documento subido exitosamente')
@@ -166,9 +142,9 @@ const AgregarArchivo = () => {
         })
         setArchivos([])
       }
-    } catch (err) {
-      console.error('Error details:', err.response?.data || err.message)
-      setError(err.response?.data?.message || 'Error al subir el documento')
+    } catch (error) {
+      console.error('Error details:', error.response?.data || error.message)
+      setError(error.response?.data?.message || 'Error al subir el documento')
     } finally {
       setLoading(false)
     }

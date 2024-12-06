@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import UserCard from '../UserCard/UserCard'
 import { Offcanvas, Button, ListGroup, Badge, Card } from 'react-bootstrap'
 import localforage from 'localforage'
+import { useNotification } from '../../hooks/useNotification'
 
 const permissionNames = {
   crear: 'Crear Archivos',
@@ -21,6 +22,7 @@ const RightSidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate()
   const [localUser, setLocalUser] = useState(null)
   const isDarkMode = document.body.className.includes('bg-dark')
+  const { showNotification } = useNotification()
 
   useEffect(() => {
     const getLocalUser = async () => {
@@ -37,10 +39,8 @@ const RightSidebar = ({ isOpen, onClose }) => {
       onClose()
       navigate('/', { replace: true })
     } catch (error) {
+      showNotification('Error al cerrar sesión. Inténtalo de nuevo.', 'error')
       console.error('Error during logout:', error)
-      // Si falla el logout, intentamos limpiar el estado local de todos modos
-      onClose()
-      navigate('/', { replace: true })
     }
   }
 

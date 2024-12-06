@@ -1,6 +1,7 @@
 // src/pages/ForgotPassword/ForgotPassword.jsx
 import React, { useState } from 'react'
 import { useTheme } from '../../context/ThemeContext'
+import { authService } from '../../services/auth.service'
 import damagedFiles from '../../assets/img48.avif'
 
 export const ForgotPassword = () => {
@@ -13,12 +14,8 @@ export const ForgotPassword = () => {
     e.preventDefault()
 
     try {
-      const response = await window.axiosInstance.post(
-        '/auth/forgot-password',
-        {
-          email
-        }
-      )
+      const response = await authService.forgotPassword(email)
+
       if (response.status === 200) {
         setSuccess(
           'Correo de recuperación de contraseña enviado con éxito. Por favor, verifica tu correo electrónico.'
@@ -26,9 +23,13 @@ export const ForgotPassword = () => {
         setError('')
       }
     } catch (error) {
-      setError(
-        'Hubo un error al enviar el correo de recuperación de contraseña. Por favor, inténtalo de nuevo.'
-      )
+      if (error.response?.data?.message) {
+        setError(error.response.data.message)
+      } else {
+        setError(
+          'Hubo un error al enviar el correo de recuperación de contraseña. Por favor, inténtalo de nuevo.'
+        )
+      }
       setSuccess('')
     }
   }

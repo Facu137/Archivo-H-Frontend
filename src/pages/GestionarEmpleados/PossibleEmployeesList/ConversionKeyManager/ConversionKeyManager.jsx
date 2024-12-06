@@ -6,6 +6,7 @@ import { useNotification } from '../../../../hooks/useNotification'
 import { useNetwork } from '../../../../context/NetworkContext'
 import { useTheme } from '../../../../context/ThemeContext'
 import searchEmployeeImage from '../../../../assets/topaz-inaguracion-AH.avif'
+import { empleadosService } from '../../../../services/empleados.service'
 import './ConversionKeyManager.css'
 
 const ConversionKeyManager = () => {
@@ -24,16 +25,8 @@ const ConversionKeyManager = () => {
     const fetchKeyAndStatus = async () => {
       try {
         const [keyResponse, statusResponse] = await Promise.all([
-          window.axiosInstance.get(`/admin/get-conversion-key/${user.id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }),
-          window.axiosInstance.get(`/admin/get-search-status/${user.id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
+          empleadosService.obtenerClaveConversion(user.id),
+          empleadosService.obtenerEstadoBusqueda(user.id)
         ])
 
         if (!ignore) {
@@ -75,18 +68,7 @@ const ConversionKeyManager = () => {
     setIsSearchEnabled(newIsEnabled)
 
     try {
-      await window.axiosInstance.put(
-        '/admin/update-search-new-employees',
-        {
-          personaId: user.id,
-          habilitarBusquedaEmpleados: newIsEnabled
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await empleadosService.actualizarEstadoBusqueda(user.id, newIsEnabled)
       showNotification(
         `Búsqueda de nuevos empleados ${newIsEnabled ? 'activada' : 'desactivada'}`,
         'success'
@@ -112,17 +94,9 @@ const ConversionKeyManager = () => {
     }
 
     try {
-      await window.axiosInstance.put(
-        '/admin/update-conversion-key',
-        {
-          personaId: user.id,
-          claveConversion: newConversionKey
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+      await empleadosService.actualizarClaveConversion(
+        user.id,
+        newConversionKey
       )
       setConversionKey(newConversionKey)
       showNotification('Clave de conversión actualizada con éxito', 'success')
@@ -151,7 +125,9 @@ const ConversionKeyManager = () => {
               }`}
             >
               <Card.Header
-                className={`border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+                className={`border-bottom py-3 ${
+                  isDarkMode ? 'bg-dark' : 'bg-light'
+                }`}
               >
                 <div className="text-center mb-4">
                   <img
@@ -162,7 +138,9 @@ const ConversionKeyManager = () => {
                   />
                   <h3 className="h3 mb-2">Configurar Búsqueda de Empleados</h3>
                   <p
-                    className={`${isDarkMode ? 'text-light-emphasis' : 'text-muted'} mb-0`}
+                    className={`${
+                      isDarkMode ? 'text-light-emphasis' : 'text-muted'
+                    } mb-0`}
                   >
                     Gestiona la búsqueda de nuevos empleados y configura la
                     clave de acceso
@@ -188,7 +166,9 @@ const ConversionKeyManager = () => {
                         >
                           Búsqueda de empleados{' '}
                           <span
-                            className={`badge ${isSearchEnabled ? 'bg-success' : 'bg-secondary'}`}
+                            className={`badge ${
+                              isSearchEnabled ? 'bg-success' : 'bg-secondary'
+                            }`}
                           >
                             {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
                           </span>

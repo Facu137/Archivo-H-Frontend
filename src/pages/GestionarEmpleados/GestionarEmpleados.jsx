@@ -3,18 +3,19 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { Container, Row, Col, Spinner, Alert, Card } from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
+import { empleadosService } from '../../services/empleados.service'
 import PossibleEmployeesList from './PossibleEmployeesList/PossibleEmployeesList'
 import CurrentEmployeesList from './CurrentEmployeesList/CurrentEmployeesList'
 import { useNetwork } from '../../context/NetworkContext'
 import { useNotification } from '../../hooks/useNotification'
 import topazImage from '../../assets/topaz-museo_historico_4.avif'
 
-export const GestionarEmpleados = () => {
+const GestionarEmpleados = () => {
   const { user, isLoading: authLoading } = useAuth()
   const { isDarkMode } = useTheme()
-  const [isLoading, setIsLoading] = useState(true)
   const [possibleEmployees, setPossibleEmployees] = useState([])
   const [currentEmployees, setCurrentEmployees] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const showNotification = useNotification()
   const isOnline = useNetwork()
@@ -57,8 +58,8 @@ export const GestionarEmpleados = () => {
     setIsLoading(true)
     try {
       const [possibleEmpResponse, currentEmpResponse] = await Promise.all([
-        window.axiosInstance.get('/admin/list-possible-employees'),
-        window.axiosInstance.get('/admin/list-employees')
+        empleadosService.listarPosiblesEmpleados(),
+        empleadosService.listarEmpleados()
       ])
       setPossibleEmployees(possibleEmpResponse.data)
       setCurrentEmployees(currentEmpResponse.data)
@@ -72,7 +73,7 @@ export const GestionarEmpleados = () => {
 
   const fetchCurrentEmployees = useCallback(async () => {
     try {
-      const response = await window.axiosInstance.get('/admin/list-employees')
+      const response = await empleadosService.listarEmpleados()
       setCurrentEmployees(response.data)
       setError(null)
     } catch (error) {
@@ -116,9 +117,7 @@ export const GestionarEmpleados = () => {
 
   const handleAcceptConversion = async (employeeId) => {
     try {
-      await window.axiosInstance.post('/admin/convert-to-employee', {
-        userId: employeeId
-      })
+      await empleadosService.convertirAEmpleado(employeeId)
       showNotification('Empleado aceptado con éxito', 'success')
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
@@ -131,9 +130,7 @@ export const GestionarEmpleados = () => {
 
   const handleRejectConversion = async (employeeId) => {
     try {
-      await window.axiosInstance.put('/admin/cancel-employee-conversion', {
-        userId: employeeId
-      })
+      await empleadosService.cancelarConversionEmpleado(employeeId)
       showNotification('Conversión rechazada con éxito', 'success')
       setPossibleEmployees(
         possibleEmployees.filter((employee) => employee.id !== employeeId)
@@ -200,3 +197,5 @@ export const GestionarEmpleados = () => {
     </div>
   )
 }
+
+export default GestionarEmpleados

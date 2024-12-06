@@ -1,18 +1,17 @@
 // src/pages/Buscador/SimpleSearchForm.jsx
 import React, { useState } from 'react'
-import axios from 'axios'
 import { useAuth } from '../../context/AuthContext'
 import { Form, InputGroup, Button, Spinner } from 'react-bootstrap'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import { useTheme } from '../../context/ThemeContext'
+import { archivoService } from '../../services/archivo.service'
 
 const SimpleSearchForm = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const pageSize = 100
-  const { token } = useAuth()
   const { isDarkMode } = useTheme()
 
   const handleSubmit = async (e) => {
@@ -20,25 +19,17 @@ const SimpleSearchForm = ({ onSearch }) => {
     if (!searchTerm.trim()) return
 
     setIsLoading(true)
-    const headers = token ? { Authorization: `Bearer ${token}` } : {}
-
     try {
-      const response = await axios.get('http://localhost:3000/api/general', {
-        params: {
-          search: searchTerm,
-          page,
-          pageSize
-        },
-        headers
+      const response = await archivoService.busquedaGeneral({
+        search: searchTerm,
+        page,
+        pageSize
       })
 
       onSearch(response.data)
-      setPage(1)
+      setPage(page + 1)
     } catch (error) {
-      console.error('Error al hacer la búsqueda:', error)
-      if (error.response && error.response.status === 401) {
-        console.log('Token inválido')
-      }
+      console.error('Error en la búsqueda:', error)
     } finally {
       setIsLoading(false)
     }
@@ -46,61 +37,42 @@ const SimpleSearchForm = ({ onSearch }) => {
 
   const handleClear = () => {
     setSearchTerm('')
+    setPage(1)
   }
 
   return (
-    <Form onSubmit={handleSubmit} className="search-form">
-      <InputGroup size="lg" className="mb-3 shadow-sm">
+    <Form onSubmit={handleSubmit} className="mb-4">
+      <InputGroup>
         <Form.Control
           type="text"
-          placeholder="Ingrese su búsqueda aquí..."
+          placeholder="Buscar en el archivo histórico..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label="Término de búsqueda"
-          className={`
-            ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-white'}
-            border-end-0
-            ${searchTerm ? 'pe-5' : ''}
-          `}
-          style={{
-            transition: 'all 0.3s ease',
-            fontSize: '1.1rem'
-          }}
-          disabled={isLoading}
+          className={isDarkMode ? 'bg-dark text-light' : ''}
         />
         {searchTerm && (
           <Button
-            variant="link"
+            variant={isDarkMode ? 'outline-light' : 'outline-secondary'}
             onClick={handleClear}
-            className="position-absolute end-0 z-1 border-0 bg-transparent"
-            style={{ right: '70px', zIndex: 10, padding: '12px' }}
           >
-            <FaTimes className={isDarkMode ? 'text-light' : 'text-secondary'} />
+            <FaTimes />
           </Button>
         )}
         <Button
-          variant={isDarkMode ? 'light' : 'primary'}
           type="submit"
-          className="d-flex align-items-center gap-2 px-4"
-          style={{ transition: 'all 0.3s ease' }}
-          disabled={!searchTerm.trim() || isLoading}
+          variant={isDarkMode ? 'outline-light' : 'primary'}
+          disabled={isLoading || !searchTerm.trim()}
         >
           {isLoading ? (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-              <span>Buscando...</span>
-            </>
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
           ) : (
-            <>
-              <FaSearch />
-              <span>Buscar</span>
-            </>
+            <FaSearch />
           )}
         </Button>
       </InputGroup>

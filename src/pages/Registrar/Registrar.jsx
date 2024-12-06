@@ -1,10 +1,10 @@
 // src/pages/Registrar/Registrar.jsx
 import React, { useState } from 'react'
-import axios from 'axios'
 import { useNotification } from '../../hooks/useNotification'
 import { updateUserSchema } from '../../schemas/authSchema'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../../context/ThemeContext'
+import { authService } from '../../services/auth.service'
 import topazImage from '../../assets/topaz-museo_historico_4.avif'
 
 export const Registrar = () => {
@@ -39,7 +39,7 @@ export const Registrar = () => {
     try {
       updateUserSchema.parse(formData)
 
-      const response = await axios.post('http://localhost:3000/auth/register', {
+      const response = await authService.register({
         ...formData,
         rol: 'usuario'
       })
@@ -52,22 +52,20 @@ export const Registrar = () => {
         navigate('/login')
       }
     } catch (error) {
-      if (error.errors) {
+      if (error.name === 'ZodError') {
         const newErrors = {}
         error.errors.forEach((err) => {
           newErrors[err.path[0]] = err.message
         })
         setErrors(newErrors)
-      } else if (error.response && error.response.status === 400) {
+      } else if (error.response?.data?.message) {
+        showNotification(error.response.data.message, 'error')
+      } else {
         showNotification(
-          error.response.data.message ||
-            'Hubo un error al registrar el usuario',
+          'Error al registrar usuario. Por favor, inténtalo de nuevo.',
           'error'
         )
-      } else {
-        showNotification('Hubo un error al registrar el usuario', 'error')
       }
-      console.error('Error al registrar el usuario', error)
     }
   }
 
@@ -82,7 +80,9 @@ export const Registrar = () => {
               }`}
             >
               <div
-                className={`card-header border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+                className={`card-header border-bottom py-3 ${
+                  isDarkMode ? 'bg-dark' : 'bg-light'
+                }`}
               >
                 <h2 className="text-center m-0 h3">Registrar Usuario</h2>
               </div>
@@ -215,7 +215,9 @@ export const Registrar = () => {
               }`}
             >
               <div
-                className={`card-header border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+                className={`card-header border-bottom py-3 ${
+                  isDarkMode ? 'bg-dark' : 'bg-light'
+                }`}
               >
                 <h3 className="text-center m-0 h3">
                   ¡Únete a nuestra comunidad!

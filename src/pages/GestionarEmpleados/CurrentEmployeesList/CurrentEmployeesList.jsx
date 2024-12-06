@@ -8,6 +8,7 @@ import { useAuth } from '../../../context/AuthContext'
 import EmployeeList from './EmployeeList/EmployeeList'
 import SuccessorSection from './SuccessorSection/SuccessorSection'
 import manageEmployeesImage from '../../../assets/topaz-museo_historico_4.avif'
+import { empleadosService } from '../../../services/empleados.service'
 
 const CurrentEmployeesList = ({
   employees,
@@ -22,20 +23,13 @@ const CurrentEmployeesList = ({
 
   const fetchSuccessor = useCallback(async () => {
     try {
-      const response = await window.axiosInstance.get(
-        `/admin/get-successor/${user.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      const response = await empleadosService.getSuccessor(user.id)
       setSuccessor(response.data.sucesor)
     } catch (error) {
       console.error('Error al obtener el sucesor:', error)
       throw error
     }
-  }, [token, user])
+  }, [user])
 
   useEffect(() => {
     if (user && user.rol === 'administrador') {

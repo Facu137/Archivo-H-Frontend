@@ -1,10 +1,10 @@
 // src/pages/Buscador/Buscador.jsx
 import React from 'react'
-import axios from 'axios'
 import SearchContainer from './SearchContainer'
 import { useAuth } from '../../context/AuthContext'
 import { Container } from 'react-bootstrap'
 import { useTheme } from '../../context/ThemeContext'
+import { archivoService } from '../../services/archivo.service'
 
 const Buscador = () => {
   const { token } = useAuth()
@@ -24,14 +24,8 @@ const Buscador = () => {
 
   const handleDelete = async (documentoId) => {
     try {
-      await axios.delete(
-        `http://localhost:3000/api/deleted/documents/${documentoId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await archivoService.eliminarArchivo(documentoId)
+      console.log('Documento eliminado con éxito')
     } catch (error) {
       console.error('Error al eliminar el documento:', error)
     }
@@ -40,7 +34,7 @@ const Buscador = () => {
   return (
     <Container
       fluid
-      className={`py-4 ${isDarkMode ? 'bg-dark text-light' : 'bg-light text-dark'}`}
+      className={`min-vh-100 py-4 ${isDarkMode ? 'bg-dark text-light' : ''}`}
     >
       <Container className={isDarkMode ? 'text-light' : 'text-dark'}>
         <h1 className="mb-4">Búsqueda de Archivos Historicos</h1>

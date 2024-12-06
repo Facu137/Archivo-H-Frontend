@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Card, Button, Alert } from 'react-bootstrap'
 import { useTheme } from '../../../../context/ThemeContext'
 import UserCard from '../../../../components/UserCard/UserCard'
+import { empleadosService } from '../../../../services/empleados.service'
 
 const SuccessorSection = ({
   successor,
@@ -16,12 +17,8 @@ const SuccessorSection = ({
 
   const handleRemoveSuccessor = async () => {
     try {
-      await window.axiosInstance.delete(`/admin/remove-successor/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      showNotification('Sucesor eliminado correctamente', 'success')
+      await empleadosService.eliminarSucesor(user.id)
+      showNotification('Sucesor eliminado con éxito', 'success')
       setSuccessor(null)
     } catch (error) {
       console.error('Error al eliminar sucesor:', error)
@@ -32,44 +29,33 @@ const SuccessorSection = ({
   return (
     <Card
       className={`border-0 shadow-sm ${
-        isDarkMode ? 'bg-dark text-light' : 'bg-light'
+        isDarkMode ? 'bg-dark text-light' : 'bg-white'
       }`}
     >
       <Card.Header
         className={`border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
       >
-        <h4 className="h5 mb-0">Sucesor del Administrador</h4>
+        <h4 className="text-center m-0 h3">Sucesor Actual</h4>
       </Card.Header>
       <Card.Body className="p-4">
         {successor ? (
-          <div className="d-flex flex-column gap-3">
-            <div className="position-relative rounded-3 overflow-hidden">
-              <UserCard
-                user={successor}
-                darkMode={isDarkMode}
-                className="mb-0 border-0 shadow-sm"
-              />
-              <div className="mt-3 text-end">
-                <Button
-                  variant={isDarkMode ? 'light' : 'danger'}
-                  size="sm"
-                  className="px-3 py-2 rounded-3"
-                  onClick={handleRemoveSuccessor}
-                >
-                  Quitar Sucesor
-                </Button>
-              </div>
-            </div>
-          </div>
+          <UserCard
+            user={successor}
+            darkMode={isDarkMode}
+            className="border-0 mb-0"
+          />
         ) : (
-          <Alert
-            variant={isDarkMode ? 'dark' : 'info'}
-            className="mb-0 border-0"
-          >
-            <span className={isDarkMode ? 'text-light' : ''}>
-              No hay un sucesor asignado.
-            </span>
-          </Alert>
+          <Alert variant="warning">No hay sucesor asignado.</Alert>
+        )}
+        {successor && (
+          <div className="d-flex justify-content-end mt-3">
+            <Button
+              variant={isDarkMode ? 'outline-light' : 'outline-danger'}
+              onClick={handleRemoveSuccessor}
+            >
+              Eliminar Sucesor
+            </Button>
+          </div>
         )}
       </Card.Body>
     </Card>

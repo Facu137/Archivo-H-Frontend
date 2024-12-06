@@ -5,6 +5,7 @@ import { Button, Modal, Card } from 'react-bootstrap'
 import { useTheme } from '../../../../context/ThemeContext'
 import UserCard from '../../../../components/UserCard/UserCard'
 import EmployeeDetails from '../EmployeeDetails/EmployeeDetails'
+import { empleadosService } from '../../../../services/empleados.service'
 
 const EmployeeList = ({
   employees,
@@ -59,15 +60,7 @@ const EmployeeList = ({
         dataToUpdate[field] = editedEmployeeData[field]
       })
 
-      await window.axiosInstance.put(
-        `/admin/update-employee/${editingEmployeeId}`,
-        dataToUpdate,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await empleadosService.updateEmployee(editingEmployeeId, dataToUpdate)
 
       showNotification('Empleado actualizado con éxito', 'success')
       handleCloseModal()
@@ -80,46 +73,18 @@ const EmployeeList = ({
 
   const handleSetSuccessor = async (employeeId) => {
     try {
-      await window.axiosInstance.post(
-        '/admin/set-successor',
-        {
-          adminId: user.id,
-          employeeId
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      showNotification('Sucesor establecido correctamente', 'success')
+      await empleadosService.setSucesor(user.id, employeeId)
+      showNotification('Sucesor establecido con éxito', 'success')
       fetchSuccessor()
     } catch (error) {
       console.error('Error al establecer sucesor:', error)
-      if (
-        error.response &&
-        (error.response.status === 400 || error.response.status === 404)
-      ) {
-        showNotification(error.response.data.message, 'error')
-      } else {
-        showNotification(
-          'Error al establecer el sucesor. Por favor, inténtalo de nuevo.',
-          'error'
-        )
-      }
+      showNotification('Error al establecer sucesor', 'error')
     }
   }
 
   const handleRemoveEmployee = async (employeeId) => {
     try {
-      await window.axiosInstance.delete(
-        `/admin/remove-employee/${employeeId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      await empleadosService.removeEmployee(employeeId)
       showNotification('Empleado eliminado con éxito', 'success')
       setCurrentEmployees((prevEmployees) =>
         prevEmployees.filter((emp) => emp.id !== employeeId)
