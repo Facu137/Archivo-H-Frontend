@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTheme } from '../../context/ThemeContext'
+import { authService } from '../../services/auth.service'
 import { z } from 'zod'
 import archivoFire from '../../assets/1728590524186.avif'
 
@@ -41,20 +42,25 @@ export const ResetPassword = () => {
     try {
       resetPasswordSchema.parse({ token, password, confirmPassword })
 
-      const response = await window.axiosInstance.post('/auth/reset-password', {
+      const response = await authService.resetPassword({
         token,
         password
       })
+
       if (response.status === 200) {
         setSuccess(
           'Contraseña restablecida con éxito. Ahora puedes iniciar sesión.'
         )
         setError('')
-        setTimeout(() => navigate('/login'), 3000)
+        setTimeout(() => {
+          navigate('/login')
+        }, 3000)
       }
     } catch (error) {
-      if (error.issues) {
-        setError(error.issues.map((issue) => issue.message).join(', '))
+      if (error.name === 'ZodError') {
+        setError(error.errors[0].message)
+      } else if (error.response?.data?.message) {
+        setError(error.response.data.message)
       } else {
         setError(
           'Hubo un error al restablecer la contraseña. Por favor, inténtalo de nuevo.'

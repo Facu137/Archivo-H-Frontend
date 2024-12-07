@@ -5,9 +5,10 @@ import { updateUserSchema } from '../../../schemas/authSchema'
 import { useNotification } from '../../../hooks/useNotification'
 import { useTheme } from '../../../context/ThemeContext'
 import { Form, Button, Card, Alert, Container, Row, Col } from 'react-bootstrap'
+import { authService } from '../../../services/auth.service'
 
 const ProfileForm = () => {
-  const { user, logout } = useAuth()
+  const { user, logout, token } = useAuth()
   const navigate = useNavigate()
   const showNotification = useNotification()
   const { isDarkMode } = useTheme()
@@ -53,7 +54,7 @@ const ProfileForm = () => {
         confirmPassword: formData.confirmPassword || undefined
       })
 
-      await window.axiosInstance.put('/auth/edit-user', validatedData)
+      await authService.editUser(validatedData, token)
 
       showNotification(
         'Cambios guardados correctamente. Por favor, vuelva a iniciar sesión para ver los cambios.',
@@ -105,14 +106,26 @@ const ProfileForm = () => {
         <Card.Header
           className={`${isDarkMode ? 'bg-dark' : 'bg-light'} border-bottom`}
         >
-          <h2 className="mb-0">Editar Usuario</h2>
+          <h2 className="mb-0">Editar Perfil</h2>
         </Card.Header>
         <Card.Body>
-          {(error || serverError) && (
-            <Alert variant="danger">{error || serverError}</Alert>
-          )}
-
+          {serverError && <Alert variant="danger">{serverError}</Alert>}
           <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={12}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
@@ -122,6 +135,7 @@ const ProfileForm = () => {
                     name="nombre"
                     value={formData.nombre}
                     onChange={handleChange}
+                    required
                     className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
                   />
                 </Form.Group>
@@ -134,61 +148,55 @@ const ProfileForm = () => {
                     name="apellido"
                     value={formData.apellido}
                     onChange={handleChange}
+                    required
                     className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
                   />
                 </Form.Group>
               </Col>
             </Row>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Nueva Contraseña (opcional)</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Confirmar Nueva Contraseña</Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
-              />
-            </Form.Group>
-
-            <Row className="mt-4">
-              <Col xs={12} className="d-grid gap-3">
-                <Button variant="primary" type="submit" className={`py-2`}>
-                  Guardar Cambios
-                </Button>
-                <Button
-                  variant="danger"
-                  type="button"
-                  onClick={handleDeleteAccount}
-                  className={`py-2`}
-                >
-                  Eliminar Cuenta
-                </Button>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Contraseña</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Confirmar Contraseña</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={isDarkMode ? 'bg-dark text-white' : 'bg-light'}
+                  />
+                </Form.Group>
               </Col>
             </Row>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <div className="d-grid">
+              <Button variant="primary" type="submit" className="py-2">
+                Guardar Cambios
+              </Button>
+            </div>
           </Form>
+          <hr />
+          <div className="d-grid">
+            <Button
+              variant="danger"
+              onClick={handleDeleteAccount}
+              className="py-2"
+            >
+              Eliminar Cuenta
+            </Button>
+          </div>
         </Card.Body>
       </Card>
     </Container>

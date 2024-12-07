@@ -1,6 +1,6 @@
 // src/App.jsx
 import { Route, Routes, Navigate } from 'react-router-dom'
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext' // Agregado
 // components
@@ -21,16 +21,11 @@ import { EditUser } from './pages/EditUser/EditUser'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword/ResetPassword'
 import Buscador from './pages/Buscador/Buscador'
-import { GestionarEmpleados } from './pages/GestionarEmpleados/GestionarEmpleados'
+import GestionarEmpleados from './pages/GestionarEmpleados/GestionarEmpleados'
 import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados'
 import NotFound from './pages/NotFound/NotFound' // Import NotFound page
 // hooks
-import {
-  NotificationProvider,
-  NotificationContext
-} from './hooks/useNotification'
-// api
-import AxiosConfig from './api/AxiosConfig' // Asegúrate de importar el componente
+import { NotificationProvider } from './hooks/useNotification'
 import './index.css'
 
 export const App = () => {
@@ -77,14 +72,10 @@ export const App = () => {
     setNotification(null)
   }, [])
 
-  const showNotificationFromContext =
-    useContext(NotificationContext) || (() => {}) // RENOMBRADA
-
   return (
     <NotificationProvider showNotification={showNotification}>
       <ThemeProvider isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}>
         <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-          <AxiosConfig notificationHandler={showNotificationFromContext} />
           <NavBar
             toggleSidebar={toggleSidebar}
             toggleDarkMode={toggleDarkMode}

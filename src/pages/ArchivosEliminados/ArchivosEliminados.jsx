@@ -1,59 +1,66 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import ResultsContainerEliminados from './ResultsContainerEliminados' // Importa el nuevo componente
+import React, { useState, useEffect, useCallback } from 'react'
+import ResultsContainerEliminados from './ResultsContainerEliminados'
 import { useAuth } from '../../context/AuthContext'
+import { archivoService } from '../../services/archivo.service'
+import { Alert } from 'react-bootstrap'
 
 const ArchivosEliminados = () => {
   const [deletedFiles, setDeletedFiles] = useState([])
   const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const pageSize = 50
   const [totalCount, setTotalCount] = useState(0)
-  const { token } = useAuth()
+  useAuth()
+
+  const fetchDeletedFiles = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await archivoService.obtenerArchivosEliminados({
+        page,
+        pageSize
+      })
+      setDeletedFiles(response.data.results)
+      setTotalCount(response.data.totalCount)
+    } catch (error) {
+      console.error('Error al obtener archivos eliminados:', error)
+      setError(
+        error.response?.data?.message ||
+          'Error al obtener los archivos eliminados'
+      )
+    } finally {
+      setLoading(false)
+    }
+  }, [page, pageSize])
 
   useEffect(() => {
-    const fetchDeletedFiles = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:3000/api/deleted/deleted',
-          {
-            params: {
-              page,
-              pageSize
-            },
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        setDeletedFiles(response.data.results)
-        setTotalCount(response.data.totalCount)
-      } catch (error) {
-        console.error('Error al obtener archivos eliminados:', error)
-        if (error.response && error.response.status === 401) {
-          console.log('Token inválido')
-          // Redirige al login o muestra un mensaje de error
-          // Por ejemplo:
-          //  Swal.fire({
-          //   title: 'Error',
-          //   text: 'Token inválido. Por favor, inicie sesión nuevamente.',
-          //   icon: 'error'
-          // }).then(() => {
-          //   // Redireccionar al login
-          //   window.location.href = '/login'; // O usa un router como react-router-dom
-          // });
-        }
-      }
-    }
-
     fetchDeletedFiles()
-  }, [page, token])
+  }, [fetchDeletedFiles])
 
   const handleDeletePermanently = async (documentoId) => {
-    // ... (Código existente sin cambios)
+    try {
+      await archivoService.eliminarPermanentemente(documentoId)
+      // Actualizar la lista después de eliminar
+      fetchDeletedFiles()
+    } catch (error) {
+      console.error('Error al eliminar permanentemente:', error)
+      setError(
+        error.response?.data?.message ||
+          'Error al eliminar permanentemente el archivo'
+      )
+    }
   }
 
   const handleRestoreFile = async (documentoId) => {
-    // ... (Código existente sin cambios)
+    try {
+      await archivoService.restaurarArchivo(documentoId)
+      // Actualizar la lista después de restaurar
+      fetchDeletedFiles()
+    } catch (error) {
+      console.error('Error al restaurar archivo:', error)
+      setError(error.response?.data?.message || 'Error al restaurar el archivo')
+    }
   }
 
   const handleNextPage = () => setPage(page + 1)
@@ -62,29 +69,50 @@ const ArchivosEliminados = () => {
   const totalPages = Math.ceil(totalCount / pageSize)
 
   return (
-    <div>
-      <h1>Archivos Eliminados</h1>
+    <div className="container py-4">
+      <h1 className="mb-4">Archivos Eliminados</h1>
 
-      {/* Usa ResultsContainerEliminados */}
-      <ResultsContainerEliminados
-        results={deletedFiles}
-        onDeletePermanently={handleDeletePermanently}
-        onRestore={handleRestoreFile}
-      />
+      {error && (
+        <Alert variant="danger" onClose={() => setError(null)} dismissible>
+          {error}
+        </Alert>
+      )}
 
-      <div className="pagination">
-        {' '}
-        {/* Agrega una clase para estilizar la paginación */}
-        <button onClick={handlePreviousPage} disabled={page === 1}>
-          Anterior
-        </button>
-        <span>
-          Página {page} de {totalPages}
-        </span>
-        <button onClick={handleNextPage} disabled={page === totalPages}>
-          Siguiente
-        </button>
-      </div>
+      {loading ? (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      ) : (
+        <>
+          <ResultsContainerEliminados
+            results={deletedFiles}
+            onDeletePermanently={handleDeletePermanently}
+            onRestore={handleRestoreFile}
+          />
+
+          <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+            <button
+              className="btn btn-outline-primary"
+              onClick={handlePreviousPage}
+              disabled={page === 1}
+            >
+              Anterior
+            </button>
+            <span>
+              Página {page} de {totalPages}
+            </span>
+            <button
+              className="btn btn-outline-primary"
+              onClick={handleNextPage}
+              disabled={page === totalPages}
+            >
+              Siguiente
+            </button>
+          </div>
+        </>
+      )}
     </div>
   )
 }

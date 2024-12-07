@@ -1,13 +1,14 @@
 // src/pages/Buscador/AdvancedSearchForm.jsx
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, Card } from 'react-bootstrap'
+import { Form, Row, Col, Button, Card, Spinner } from 'react-bootstrap'
 import { useTheme } from '../../context/ThemeContext'
+import { archivoService } from '../../services/archivo.service'
 
 const AdvancedSearchForm = ({ onSearch }) => {
   const [categoria, setCategoria] = useState('mensura')
   const [camposBusqueda, setCamposBusqueda] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
   const { isDarkMode } = useTheme()
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const AdvancedSearchForm = ({ onSearch }) => {
         ]
         break
       case 'correspondencia':
-      case 'leyesdecretos': // Mismos campos para correspondencia y leyesdecretos
+      case 'leyesdecretos':
         campos = [
           { label: 'Legajo', id: 'Legajo' },
           { label: 'Legajo bis', id: 'Legajo bis' },
@@ -69,8 +70,8 @@ const AdvancedSearchForm = ({ onSearch }) => {
         ]
         break
       case 'gobierno':
-      case 'tierrasfiscales': // Mismos campos para gobierno y tierrasfiscales
-      case 'tribunales': // Mismos campos para tribunales
+      case 'tierrasfiscales':
+      case 'tribunales':
         campos = [
           { label: 'Legajo', id: 'Legajo' },
           { label: 'Legajo bis', id: 'Legajo bis' },
@@ -85,6 +86,8 @@ const AdvancedSearchForm = ({ onSearch }) => {
           { label: 'Folios', id: 'Folios' }
         ]
         break
+      default:
+        campos = []
     }
 
     const nuevosCampos = {}
@@ -103,82 +106,35 @@ const AdvancedSearchForm = ({ onSearch }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
 
     try {
       // Construir los parámetros de la consulta
       const params = { tipo_documento: categoria }
 
       // Agregar los campos de búsqueda específicos de la categoría
-      switch (categoria) {
-        case 'mensura':
-          params.legajo = camposBusqueda.Legajo
-          params.legajoBis = camposBusqueda['Legajo bis']
-          params.expediente = camposBusqueda.Expediente
-          params.expedienteBis = camposBusqueda['Expediente bis']
-          params.departamento = camposBusqueda['Dpto. Antiguo'] // O 'Dpto. Actual' según corresponda
-          params.lugar = camposBusqueda.Lugar
-          params.dia = camposBusqueda.Dia
-          params.mes = camposBusqueda.Mes
-          params.anio = camposBusqueda.Año
-          params.titular = camposBusqueda.Titular
-          params.caratula = camposBusqueda.Caratula
-          params.propiedad = camposBusqueda.Propiedad
-          params.folios = camposBusqueda.Fojas
-          break
-        case 'notarial':
-          params.escribano = camposBusqueda.Escribano
-          params.registro = camposBusqueda.Registro
-          params.protocolo = camposBusqueda.Protocolo
-          params.mes_inicio = camposBusqueda['Mes inicio']
-          params.mes_fin = camposBusqueda['Mes fin']
-          params.dia = camposBusqueda.Dia
-          params.mes = camposBusqueda.Mes
-          params.anio = camposBusqueda.Año
-          params.escritura_nro = camposBusqueda['Escritura N°']
-          params.iniciador = camposBusqueda.Iniciador
-          params.extracto = camposBusqueda.Extracto // Ajusta el nombre del campo si es necesario
-          params.negocio_juridico = camposBusqueda['Negocio juridico']
-          params.folio = camposBusqueda.Folio
-          break
-        case 'correspondencia':
-        case 'leyesdecretos':
-          params.legajo = camposBusqueda.Legajo
-          params.legajoBis = camposBusqueda['Legajo bis']
-          params.expediente = camposBusqueda.Expediente
-          params.expedienteBis = camposBusqueda['Expediente bis']
-          params.dia = camposBusqueda.Dia
-          params.mes = camposBusqueda.Mes
-          params.anio = camposBusqueda.Año
-          params.emisor = camposBusqueda.Emisor
-          params.destinatario = camposBusqueda.Destinatario
-          params.asunto = camposBusqueda.Asunto // Ajusta el nombre del campo si es necesario
-          params.folios = camposBusqueda.Fojas
-          break
-        case 'gobierno':
-        case 'tierrasfiscales':
-        case 'tribunales':
-          params.legajo = camposBusqueda.Legajo
-          params.legajoBis = camposBusqueda['Legajo bis']
-          params.expediente = camposBusqueda.Expediente
-          params.expedienteBis = camposBusqueda['Expediente bis']
-          params.dia = camposBusqueda.Dia
-          params.mes = camposBusqueda.Mes
-          params.anio = camposBusqueda.Año
-          params.iniciador = camposBusqueda.Iniciador
-          params.caratula = camposBusqueda.Caratula
-          params.tema = camposBusqueda.Tema
-          params.folios = camposBusqueda.Folios
-          break
-      }
+      Object.entries(camposBusqueda).forEach(([key, value]) => {
+        if (value) {
+          // Convertir las claves al formato esperado por el backend
+          const apiKey = key
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/[.°]/g, '')
+          params[apiKey] = value
+        }
+      })
 
-      const response = await axios.get(
-        'http://localhost:3000/api/documents/advanced-search',
-        { params }
-      )
+      const response = await archivoService.busquedaAvanzada(params)
       onSearch(response.data)
     } catch (error) {
-      console.error('Error al hacer la búsqueda:', error)
+      console.error('Error en la búsqueda avanzada:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  const handleReset = () => {
+    mostrarCamposBusqueda(categoria)
   }
 
   return (
@@ -223,12 +179,30 @@ const AdvancedSearchForm = ({ onSearch }) => {
             ))}
           </Row>
 
-          <div className="d-flex justify-content-end mt-4">
+          <div className="d-flex justify-content-end gap-2 mt-4">
+            <Button
+              type="button"
+              variant={isDarkMode ? 'outline-light' : 'outline-secondary'}
+              onClick={handleReset}
+            >
+              Limpiar
+            </Button>
             <Button
               type="submit"
               variant={isDarkMode ? 'outline-light' : 'primary'}
+              disabled={isLoading}
             >
-              Buscar
+              {isLoading ? (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              ) : (
+                'Buscar'
+              )}
             </Button>
           </div>
         </Form>
