@@ -15,21 +15,12 @@ export const NetworkProvider = ({ children }) => {
   const [lastOnlineTime, setLastOnlineTime] = useState(Date.now())
   const [reconnectionAttempts, setReconnectionAttempts] = useState(0)
 
-  const checkConnectivity = useCallback(async () => {
-    try {
-      const response = await fetch('/api/health-check', {
-        method: 'HEAD',
-        cache: 'no-store'
-      })
-      return response.ok
-    } catch (error) {
-      return false
-    }
+  const checkConnectivity = useCallback(() => {
+    return navigator.onLine
   }, [])
 
-  const handleOnline = useCallback(async () => {
-    const isReallyOnline = await checkConnectivity()
-    if (isReallyOnline) {
+  const handleOnline = useCallback(() => {
+    if (checkConnectivity()) {
       setIsOnline(true)
       setLastOnlineTime(Date.now())
       setReconnectionAttempts(0)
@@ -43,17 +34,22 @@ export const NetworkProvider = ({ children }) => {
 
   // Verificar conectividad periódicamente
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!isOnline) {
-        const isConnected = await checkConnectivity()
-        if (isConnected) {
-          handleOnline()
-        }
+    const checkStatus = () => {
+      const online = checkConnectivity()
+      if (online) {
+        handleOnline()
+      } else {
+        handleOffline()
       }
-    }, 30000) // Verificar cada 30 segundos cuando está offline
+    }
+
+    // Verificar estado inicial
+    checkStatus()
+
+    const interval = setInterval(checkStatus, 5000) // Verificar cada 5 segundos
 
     return () => clearInterval(interval)
-  }, [isOnline, checkConnectivity, handleOnline])
+  }, [checkConnectivity, handleOnline])
 
   // Listeners de eventos online/offline
   useEffect(() => {

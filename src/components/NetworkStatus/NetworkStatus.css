@@ -14,8 +14,6 @@
   transition: opacity 0.3s ease-in-out; /* Transición suave para la opacidad */
 }
 
-
-
 .dark-mode .network-status-bar {
   background-color: #DC3545; /* Rojo oscuro */
   color: #fff; /* Texto blanco */
@@ -26,13 +24,45 @@
   color: #fff; /* Texto blanco */
 }
 
-
 .network-status-bar.hidden {
   opacity: 0; /* Ocultar con opacidad 0 */
 }
 
 .no-connection{
     font-weight: bolder;
+}
+
+.network-status-container {
+  pointer-events: none;
+}
+
+.network-status-container .alert {
+  transition: all 0.3s ease;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para modo oscuro */
+.network-status-container .alert.bg-dark {
+  background-color: rgba(33, 37, 41, 0.95) !important;
+  border-color: rgba(255, 192, 203, 0.5) !important;
+}
+
+.text-pink {
+  color: #ff69b4 !important; /* Hot Pink */
+}
+
+/* Animación de entrada */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.network-status-container .alert {
+  animation: slideUp 0.3s ease-out;
 }
 
 /* Responsividad */
