@@ -5,6 +5,7 @@ import { Card, Row, Col, Image, Alert, Container } from 'react-bootstrap'
 import { useTheme } from '../../../context/ThemeContext'
 import { useNotification } from '../../../hooks/useNotification'
 import { useAuth } from '../../../context/AuthContext'
+import { useNetwork } from '../../../context/NetworkContext'
 import EmployeeList from './EmployeeList/EmployeeList'
 import SuccessorSection from './SuccessorSection/SuccessorSection'
 import manageEmployeesImage from '../../../assets/topaz-museo_historico_4.avif'
@@ -17,11 +18,16 @@ const CurrentEmployeesList = ({
 }) => {
   const { token, user } = useAuth()
   const { isDarkMode } = useTheme()
+  const { isOnline } = useNetwork()
   const showNotification = useNotification()
   const [successor, setSuccessor] = useState(null)
   const [successorError, setSuccessorError] = useState(null)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   const fetchSuccessor = useCallback(async () => {
+    if (!isOnline) {
+      return
+    }
     try {
       const response = await empleadosService.getSuccessor(user.id)
       setSuccessor(response.data.sucesor)
@@ -29,20 +35,26 @@ const CurrentEmployeesList = ({
       console.error('Error al obtener el sucesor:', error)
       throw error
     }
-  }, [user])
+  }, [user, isOnline])
 
   useEffect(() => {
-    if (user && user.rol === 'administrador') {
-      fetchCurrentEmployees()
-      fetchSuccessor().catch((error) => {
-        setSuccessorError(error)
-        showNotification(
-          'Hubo un error al obtener el sucesor del administrador.',
-          'error'
-        )
-      })
+    if (user?.rol === 'administrador' && isOnline && isInitialLoad) {
+      setIsInitialLoad(false)
+      Promise.all([fetchCurrentEmployees(), fetchSuccessor()]).catch(
+        (error) => {
+          setSuccessorError(error)
+          showNotification('Hubo un error al obtener los datos.', 'error')
+        }
+      )
     }
-  }, [fetchSuccessor, fetchCurrentEmployees, user, showNotification])
+  }, [
+    user,
+    isOnline,
+    isInitialLoad,
+    fetchSuccessor,
+    fetchCurrentEmployees,
+    showNotification
+  ])
 
   if (successorError) {
     return (
@@ -64,7 +76,9 @@ const CurrentEmployeesList = ({
               }`}
             >
               <Card.Header
-                className={`border-bottom py-3 ${isDarkMode ? 'bg-dark' : 'bg-light'}`}
+                className={`border-bottom py-3 ${
+                  isDarkMode ? 'bg-dark' : 'bg-light'
+                }`}
               >
                 <h4 className="text-center m-0 h3">
                   Gestionar Empleados Actuales
@@ -84,13 +98,21 @@ const CurrentEmployeesList = ({
                   sistema. Gestiona sus permisos y accesos de manera eficiente.
                 </p>
                 <div
-                  className={`rounded-3 p-4 ${isDarkMode ? 'bg-dark border border-secondary' : 'bg-white border'}`}
+                  className={`rounded-3 p-4 ${
+                    isDarkMode
+                      ? 'bg-dark border border-secondary'
+                      : 'bg-white border'
+                  }`}
                 >
                   <h5 className="h6 mb-3 fw-bold">Funciones Disponibles:</h5>
                   <ul className="list-unstyled mb-0">
                     <li className="mb-3 d-flex align-items-center gap-3">
                       <div
-                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-success bg-opacity-10' : 'bg-success bg-opacity-10'}`}
+                        className={`p-2 rounded-circle ${
+                          isDarkMode
+                            ? 'bg-success bg-opacity-10'
+                            : 'bg-success bg-opacity-10'
+                        }`}
                       >
                         <i className="bi bi-person-check text-success"></i>
                       </div>
@@ -100,7 +122,11 @@ const CurrentEmployeesList = ({
                     </li>
                     <li className="mb-3 d-flex align-items-center gap-3">
                       <div
-                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-primary bg-opacity-10' : 'bg-primary bg-opacity-10'}`}
+                        className={`p-2 rounded-circle ${
+                          isDarkMode
+                            ? 'bg-primary bg-opacity-10'
+                            : 'bg-primary bg-opacity-10'
+                        }`}
                       >
                         <i className="bi bi-shield-check text-primary"></i>
                       </div>
@@ -110,7 +136,11 @@ const CurrentEmployeesList = ({
                     </li>
                     <li className="mb-3 d-flex align-items-center gap-3">
                       <div
-                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-danger bg-opacity-10' : 'bg-danger bg-opacity-10'}`}
+                        className={`p-2 rounded-circle ${
+                          isDarkMode
+                            ? 'bg-danger bg-opacity-10'
+                            : 'bg-danger bg-opacity-10'
+                        }`}
                       >
                         <i className="bi bi-person-x text-danger"></i>
                       </div>
@@ -120,7 +150,11 @@ const CurrentEmployeesList = ({
                     </li>
                     <li className="d-flex align-items-center gap-3">
                       <div
-                        className={`p-2 rounded-circle ${isDarkMode ? 'bg-success bg-opacity-10' : 'bg-success bg-opacity-10'}`}
+                        className={`p-2 rounded-circle ${
+                          isDarkMode
+                            ? 'bg-success bg-opacity-10'
+                            : 'bg-success bg-opacity-10'
+                        }`}
                       >
                         <i className="bi bi-person-plus text-success"></i>
                       </div>

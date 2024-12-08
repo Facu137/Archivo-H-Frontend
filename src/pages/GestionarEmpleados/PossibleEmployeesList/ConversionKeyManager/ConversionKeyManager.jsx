@@ -1,5 +1,5 @@
 // src/pages/GestionarEmpleados/PossibleEmployeesList/ConversionKeyManager/ConversionKeyManager.jsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Form, Card, Button, InputGroup } from 'react-bootstrap'
 import { useAuth } from '../../../../context/AuthContext'
 import { useNotification } from '../../../../hooks/useNotification'
@@ -10,50 +10,44 @@ import { empleadosService } from '../../../../services/empleados.service'
 import './ConversionKeyManager.css'
 
 const ConversionKeyManager = () => {
-  const { user, token } = useAuth()
+  const { user } = useAuth()
   const { isDarkMode } = useTheme()
+  const { isOnline } = useNetwork()
+  const showNotification = useNotification()
   const [conversionKey, setConversionKey] = useState('')
   const [isSearchEnabled, setIsSearchEnabled] = useState(false)
   const [newConversionKey, setNewConversionKey] = useState('')
   const [error, setError] = useState(null)
-  const showNotification = useNotification()
-  const isOnline = useNetwork()
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+
+  const fetchKeyAndStatus = useCallback(async () => {
+    if (!isOnline) {
+      return
+    }
+    try {
+      const [keyResponse, statusResponse] = await Promise.all([
+        empleadosService.obtenerClaveConversion(user.id),
+        empleadosService.obtenerEstadoBusqueda(user.id)
+      ])
+      setConversionKey(keyResponse.data.claveConversion)
+      setNewConversionKey(keyResponse.data.claveConversion)
+      setIsSearchEnabled(
+        Boolean(statusResponse.data.habilitarBusquedaEmpleados)
+      )
+      setError(null)
+    } catch (error) {
+      showNotification('Error al obtener la configuración', 'error')
+      setError(error.message)
+      console.error('Error fetching key and status:', error)
+    }
+  }, [user, isOnline, showNotification])
 
   useEffect(() => {
-    let ignore = false
-
-    const fetchKeyAndStatus = async () => {
-      try {
-        const [keyResponse, statusResponse] = await Promise.all([
-          empleadosService.obtenerClaveConversion(user.id),
-          empleadosService.obtenerEstadoBusqueda(user.id)
-        ])
-
-        if (!ignore) {
-          setConversionKey(keyResponse.data.claveConversion)
-          setIsSearchEnabled(
-            Boolean(statusResponse.data.habilitarBusquedaEmpleados)
-          )
-        }
-      } catch (error) {
-        showNotification('Error al obtener la configuración', 'error')
-        setError(error.message)
-        console.error('Error fetching key and status:', error)
-      }
-    }
-
-    if (user && user.rol === 'administrador' && isOnline) {
+    if (user?.rol === 'administrador' && isOnline && isInitialLoad) {
+      setIsInitialLoad(false)
       fetchKeyAndStatus()
     }
-
-    return () => {
-      ignore = true
-    }
-  }, [user, token, showNotification, isOnline])
-
-  useEffect(() => {
-    setNewConversionKey(conversionKey)
-  }, [conversionKey])
+  }, [user, isOnline, isInitialLoad, fetchKeyAndStatus])
 
   const handleSearchEnabledChange = async () => {
     if (!isOnline) {
@@ -69,6 +63,7 @@ const ConversionKeyManager = () => {
 
     try {
       await empleadosService.actualizarEstadoBusqueda(user.id, newIsEnabled)
+      setIsSearchEnabled(newIsEnabled)
       showNotification(
         `Búsqueda de nuevos empleados ${newIsEnabled ? 'activada' : 'desactivada'}`,
         'success'
@@ -103,126 +98,92 @@ const ConversionKeyManager = () => {
     } catch (error) {
       console.error('Error al actualizar la clave de conversión:', error)
       showNotification('Error al actualizar la clave de conversión', 'error')
+      setNewConversionKey(conversionKey)
     }
   }
 
   if (error) {
     return (
-      <div className="alert alert-danger" role="alert">
-        Error: {error}
-      </div>
+      <Card
+        className={`border-0 shadow-sm ${
+          isDarkMode ? 'bg-dark text-light' : 'bg-light'
+        }`}
+      >
+        <Card.Body>
+          <div className="text-center">
+            <p className="text-danger">Error: {error}</p>
+          </div>
+        </Card.Body>
+      </Card>
     )
   }
 
   return (
-    <div className="conversion-key-manager min-vh-100 py-5">
-      <div className="container px-4">
-        <div className="row justify-content-center g-4">
-          <div className="col-12 col-lg-8">
-            <Card
-              className={`border-0 shadow mb-4 ${
-                isDarkMode ? 'bg-dark text-light' : 'bg-light'
-              }`}
-            >
-              <Card.Header
-                className={`border-bottom py-3 ${
-                  isDarkMode ? 'bg-dark' : 'bg-light'
-                }`}
-              >
-                <div className="text-center mb-4">
-                  <img
-                    src={searchEmployeeImage}
-                    alt="Búsqueda de Empleados"
-                    className="search-image rounded-3 mb-3"
-                    style={{ maxHeight: '200px', objectFit: 'cover' }}
-                  />
-                  <h3 className="h3 mb-2">Configurar Búsqueda de Empleados</h3>
-                  <p
-                    className={`${
-                      isDarkMode ? 'text-light-emphasis' : 'text-muted'
-                    } mb-0`}
-                  >
-                    Gestiona la búsqueda de nuevos empleados y configura la
-                    clave de acceso
-                  </p>
-                </div>
-              </Card.Header>
-              <Card.Body className="p-4">
-                <div className="mb-4">
-                  <h4 className="mb-3 h5">Estado de Búsqueda</h4>
-                  <div
-                    className={`p-4 rounded-3 ${
-                      isDarkMode
-                        ? 'bg-dark-subtle border border-secondary'
-                        : 'bg-light-subtle border'
-                    }`}
-                  >
-                    <Form.Check
-                      type="switch"
-                      id="search-enabled"
-                      label={
-                        <span
-                          className={isDarkMode ? 'text-light' : 'text-dark'}
-                        >
-                          Búsqueda de empleados{' '}
-                          <span
-                            className={`badge ${
-                              isSearchEnabled ? 'bg-success' : 'bg-secondary'
-                            }`}
-                          >
-                            {isSearchEnabled ? 'Habilitada' : 'Deshabilitada'}
-                          </span>
-                        </span>
-                      }
-                      checked={isSearchEnabled}
-                      onChange={handleSearchEnabledChange}
-                      className="mb-0 form-switch-lg"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="mb-3 h5">Clave de Conversión</h4>
-                  <div
-                    className={`p-4 rounded-3 ${
-                      isDarkMode
-                        ? 'bg-dark-subtle border border-secondary'
-                        : 'bg-light-subtle border'
-                    }`}
-                  >
-                    <InputGroup className="mb-3">
-                      <Form.Control
-                        type="text"
-                        value={newConversionKey}
-                        onChange={handleConversionKeyChange}
-                        disabled={!isSearchEnabled}
-                        placeholder="Ingrese la clave de conversión"
-                        className={
-                          isDarkMode
-                            ? 'bg-dark text-light border-secondary'
-                            : ''
-                        }
-                      />
-                      <Button
-                        variant={isDarkMode ? 'light' : 'primary'}
-                        onClick={handleSaveConversionKey}
-                        disabled={!isSearchEnabled}
-                      >
-                        Guardar Cambios
-                      </Button>
-                    </InputGroup>
-                    <small className={isDarkMode ? 'text-light' : 'text-muted'}>
-                      Esta clave será requerida para que los usuarios puedan
-                      solicitar unirse como empleados.
-                    </small>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
+    <Card
+      className={`border-0 shadow-sm ${
+        isDarkMode ? 'bg-dark text-light' : 'bg-light'
+      }`}
+    >
+      <Card.Body>
+        <div className="d-flex flex-column gap-4">
+          <div className="text-center">
+            <img
+              src={searchEmployeeImage}
+              alt="Buscar Empleados"
+              className="img-fluid rounded-3 mb-3"
+              style={{ objectFit: 'cover' }}
+            />
+            <h4 className={`h5 ${isDarkMode ? 'text-light' : ''}`}>
+              Configuración de Búsqueda
+            </h4>
           </div>
+
+          <Form.Group>
+            <Form.Label className={isDarkMode ? 'text-light' : ''}>
+              Habilitar búsqueda de nuevos empleados
+            </Form.Label>
+            <Form.Check
+              type="switch"
+              id="search-enabled-switch"
+              checked={isSearchEnabled}
+              onChange={handleSearchEnabledChange}
+              label={isSearchEnabled ? 'Activado' : 'Desactivado'}
+              className={isDarkMode ? 'text-light' : ''}
+            />
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label className={isDarkMode ? 'text-light' : ''}>
+              Clave de conversión
+            </Form.Label>
+            <InputGroup>
+              <Form.Control
+                type="text"
+                value={newConversionKey}
+                onChange={handleConversionKeyChange}
+                disabled={!isSearchEnabled}
+                placeholder="Ingrese la clave de conversión"
+                className={
+                  isDarkMode ? 'bg-dark text-light border-secondary' : ''
+                }
+              />
+              <Button
+                variant={isDarkMode ? 'outline-light' : 'primary'}
+                onClick={handleSaveConversionKey}
+                disabled={!isSearchEnabled}
+                className="save-button"
+              >
+                Guardar
+              </Button>
+            </InputGroup>
+            <Form.Text className={isDarkMode ? 'text-light' : 'text-muted'}>
+              Esta clave será utilizada por los usuarios para convertirse en
+              empleados.
+            </Form.Text>
+          </Form.Group>
         </div>
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   )
 }
 
