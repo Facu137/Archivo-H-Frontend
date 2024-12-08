@@ -146,7 +146,9 @@ const FormularioGeneral = ({
             </div>
           </Form.Group>
         </Col>
+      </Row>
 
+      <Row>
         <Col md={6}>
           <Form.Group className="mb-3">
             <Form.Label>Número de Legajo</Form.Label>
@@ -195,12 +197,16 @@ const FormularioGeneral = ({
             />
           </Form.Group>
         </Col>
+      </Row>
 
+      <Row>
         <FormularioFecha
           formData={formData}
           handleInputChange={handleInputChange}
         />
+      </Row>
 
+      <Row>
         <Col md={12}>
           <Form.Group className="mb-3">
             <Form.Label>Carátula/Asunto/Extracto</Form.Label>
@@ -213,87 +219,89 @@ const FormularioGeneral = ({
             />
           </Form.Group>
         </Col>
+      </Row>
 
+      <Row>
         <FormularioPersona
           formData={formData}
           handleInputChange={handleInputChange}
           isMobile={isMobile}
           isDarkMode={isDarkMode}
         />
+      </Row>
 
-        {formData.tipoDocumento === 'Mensura' && (
-          <FormularioMensura
-            formData={formData}
-            handleInputChange={handleInputChange}
-            show={true}
-          />
-        )}
+      {formData.tipoDocumento === 'Mensura' && (
+        <FormularioMensura
+          formData={formData}
+          handleInputChange={handleInputChange}
+          show={true}
+        />
+      )}
 
-        {formData.tipoDocumento === 'Notarial' && (
-          <FormularioNotarial
-            formData={formData}
-            handleInputChange={handleInputChange}
-            show={true}
-          />
-        )}
+      {formData.tipoDocumento === 'Notarial' && (
+        <FormularioNotarial
+          formData={formData}
+          handleInputChange={handleInputChange}
+          show={true}
+        />
+      )}
 
-        <Row className="mb-3">
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Tema</Form.Label>
-              <Form.Control
-                type="text"
-                name="tema"
-                value={formData.tema}
-                onChange={handleInputChange}
-                placeholder="Ingrese el tema del documento"
-                autoComplete="off"
-                isValid={
-                  formData.tema.length <= 100 &&
-                  formData.tema.length >= 3 &&
-                  formData.tema !== ''
-                }
-                isInvalid={
-                  formData.tema.length > 100 &&
-                  formData.tema.length < 3 &&
-                  formData.tema === ''
-                }
-              />
-            </Form.Group>
-          </Col>
+      <Row className="mb-3">
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label>Tema</Form.Label>
+            <Form.Control
+              type="text"
+              name="tema"
+              value={formData.tema}
+              onChange={handleInputChange}
+              placeholder="Ingrese el tema del documento"
+              autoComplete="off"
+              isValid={
+                formData.tema.length <= 100 &&
+                formData.tema.length >= 3 &&
+                formData.tema !== ''
+              }
+              isInvalid={
+                formData.tema.length > 100 &&
+                formData.tema.length < 3 &&
+                formData.tema === ''
+              }
+            />
+          </Form.Group>
+        </Col>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Folios/Fojas</Form.Label>
-              <Form.Control
-                type="number"
-                name="folios"
-                value={formData.folios}
-                onChange={handleInputChange}
-                min="1"
-                max="9999999999"
-                placeholder="Ingrese el número de folios"
-                autoComplete="off"
-                isValid={formData.folios >= 1 && formData.folios <= 9999999999}
-                isInvalid={formData.folios === '0'}
-              />
-            </Form.Group>
-          </Col>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label>Folios/Fojas</Form.Label>
+            <Form.Control
+              type="number"
+              name="folios"
+              value={formData.folios}
+              onChange={handleInputChange}
+              min="1"
+              max="9999999999"
+              placeholder="Ingrese el número de folios"
+              autoComplete="off"
+              isValid={formData.folios >= 1 && formData.folios <= 9999999999}
+              isInvalid={formData.folios === '0'}
+            />
+          </Form.Group>
+        </Col>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Visibilidad</Form.Label>
-              <Form.Check
-                type="switch"
-                id="esPublico-switch"
-                name="esPublico"
-                label="Es Público"
-                checked={formData.esPublico}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label>Visibilidad</Form.Label>
+            <Form.Check
+              type="switch"
+              id="esPublico-switch"
+              name="esPublico"
+              label="Es Público"
+              checked={formData.esPublico}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+        </Col>
       </Row>
     </div>
   )

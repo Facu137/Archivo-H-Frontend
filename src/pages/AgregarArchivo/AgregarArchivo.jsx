@@ -76,10 +76,34 @@ const AgregarArchivo = () => {
       else if (numValue > 100) finalValue = '100'
     }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : finalValue
-    }))
+    // Si se está cambiando el tipo de documento, limpiar los campos específicos
+    if (name === 'tipoDocumento') {
+      setFormData((prev) => {
+        const newFormData = {
+          ...prev,
+          [name]: finalValue,
+          // Limpiar campos de Mensura
+          lugar: '',
+          propiedad: '',
+          departamentoNombreActual: '',
+          departamentoNombreAntiguo: '',
+          departamentoEsActual: true,
+          // Limpiar campos de Notarial
+          registro: '',
+          protocolo: '',
+          mesInicio: '',
+          mesFin: '',
+          escrituraNro: '',
+          negocioJuridico: ''
+        }
+        return newFormData
+      })
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : finalValue
+      }))
+    }
   }
 
   const handleFileChange = (e) => {
