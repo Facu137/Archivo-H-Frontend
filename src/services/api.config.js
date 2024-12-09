@@ -33,6 +33,11 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
+    // Silenciar errores 401 específicamente para /auth/me
+    if (error.response?.status === 401 && originalRequest.url === '/auth/me') {
+      return Promise.resolve({ data: null })
+    }
+
     // Manejo de token expirado
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true

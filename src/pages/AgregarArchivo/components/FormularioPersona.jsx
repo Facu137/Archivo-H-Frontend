@@ -9,10 +9,10 @@ const FormularioPersona = ({
   isDarkMode
 }) => {
   return (
-    <div className={`mb-4 ${isDarkMode ? 'bg-dark text-light' : ''}`}>
+    <div className={`mb-4`}>
       <h4 className="mb-3">Información de la Persona</h4>
       <Row className="mb-3">
-        <Col md={4}>
+        <Col md={6}>
           <Form.Group>
             <Form.Label>Nombre de Persona</Form.Label>
             <Form.Control
@@ -37,7 +37,7 @@ const FormularioPersona = ({
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-        <Col md={4}>
+        <Col md={6}>
           <Form.Group>
             <Form.Label>Tipo de Persona</Form.Label>
             <div
@@ -82,7 +82,10 @@ const FormularioPersona = ({
             </div>
           </Form.Group>
         </Col>
-        <Col md={4}>
+      </Row>
+
+      <Row>
+        <Col md={12}>
           <Form.Group>
             <Form.Label>Rol de Persona</Form.Label>
             <div

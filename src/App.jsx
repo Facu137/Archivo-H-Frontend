@@ -3,6 +3,9 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext' // Agregado
+import { NotificationProvider } from './hooks/useNotification'
+import { NetworkProvider } from './context/NetworkContext'
+import NetworkStatus from './components/NetworkStatus/NetworkStatus'
 // components
 import { NavBar } from './components/NavBar/NavBar'
 import RightSidebar from './components/RightSidebar/RightSidebar'
@@ -25,7 +28,6 @@ import GestionarEmpleados from './pages/GestionarEmpleados/GestionarEmpleados'
 import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados'
 import NotFound from './pages/NotFound/NotFound' // Import NotFound page
 // hooks
-import { NotificationProvider } from './hooks/useNotification'
 import './index.css'
 
 export const App = () => {
@@ -73,76 +75,79 @@ export const App = () => {
   }, [])
 
   return (
-    <NotificationProvider showNotification={showNotification}>
-      <ThemeProvider isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}>
-        <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-          <NavBar
-            toggleSidebar={toggleSidebar}
-            toggleDarkMode={toggleDarkMode}
-            isDarkMode={isDarkMode}
-          />
-          {user && (
-            <RightSidebar
-              isOpen={isSidebarOpen.right}
-              onClose={() => toggleSidebar('right')}
+    <NetworkProvider>
+      <NotificationProvider showNotification={showNotification}>
+        <ThemeProvider isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}>
+          <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+            <NavBar
+              toggleSidebar={toggleSidebar}
+              toggleDarkMode={toggleDarkMode}
+              isDarkMode={isDarkMode}
             />
-          )}
-          {user && (
-            <LeftSidebar
-              isOpen={isSidebarOpen.left}
-              onClose={() => toggleSidebar('left')}
-            />
-          )}
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/institucional" element={<Institucional />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registrar" element={<Registrar />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/buscador" element={<Buscador />} />
-              <Route path="/visor" element={<VerArchivo />} />
-              <Route
-                path="/archivos-eliminados"
-                element={<ArchivosEliminados />}
+            {user && (
+              <RightSidebar
+                isOpen={isSidebarOpen.right}
+                onClose={() => toggleSidebar('right')}
               />
-
-              {/* Rutas protegidas */}
-              <Route element={<AuthenticatedRoute />}>
-                <Route path="/editar-perfil" element={<EditUser />} />
-                <Route path="/agregar-archivo" element={<AgregarArchivo />} />
-              </Route>
-
-              {/* Ruta protegida para administradores */}
-
-              <Route
-                element={
-                  <AuthenticatedRoute allowedRoles={['administrador']} />
-                }
-              >
+            )}
+            {user && (
+              <LeftSidebar
+                isOpen={isSidebarOpen.left}
+                onClose={() => toggleSidebar('left')}
+              />
+            )}
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/institucional" element={<Institucional />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/registrar" element={<Registrar />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/buscador" element={<Buscador />} />
+                <Route path="/visor" element={<VerArchivo />} />
                 <Route
-                  path="/gestionar-empleados"
-                  element={<GestionarEmpleados />}
+                  path="/archivos-eliminados"
+                  element={<ArchivosEliminados />}
                 />
-              </Route>
 
-              <Route path="*" element={<NotFound />} />
-              <Route path="/*" element={<Navigate to="/" />} />
-            </Routes>
-          </main>
-          <Footer isDarkMode={isDarkMode} />
-          {notification && (
-            <NotificationBar
-              message={notification.message}
-              type={notification.type}
-              duration={notification.duration}
-              onClose={closeNotification}
-            />
-          )}
-        </div>
-      </ThemeProvider>
-    </NotificationProvider>
+                {/* Rutas protegidas */}
+                <Route element={<AuthenticatedRoute />}>
+                  <Route path="/editar-perfil" element={<EditUser />} />
+                  <Route path="/agregar-archivo" element={<AgregarArchivo />} />
+                </Route>
+
+                {/* Ruta protegida para administradores */}
+
+                <Route
+                  element={
+                    <AuthenticatedRoute allowedRoles={['administrador']} />
+                  }
+                >
+                  <Route
+                    path="/gestionar-empleados"
+                    element={<GestionarEmpleados />}
+                  />
+                </Route>
+
+                <Route path="*" element={<NotFound />} />
+                <Route path="/*" element={<Navigate to="/" />} />
+              </Routes>
+            </main>
+            <Footer isDarkMode={isDarkMode} />
+            <NetworkStatus />
+            {notification && (
+              <NotificationBar
+                message={notification.message}
+                type={notification.type}
+                duration={notification.duration}
+                onClose={closeNotification}
+              />
+            )}
+          </div>
+        </ThemeProvider>
+      </NotificationProvider>
+    </NetworkProvider>
   )
 }
 

@@ -18,7 +18,8 @@ const GestionarEmpleados = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const showNotification = useNotification()
-  const isOnline = useNetwork()
+  const { isOnline } = useNetwork()
+  const [lastUpdate, setLastUpdate] = useState(null)
 
   const handleError = useCallback(
     (error) => {
@@ -47,11 +48,18 @@ const GestionarEmpleados = () => {
   )
 
   const fetchData = useCallback(async () => {
+    // No hacer fetch si no hay conexión o si ya hay datos y no ha pasado suficiente tiempo
     if (!isOnline) {
-      showNotification(
-        'No hay conexión a internet. No se pueden cargar los datos.',
-        'error'
+      setError(
+        'No hay conexión a internet. Se muestran los últimos datos disponibles.'
       )
+      setIsLoading(false)
+      return
+    }
+
+    // Evitar múltiples solicitudes en un corto período
+    const now = Date.now()
+    if (lastUpdate && now - lastUpdate < 5000) {
       return
     }
 
@@ -64,22 +72,32 @@ const GestionarEmpleados = () => {
       setPossibleEmployees(possibleEmpResponse.data)
       setCurrentEmployees(currentEmpResponse.data)
       setError(null)
+      setLastUpdate(now)
     } catch (error) {
       handleError(error)
     } finally {
       setIsLoading(false)
     }
-  }, [handleError, isOnline, showNotification])
+  }, [handleError, isOnline, lastUpdate])
 
   const fetchCurrentEmployees = useCallback(async () => {
+    if (!isOnline) {
+      showNotification(
+        'No hay conexión a internet. No se pueden actualizar los datos.',
+        'warning'
+      )
+      return
+    }
+
     try {
       const response = await empleadosService.listarEmpleados()
       setCurrentEmployees(response.data)
       setError(null)
+      setLastUpdate(Date.now())
     } catch (error) {
       handleError(error)
     }
-  }, [handleError])
+  }, [handleError, isOnline, showNotification])
 
   useEffect(() => {
     if (!authLoading && user && user.rol === 'administrador') {
@@ -89,7 +107,8 @@ const GestionarEmpleados = () => {
     }
   }, [user, authLoading, showNotification, fetchData])
 
-  if (authLoading || isLoading) {
+  // Solo mostrar el spinner en la carga inicial cuando hay conexión
+  if (authLoading || (isLoading && isOnline && !lastUpdate)) {
     return (
       <Container className="min-vh-100 d-flex align-items-center justify-content-center">
         <Spinner animation="border" variant={isDarkMode ? 'light' : 'dark'} />
@@ -97,7 +116,17 @@ const GestionarEmpleados = () => {
     )
   }
 
-  if (error) {
+  if (!isOnline && !currentEmployees.length) {
+    return (
+      <Container className="py-5">
+        <Alert variant="warning">
+          No hay conexión a internet y no hay datos disponibles para mostrar.
+        </Alert>
+      </Container>
+    )
+  }
+
+  if (error && !currentEmployees.length) {
     return (
       <Container className="py-5">
         <Alert variant="danger">{error}</Alert>
