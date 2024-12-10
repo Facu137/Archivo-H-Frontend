@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Form,
-  Button,
-  Container,
-  Row,
-  Col,
-  Alert,
-  Modal
-} from 'react-bootstrap'
+import { Form, Button, Container, Alert, Modal } from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
 import { archivoService } from '../../services/archivo.service'
 import FormularioGeneral from './components/FormularioGeneral'
+import FormularioArchivos from './components/FormularioArchivos'
 
 const AgregarArchivo = () => {
   const { user } = useAuth()
@@ -106,8 +99,8 @@ const AgregarArchivo = () => {
     }
   }
 
-  const handleFileChange = (e) => {
-    setArchivos(Array.from(e.target.files))
+  const handleFileChange = (files) => {
+    setArchivos(files)
   }
 
   const handleSubmit = async (e) => {
@@ -186,31 +179,20 @@ const AgregarArchivo = () => {
           isMobile={isMobile}
           isDarkMode={isDarkMode}
         />
-        <Row className="mb-3">
-          <Col md={12}>
-            <Form.Group>
-              <Form.Label>Imagenes</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*, application/pdf" // Aceptar solo archivos de imagen y pdf
-                multiple
-                onChange={handleFileChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+        <FormularioArchivos onFilesChange={handleFileChange} />
+        <div className="d-grid gap-2">
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
 
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
-
-        <Button
-          variant="primary"
-          type="submit"
-          disabled={loading}
-          className="w-100"
-        >
-          {loading ? 'Cargando...' : 'Guardar Documento'}
-        </Button>
+          <Button
+            variant="primary"
+            type="submit"
+            disabled={loading}
+            className="w-100"
+          >
+            {loading ? 'Cargando...' : 'Guardar Documento'}
+          </Button>
+        </div>
       </Form>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
