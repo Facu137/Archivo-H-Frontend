@@ -44,7 +44,7 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
 
   const handleEdit = (e) => {
     e.stopPropagation()
-    onEdit(documento_id)
+    navigate(`/editar-archivo/${documento_id}`)
   }
 
   const handleDelete = (e) => {
@@ -212,3 +212,4 @@ ResultCard.propTypes = {
 }
 
 export default ResultCard
+

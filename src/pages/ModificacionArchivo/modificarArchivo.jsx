@@ -1,382 +1,409 @@
 // src/pages/ModificacionArchivo/modificarArchivo.jsx
 import React, { useState, useEffect } from 'react'
-import './GestionArchivo.css'
-import * as zod from 'zod'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Alert,
+  Spinner
+} from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext'
-import { fileSchema } from '../../schemas/fileSchema'
-import { mensuraSchema } from '../../schemas/mensuraSchema'
-import { notarialSchema } from '../../schemas/notarialSchema'
+import { useTheme } from '../../context/ThemeContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-export const GestionArchivo = () => {
-  const [fileType, setFileType] = useState('Mensura')
-  const [formFields, setFormFields] = useState([])
-  const [fileUploads, setFileUploads] = useState([])
-  const [errors, setErrors] = useState({})
-  const { token } = useAuth()
-  const [documentId, setDocumentId] = useState(null)
-  const [selectedTable, setSelectedTable] = useState('documentos')
+const ModificarArchivo = () => {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const { isDarkMode } = useTheme()
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertVariant, setAlertVariant] = useState('success')
+  const [formData, setFormData] = useState({
+    legajoNumero: '',
+    legajoEsBis: 0,
+    expedienteNumero: '',
+    expedienteEsBis: 0,
+    tipoDocumento: 'Correspondencia',
+    anio: '',
+    mes: '',
+    dia: '',
+    caratulaAsuntoExtracto: '',
+    tema: '',
+    folios: '',
+    esPublico: true,
+    personaNombre: '',
+    personaTipo: 'Persona Física',
+    personaRol: 'Titular',
+    lugar: '',
+    propiedad: '',
+    departamentoNombreActual: '',
+    departamentoNombreAntiguo: '',
+    registro: '',
+    protocolo: ''
+  })
 
   useEffect(() => {
-    const createFormFields = () => {
-      const fields = {
-        Mensura: [
-          'numeroLegajo',
-          'legajoBis',
-          'numeroExpediente',
-          'expedienteBis',
-          'DepartamentoAntiguo',
-          'DepartamentoActual',
-          'Lugar',
-          'dia',
-          'mes',
-          'año',
-          'Titular',
-          'Carátula',
-          'Propiedad',
-          'Fojas'
-        ],
-        Notarial: [
-          'Escribano',
-          'Registro',
-          'Protocolo',
-          'MesInicio',
-          'MesFin',
-          'dia',
-          'mes',
-          'año',
-          'EscrituraNº',
-          'Iniciador',
-          'Extracto',
-          'NegocioJuridico',
-          'Folio'
-        ],
-        Correspondencia: [
-          'numeroLegajo',
-          'legajoBis',
-          'numeroExpediente',
-          'expedienteBis',
-          'dia',
-          'mes',
-          'año',
-          'Emisor',
-          'Destinatario',
-          'Asunto',
-          'Fojas'
-        ],
-        Leyes_Decretos: [
-          'numeroLegajo',
-          'legajoBis',
-          'numeroExpediente',
-          'expedienteBis',
-          'dia',
-          'mes',
-          'año',
-          'Emisor',
-          'Destinatario',
-          'Asunto',
-          'Fojas'
-        ],
-        Gobierno: [
-          'numeroLegajo',
-          'legajoBis',
-          'numeroExpediente',
-          'expedienteBis',
-          'dia',
-          'mes',
-          'año',
-          'Iniciador',
-          'Carátula',
-          'Tema',
-          'Folios'
-        ],
-        Tierras_Fiscales: [
-          'numeroLegajo',
-          'legajoBis',
-          'numeroExpediente',
-          'expedienteBis',
-          'dia',
-          'mes',
-          'año',
-          'Iniciador',
-          'Carátula',
-          'Tema',
-          'Folios'
-        ],
-        Tribunales: [
-          'numeroLegajo',
-          'legajoBis',
-          'numeroExpediente',
-          'expedienteBis',
-          'dia',
-          'mes',
-          'año',
-          'Iniciador',
-          'Carátula',
-          'Tema',
-          'Folios'
-        ]
-      }
+    const fetchDocumentData = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        if (!id) {
+          throw new Error('No se proporcionó un ID de documento')
+        }
 
-      const fieldList = fields[fileType]
-      const newFormFields = fieldList.map((field) => ({
-        id: field,
-        value: '',
-        isPersonField: [
-          'Iniciador',
-          'Titular',
-          'Escribano',
-          'Emisor',
-          'Destinatario'
-        ].includes(field)
-      }))
-      setFormFields(newFormFields)
-      setErrors({})
+        const response = await fetch(
+          `http://localhost:3000/api/documentos/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Documento no encontrado')
+          }
+          throw new Error('Error al cargar el documento')
+        }
+
+        const data = await response.json()
+        if (!data) {
+          throw new Error('No se recibieron datos del documento')
+        }
+
+        setFormData({
+          legajoNumero: data.legajo_numero || '',
+          legajoEsBis: data.legajo_bis || 0,
+          expedienteNumero: data.expediente_numero || '',
+          expedienteEsBis: data.expediente_bis || 0,
+          tipoDocumento: data.tipo_documento || 'Correspondencia',
+          anio: data.anio || '',
+          mes: data.mes || '',
+          dia: data.dia || '',
+          caratulaAsuntoExtracto: data.caratula_asunto_extracto || '',
+          tema: data.tema || '',
+          folios: data.folios || '',
+          esPublico: true,
+          personaNombre: data.persona_nombre || '',
+          personaTipo: data.persona_tipo || 'Persona Física',
+          personaRol: data.persona_rol || 'Titular',
+          lugar: data.mensura_lugar || '',
+          propiedad: data.mensura_propiedad || '',
+          departamentoNombreActual: data.departamento_nombre || '',
+          departamentoNombreAntiguo: '',
+          registro: data.notarial_registro || '',
+          protocolo: data.notarial_protocolo || ''
+        })
+      } catch (error) {
+        console.error('Error fetching document:', error)
+        setError(error.message)
+        setAlertVariant('danger')
+        setAlertMessage(error.message)
+        setShowAlert(true)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    createFormFields()
-  }, [fileType])
+    if (id) {
+      fetchDocumentData()
+    } else {
+      setError('No se proporcionó un ID de documento')
+      setIsLoading(false)
+    }
+  }, [id, user.token])
 
-  const handleFileTypeChange = (e) => {
-    setFileType(e.target.value)
-  }
-
-  const handleFormFieldChange = (id, value) => {
-    const updatedFields = formFields.map((field) =>
-      field.id === id ? { ...field, value } : field
+  if (isLoading) {
+    return (
+      <Container
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: '200px' }}
+      >
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </Spinner>
+      </Container>
     )
-    setFormFields(updatedFields)
-
-    validateField(id, value)
   }
 
-  const handleFileUpload = (e) => {
-    setFileUploads([...fileUploads, ...e.target.files])
-  }
-
-  const handleFileRemove = (index) => {
-    const updatedFileUploads = [...fileUploads]
-    updatedFileUploads.splice(index, 1)
-    setFileUploads(updatedFileUploads)
+  if (error) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">
+          <Alert.Heading>Error</Alert.Heading>
+          <p>{error}</p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button
+              variant="outline-danger"
+              onClick={() => navigate('/buscador')}
+            >
+              Volver al buscador
+            </Button>
+          </div>
+        </Alert>
+      </Container>
+    )
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const formData = new FormData(e.target)
-
-    let validationSchema
-
-    switch (fileType) {
-      case 'Mensura':
-        validationSchema = mensuraSchema
-        break
-      case 'Notarial':
-        validationSchema = notarialSchema
-        break
-      default:
-        validationSchema = fileSchema
-        break
-    }
 
     try {
-      validationSchema.parse({
-        ...Object.fromEntries(formData),
-        files: fileUploads
-      })
-
-      const camposAModificar = {}
-      formFields.forEach((field) => {
-        camposAModificar[field.id] = field.value
-      })
-
-      const requestBody = {
-        tabla: selectedTable,
-        campos: camposAModificar,
-        tipoDocumento: fileType
+      const campos = {
+        legajo_numero: formData.legajoNumero,
+        legajo_bis: formData.legajoEsBis,
+        expediente_numero: formData.expedienteNumero,
+        expediente_bis: formData.expedienteEsBis,
+        tipo_documento: formData.tipoDocumento,
+        anio: formData.anio,
+        mes: formData.mes,
+        dia: formData.dia,
+        caratula_asunto_extracto: formData.caratulaAsuntoExtracto,
+        tema: formData.tema,
+        folios: formData.folios,
+        persona_nombre: formData.personaNombre,
+        persona_tipo: formData.personaTipo,
+        persona_rol: formData.personaRol,
+        mensura_lugar: formData.lugar,
+        mensura_propiedad: formData.propiedad,
+        departamento_nombre: formData.departamentoNombreActual,
+        notarial_registro: formData.registro,
+        notarial_protocolo: formData.protocolo
       }
 
-      const response = await fetch(`http://localhost:3000/api/${documentId}`, {
+      const response = await fetch(`http://localhost:3000/api/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${user.token}`
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          tabla: 'documentos',
+          campos,
+          tipoDocumento: formData.tipoDocumento
+        })
       })
 
       if (response.ok) {
-        console.log('Documento modificado correctamente')
+        setAlertVariant('success')
+        setAlertMessage('Documento modificado correctamente')
+        setTimeout(() => {
+          navigate('/buscador')
+        }, 2000)
       } else {
-        console.error('Error al modificar el documento:', response.status)
+        setAlertVariant('danger')
+        setAlertMessage('Error al modificar el documento')
       }
+      setShowAlert(true)
     } catch (error) {
-      if (error instanceof zod.ZodError) {
-        const validationErrors = {}
-        error.issues.forEach((issue) => {
-          validationErrors[issue.path[0]] = issue.message
-        })
-        setErrors(validationErrors)
-      } else {
-        console.error('Error al enviar el formulario:', error)
-      }
-    }
-  }
-
-  const validateField = (fieldId, value) => {
-    try {
-      let validationSchema
-      switch (fileType) {
-        case 'Mensura':
-          validationSchema = mensuraSchema
-          break
-        case 'Notarial':
-          validationSchema = notarialSchema
-          break
-        default:
-          validationSchema = fileSchema
-          break
-      }
-
-      validationSchema.shape[fieldId].parse(value)
-
-      setErrors((prevErrors) => {
-        const updatedErrors = { ...prevErrors }
-        delete updatedErrors[fieldId]
-        return updatedErrors
-      })
-    } catch (error) {
-      if (error instanceof zod.ZodError) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [fieldId]: error.issues[0].message
-        }))
-      } else {
-        console.error('Error al validar el campo:', error)
-      }
+      console.error('Error:', error)
+      setAlertVariant('danger')
+      setAlertMessage('Error al procesar la solicitud')
+      setShowAlert(true)
     }
   }
 
   return (
-    <div className="main-content">
-      <div className="mb-3">
-        <label htmlFor="documentId" className="form-label">
-          ID del documento:
-        </label>
-        <input
-          type="number"
-          id="documentId"
-          className="form-control"
-          value={documentId}
-          onChange={(e) => setDocumentId(parseInt(e.target.value))}
-          required
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="tableSelect" className="form-label">
-          Tabla a modificar:
-        </label>
-        <select
-          id="tableSelect"
-          className="form-select"
-          value={selectedTable}
-          onChange={(e) => setSelectedTable(e.target.value)}
+    <Container className={`my-4 ${isDarkMode ? 'bg-dark text-light' : ''}`}>
+      {showAlert && (
+        <Alert
+          variant={alertVariant}
+          onClose={() => setShowAlert(false)}
+          dismissible
         >
-          <option value="documentos">Documentos</option>
-          <option value="mensura">Mensura</option>
-          <option value="notarial">Notarial</option>
-        </select>
-      </div>
+          {alertMessage}
+        </Alert>
+      )}
 
-      <form
-        id="fileForm"
-        onSubmit={handleSubmit}
-        className="needs-validation"
-        noValidate
-      >
-        <label htmlFor="fileType">Seleccionar Tipo de Archivo:</label>
-        <select
-          id="fileType"
-          name="fileType"
-          value={fileType}
-          onChange={handleFileTypeChange}
-          className="form-select"
-          required
-        >
-          <option value="Mensura">Mensura</option>
-          <option value="Notarial">Notarial</option>
-          <option value="Correspondencia">Correspondencia</option>
-          <option value="Leyes_Decretos">Leyes y Decretos</option>
-          <option value="Gobierno">Gobierno</option>
-          <option value="Tierras_Fiscales">Tierras Fiscales</option>
-          <option value="Tribunales">Tribunales</option>
-        </select>
-
-        <div id="formFields" className="row g-3">
-          {formFields.map((field) => (
-            <div key={field.id} className="col-md-4">
-              <label htmlFor={field.id} className="form-label">
-                {field.id}:
-              </label>
-              <input
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Legajo Número</Form.Label>
+              <Form.Control
                 type="text"
-                id={field.id}
-                name={field.id}
-                value={field.value}
+                value={formData.legajoNumero}
                 onChange={(e) =>
-                  handleFormFieldChange(field.id, e.target.value)
+                  setFormData({ ...formData, legajoNumero: e.target.value })
                 }
-                className={`form-control ${errors[field.id] ? 'is-invalid' : ''}`}
-                required
               />
-              {errors[field.id] && (
-                <div className="invalid-feedback">{errors[field.id]}</div>
-              )}
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Expediente Número</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.expedienteNumero}
+                onChange={(e) =>
+                  setFormData({ ...formData, expedienteNumero: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-              {field.isPersonField && (
-                <div className="person-type">
-                  <label>Física</label>
-                  <input type="radio" name={`${field.id}Type`} value="Física" />
-                  <label>Jurídica</label>
-                  <input
-                    type="radio"
-                    name={`${field.id}Type`}
-                    value="Jurídica"
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <Row>
+          <Col md={4}>
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo de Documento</Form.Label>
+              <Form.Select
+                value={formData.tipoDocumento}
+                onChange={(e) =>
+                  setFormData({ ...formData, tipoDocumento: e.target.value })
+                }
+              >
+                <option value="Mensura">Mensura</option>
+                <option value="Notarial">Notarial</option>
+                <option value="Correspondencia">Correspondencia</option>
+                <option value="Leyes_Decretos">Leyes y Decretos</option>
+                <option value="Gobierno">Gobierno</option>
+                <option value="Tierras_Fiscales">Tierras Fiscales</option>
+                <option value="Tribunales">Tribunales</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group className="mb-3">
+              <Form.Label>Año</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.anio}
+                onChange={(e) =>
+                  setFormData({ ...formData, anio: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+          <Col md={2}>
+            <Form.Group className="mb-3">
+              <Form.Label>Mes</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.mes}
+                onChange={(e) =>
+                  setFormData({ ...formData, mes: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+          <Col md={2}>
+            <Form.Group className="mb-3">
+              <Form.Label>Día</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.dia}
+                onChange={(e) =>
+                  setFormData({ ...formData, dia: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <div id="fileUploads" className="mb-3">
-          <label htmlFor="files" className="form-label">
-            Archivos (imágenes o PDFs):
-          </label>
-          <input
-            type="file"
-            id="files"
-            name="files"
-            multiple
-            onChange={handleFileUpload}
-            className="form-control"
-            required
-          />
-          {fileUploads.map((file, index) => (
-            <div key={index}>
-              {file.name}
-              <button type="button" onClick={() => handleFileRemove(index)}>
-                Eliminar
-              </button>
-            </div>
-          ))}
-          {errors.file && <div className="invalid-feedback">{errors.file}</div>}
-        </div>
+        <Row>
+          <Col md={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Carátula/Asunto/Extracto</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={formData.caratulaAsuntoExtracto}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    caratulaAsuntoExtracto: e.target.value
+                  })
+                }
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <button type="submit" className="btn btn-primary">
-          Guardar
-        </button>
-      </form>
-    </div>
+        <Row>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Tema</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.tema}
+                onChange={(e) =>
+                  setFormData({ ...formData, tema: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Folios</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.folios}
+                onChange={(e) =>
+                  setFormData({ ...formData, folios: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Nombre de la Persona</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.personaNombre}
+                onChange={(e) =>
+                  setFormData({ ...formData, personaNombre: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+          <Col md={3}>
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo de Persona</Form.Label>
+              <Form.Select
+                value={formData.personaTipo}
+                onChange={(e) =>
+                  setFormData({ ...formData, personaTipo: e.target.value })
+                }
+              >
+                <option value="Persona Física">Persona Física</option>
+                <option value="Persona Jurídica">Persona Jurídica</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col md={3}>
+            <Form.Group className="mb-3">
+              <Form.Label>Rol</Form.Label>
+              <Form.Select
+                value={formData.personaRol}
+                onChange={(e) =>
+                  setFormData({ ...formData, personaRol: e.target.value })
+                }
+              >
+                <option value="Titular">Titular</option>
+                <option value="Iniciador">Iniciador</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Button variant="primary" type="submit" className="mt-3">
+          Guardar Modificaciones
+        </Button>
+      </Form>
+    </Container>
   )
 }
+
+export default ModificarArchivo

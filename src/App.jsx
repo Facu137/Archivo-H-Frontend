@@ -27,6 +27,7 @@ import Buscador from './pages/Buscador/Buscador'
 import GestionarEmpleados from './pages/GestionarEmpleados/GestionarEmpleados'
 import ArchivosEliminados from './pages/ArchivosEliminados/ArchivosEliminados'
 import NotFound from './pages/NotFound/NotFound' // Import NotFound page
+import ModificarArchivo from './pages/ModificacionArchivo/modificarArchivo'
 // hooks
 import './index.css'
 
@@ -110,7 +111,14 @@ export const App = () => {
                   path="/archivos-eliminados"
                   element={<ArchivosEliminados />}
                 />
-
+                <Route
+                  path="/editar-archivo/:id"
+                  element={
+                    <AuthenticatedRoute>
+                      <ModificarArchivo />
+                    </AuthenticatedRoute>
+                  }
+                />
                 {/* Rutas protegidas */}
                 <Route element={<AuthenticatedRoute />}>
                   <Route path="/editar-perfil" element={<EditUser />} />
