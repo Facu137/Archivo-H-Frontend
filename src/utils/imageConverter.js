@@ -1,7 +1,9 @@
+import imageCompression from 'browser-image-compression'
+
 /**
- * Convierte una imagen a formato AVIF
+ * Comprime y optimiza una imagen para uso web
  * @param {File} file - Archivo de imagen original
- * @returns {Promise<File>} - Archivo convertido a AVIF
+ * @returns {Promise<File>} - Archivo comprimido en formato WebP
  */
 export const convertToAVIF = async (file) => {
   // Si es PDF, retornamos el archivo original
@@ -9,42 +11,28 @@ export const convertToAVIF = async (file) => {
     return file
   }
 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = async (e) => {
-      try {
-        const img = new Image()
-        img.src = e.target.result
+  const options = {
+    maxSizeMB: 1, // Tamaño máximo en MB
+    maxWidthOrHeight: 2048, // Dimensión máxima
+    useWebWorker: true, // Usar Web Worker para mejor rendimiento
+    fileType: 'image/webp', // Convertir a WebP para mejor compresión y calidad
+    initialQuality: 0.8, // Calidad inicial
+    alwaysKeepResolution: true // Mantener resolución si es menor que maxWidthOrHeight
+  }
 
-        await new Promise((resolve) => {
-          img.onload = resolve
-        })
+  try {
+    const compressedFile = await imageCompression(file, options)
 
-        const canvas = document.createElement('canvas')
-        canvas.width = img.width
-        canvas.height = img.height
-        const ctx = canvas.getContext('2d')
-        ctx.drawImage(img, 0, 0)
-
-        const blob = await new Promise((resolve) => {
-          canvas.toBlob((blob) => resolve(blob), 'image/avif', 0.065)
-        })
-
-        // Crear un nuevo archivo con el mismo nombre pero extensión .avif
-        const fileName = file.name.replace(/\.[^/.]+$/, '.avif')
-        const convertedFile = new File([blob], fileName, {
-          type: 'image/avif',
-          lastModified: new Date().getTime()
-        })
-
-        resolve(convertedFile)
-      } catch (error) {
-        reject(error)
-      }
-    }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
+    // Renombrar el archivo manteniendo el nombre original pero cambiando la extensión
+    const fileName = file.name.replace(/\.[^/.]+$/, '.webp')
+    return new File([compressedFile], fileName, {
+      type: 'image/webp',
+      lastModified: new Date().getTime()
+    })
+  } catch (error) {
+    console.error('Error al comprimir la imagen:', error)
+    throw error
+  }
 }
 
 /**
