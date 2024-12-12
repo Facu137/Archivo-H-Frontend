@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Form,
-  Row,
-  Col,
-  Button,
-  Card,
-  CloseButton,
-  Spinner
-} from 'react-bootstrap'
-import Lightbox from 'yet-another-react-lightbox'
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
-import Zoom from 'yet-another-react-lightbox/plugins/zoom'
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen'
-import 'yet-another-react-lightbox/styles.css'
-import 'yet-another-react-lightbox/plugins/thumbnails.css'
 import { convertToWebp, generatePreview } from '../../../utils/imageConverter'
+import FileUploader from './FileUploader'
+import FilePreviewGrid from './FilePreviewGrid'
+import FileActions from './FileActions'
+import ImageLightbox from './ImageLightbox'
 
 const FormularioArchivos = ({ onFilesChange }) => {
   const [originalFiles, setOriginalFiles] = useState([])
@@ -69,7 +58,7 @@ const FormularioArchivos = ({ onFilesChange }) => {
           height: img.height,
           size: (file.size / 1024).toFixed(2) // KB
         })
-        URL.revokeObjectURL(img.src) // Limpiar URL
+        URL.revokeObjectURL(img.src)
       }
       img.onerror = () => {
         resolve({
@@ -77,7 +66,7 @@ const FormularioArchivos = ({ onFilesChange }) => {
           height: '-',
           size: (file.size / 1024).toFixed(2) // KB
         })
-        URL.revokeObjectURL(img.src) // Limpiar URL
+        URL.revokeObjectURL(img.src)
       }
       img.src = URL.createObjectURL(file)
     })
@@ -95,7 +84,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
       setError(null)
       const files = Array.from(e.target.files)
 
-      // Filtrar duplicados
       const uniqueFiles = files.filter(
         (file) => !isFileDuplicate(file, originalFiles)
       )
@@ -105,7 +93,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
         return
       }
 
-      // Generar vistas previas y obtener dimensiones para archivos originales
       const newPreviews = await Promise.all(
         uniqueFiles.map((file) => generatePreview(file))
       )
@@ -121,7 +108,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
         original: [...prev.original, ...newDimensions]
       }))
 
-      // Notificar al componente padre
       onFilesChange([...originalFiles, ...uniqueFiles])
     } catch (err) {
       setError('Error al cargar los archivos: ' + err.message)
@@ -136,9 +122,7 @@ const FormularioArchivos = ({ onFilesChange }) => {
       setLoading((prev) => ({ ...prev, convert: true }))
       setError(null)
 
-      // Convertir todos los archivos originales que no tengan una versión convertida
       const unconvertedFiles = originalFiles.filter((originalFile) => {
-        // Buscar si ya existe una versión convertida de este archivo
         return !convertedFiles.some(
           (convertedFile) =>
             convertedFile.name ===
@@ -161,14 +145,12 @@ const FormularioArchivos = ({ onFilesChange }) => {
         })
       )
 
-      // Filtrar archivos que fallaron en la conversión
       const successfulConversions = newConverted.filter(Boolean)
 
       if (successfulConversions.length === 0) {
         throw new Error('No se pudo convertir ningún archivo')
       }
 
-      // Generar vistas previas y dimensiones para archivos convertidos
       const newPreviews = await Promise.all(
         successfulConversions.map((file) => generatePreview(file))
       )
@@ -186,7 +168,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
         converted: [...prev.converted, ...newDimensions]
       }))
 
-      // Notificar al componente padre con todos los archivos convertidos
       onFilesChange([...convertedFiles, ...successfulConversions])
     } catch (err) {
       setError('Error al convertir los archivos: ' + err.message)
@@ -199,7 +180,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
   const removeFile = (index, type) => {
     try {
       if (type === 'original') {
-        // Si eliminamos un archivo original, también eliminamos su versión convertida
         setOriginalFiles((prev) => prev.filter((_, i) => i !== index))
         setPreviews((prev) => ({
           ...prev,
@@ -210,7 +190,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
           original: prev.original.filter((_, i) => i !== index)
         }))
 
-        // Eliminar también el archivo convertido correspondiente
         setConvertedFiles((prev) => prev.filter((_, i) => i !== index))
         setPreviews((prev) => ({
           ...prev,
@@ -221,7 +200,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
           converted: prev.converted.filter((_, i) => i !== index)
         }))
       } else {
-        // Si eliminamos un archivo convertido, solo eliminamos ese
         setConvertedFiles((prev) => prev.filter((_, i) => i !== index))
         setPreviews((prev) => ({
           ...prev,
@@ -241,12 +219,10 @@ const FormularioArchivos = ({ onFilesChange }) => {
   const removeAllFiles = (type) => {
     try {
       if (type === 'original') {
-        // Borrar solo los archivos originales, manteniendo los convertidos
         setOriginalFiles([])
         setPreviews((prev) => ({ ...prev, original: [] }))
         setDimensions((prev) => ({ ...prev, original: [] }))
       } else {
-        // Borrar solo archivos convertidos
         setConvertedFiles([])
         setPreviews((prev) => ({ ...prev, converted: [] }))
         setDimensions((prev) => ({ ...prev, converted: [] }))
@@ -265,93 +241,11 @@ const FormularioArchivos = ({ onFilesChange }) => {
     })
   }
 
-  const renderPreviews = (files, previewUrls, dims, title, type) => (
-    <div className="mb-4">
-      <h5 className="d-flex align-items-center">
-        {title}
-        {type === 'original' && loading.upload && (
-          <Spinner
-            animation="border"
-            size="sm"
-            className="ms-2"
-            variant="primary"
-          />
-        )}
-        {type === 'converted' && loading.convert && (
-          <Spinner
-            animation="border"
-            size="sm"
-            className="ms-2"
-            variant="primary"
-          />
-        )}
-      </h5>
-      <Row xs={2} sm={3} md={4} lg={5} className="g-2">
-        {files.map((file, idx) => (
-          <Col key={`${file.name}-${idx}`}>
-            <Card style={{ height: '100%' }}>
-              <div className="position-relative">
-                <CloseButton
-                  className="position-absolute top-0 end-0 m-1"
-                  onClick={() => removeFile(idx, type)}
-                  style={{ zIndex: 1 }}
-                />
-                {file.type === 'application/pdf' ? (
-                  <div className="ratio ratio-16x9">
-                    <iframe
-                      src={previewUrls[idx]}
-                      title={file.name}
-                      allowFullScreen
-                    />
-                  </div>
-                ) : (
-                  <Card.Img
-                    variant="top"
-                    src={previewUrls[idx]}
-                    alt={file.name}
-                    style={{
-                      objectFit: 'cover',
-                      height: '120px',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => openLightbox(idx, previewUrls)}
-                  />
-                )}
-              </div>
-              <Card.Body className="p-2">
-                <Card.Title className="fs-6 text-truncate" title={file.name}>
-                  {file.name}
-                </Card.Title>
-                <Card.Text className="text-muted small mb-0">
-                  {dims[idx]?.width}x{dims[idx]?.height}px
-                </Card.Text>
-                <Card.Text className="text-muted small">
-                  {dims[idx]?.size} KB
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </div>
-  )
-
   return (
     <div className="mb-4">
       <h4 className="mb-3">Archivos</h4>
-      <Form.Group className="mb-3">
-        <Form.Label>Seleccionar Archivos</Form.Label>
-        <Form.Control
-          type="file"
-          multiple
-          accept="image/*,application/pdf"
-          onChange={handleFileChange}
-          disabled={loading.upload || loading.convert}
-        />
-        <Form.Text className="text-muted">
-          Puede seleccionar múltiples archivos de imagen o PDF
-        </Form.Text>
-      </Form.Group>
+
+      <FileUploader loading={loading} onFileChange={handleFileChange} />
 
       {error && (
         <div className="alert alert-danger" role="alert">
@@ -361,100 +255,45 @@ const FormularioArchivos = ({ onFilesChange }) => {
 
       {originalFiles.length > 0 && (
         <>
-          {renderPreviews(
-            originalFiles,
-            previews.original,
-            dimensions.original,
-            'Archivos Originales',
-            'original'
-          )}
+          <FilePreviewGrid
+            files={originalFiles}
+            previewUrls={previews.original}
+            dimensions={dimensions.original}
+            title="Archivos Originales"
+            type="original"
+            loading={loading.upload}
+            onRemove={removeFile}
+            onPreviewClick={openLightbox}
+          />
 
-          <div className="d-flex gap-2 mb-3">
-            <Button
-              variant="primary"
-              onClick={handleConvert}
-              disabled={
-                loading.upload ||
-                loading.convert ||
-                originalFiles.length === 0 ||
-                originalFiles.length === convertedFiles.length
-              }
-            >
-              {loading.convert ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                    className="me-2"
-                  />
-                  Convirtiendo...
-                </>
-              ) : convertedFiles.length > 0 ? (
-                'Convertir Archivos Restantes'
-              ) : (
-                'Convertir Imagenes'
-              )}
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => removeAllFiles('original')}
-              disabled={
-                loading.upload || loading.convert || originalFiles.length === 0
-              }
-            >
-              Quitar Todos los Originales
-            </Button>
-          </div>
+          <FileActions
+            loading={loading}
+            originalFilesCount={originalFiles.length}
+            convertedFilesCount={convertedFiles.length}
+            onConvert={handleConvert}
+            onRemoveAll={removeAllFiles}
+          />
+
+          {convertedFiles.length > 0 && (
+            <FilePreviewGrid
+              files={convertedFiles}
+              previewUrls={previews.converted}
+              dimensions={dimensions.converted}
+              title="Archivos Convertidos"
+              type="converted"
+              loading={loading.convert}
+              onRemove={removeFile}
+              onPreviewClick={openLightbox}
+            />
+          )}
         </>
       )}
 
-      {convertedFiles.length > 0 && (
-        <>
-          {renderPreviews(
-            convertedFiles,
-            previews.converted,
-            dimensions.converted,
-            'Archivos Convertidos',
-            'converted'
-          )}
-          <Button
-            variant="danger"
-            onClick={() => removeAllFiles('converted')}
-            className="mb-3"
-            disabled={loading.convert}
-          >
-            Quitar Todos los Convertidos
-          </Button>
-        </>
-      )}
-
-      <div className="alert alert-info mt-3 mb-0 p-2 d-flex">
-        <div className="col-6">Archivos originales: {originalFiles.length}</div>
-        <div className="col-6">
-          Archivos convertidos: {convertedFiles.length}
-        </div>
-      </div>
-
-      <Lightbox
+      <ImageLightbox
         open={lightbox.open}
-        close={() => setLightbox({ ...lightbox, open: false })}
         index={lightbox.index}
-        slides={lightbox.images}
-        plugins={[Thumbnails, Zoom, Fullscreen]}
-        thumbnails={{
-          position: 'start',
-          width: 50,
-          height: 70,
-          border: 1,
-          borderRadius: 0,
-          showToggle: true
-        }}
-        zoom={{
-          scrollToZoom: true
-        }}
+        images={lightbox.images}
+        onClose={() => setLightbox({ ...lightbox, open: false })}
       />
     </div>
   )
