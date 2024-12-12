@@ -10,8 +10,12 @@ import {
   Spinner
 } from 'react-bootstrap'
 import Lightbox from 'yet-another-react-lightbox'
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen'
 import 'yet-another-react-lightbox/styles.css'
-import { convertToAVIF, generatePreview } from '../../../utils/imageConverter'
+import 'yet-another-react-lightbox/plugins/thumbnails.css'
+import { convertToWebp, generatePreview } from '../../../utils/imageConverter'
 
 const FormularioArchivos = ({ onFilesChange }) => {
   const [originalFiles, setOriginalFiles] = useState([])
@@ -149,7 +153,7 @@ const FormularioArchivos = ({ onFilesChange }) => {
       const newConverted = await Promise.all(
         unconvertedFiles.map(async (file) => {
           try {
-            return await convertToAVIF(file)
+            return await convertToWebp(file)
           } catch (err) {
             console.error(`Error al convertir ${file.name}:`, err)
             return null
@@ -439,6 +443,18 @@ const FormularioArchivos = ({ onFilesChange }) => {
         close={() => setLightbox({ ...lightbox, open: false })}
         index={lightbox.index}
         slides={lightbox.images}
+        plugins={[Thumbnails, Zoom, Fullscreen]}
+        thumbnails={{
+          position: 'start',
+          width: 50,
+          height: 70,
+          border: 1,
+          borderRadius: 0,
+          showToggle: true
+        }}
+        zoom={{
+          scrollToZoom: true
+        }}
       />
     </div>
   )
