@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Card, CloseButton, Spinner } from 'react-bootstrap'
-import { FaFileImage } from 'react-icons/fa'
+import { FaFileImage, FaFilePdf } from 'react-icons/fa'
 
 const FilePreviewGrid = ({
   files,
@@ -21,11 +21,18 @@ const FilePreviewGrid = ({
     )
   }
 
+  const isPdfFile = (file) => {
+    return file.type === 'application/pdf'
+  }
+
   const renderPreview = (file, idx) => {
-    if (file.type === 'application/pdf') {
+    if (isPdfFile(file)) {
       return (
-        <div className="ratio ratio-16x9">
-          <iframe src={previewUrls[idx]} title={file.name} allowFullScreen />
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: '120px', backgroundColor: '#f8f9fa' }}
+        >
+          <FaFilePdf size={40} color="#dc3545" />
         </div>
       )
     } else if (isTiffFile(file)) {
@@ -48,7 +55,7 @@ const FilePreviewGrid = ({
             height: '120px',
             cursor: 'pointer'
           }}
-          onClick={() => onPreviewClick(idx, previewUrls)}
+          onClick={() => onPreviewClick(idx, previewUrls, type)}
         />
       )
     }
@@ -58,6 +65,11 @@ const FilePreviewGrid = ({
     if (isTiffFile(file)) {
       return (
         <Card.Text className="text-muted small mb-0">Archivo TIFF</Card.Text>
+      )
+    }
+    if (isPdfFile(file)) {
+      return (
+        <Card.Text className="text-muted small mb-0">Archivo PDF</Card.Text>
       )
     }
     return (

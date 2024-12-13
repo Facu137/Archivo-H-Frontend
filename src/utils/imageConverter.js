@@ -1,5 +1,9 @@
 import imageCompression from 'browser-image-compression'
 import UTIF from 'utif'
+import * as pdfjsLib from 'pdfjs-dist'
+
+// Configurar el worker de PDF.js
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
 
 /**
  * Convierte un archivo TIFF a un objeto Blob
@@ -105,50 +109,55 @@ const convertTiffToBlob = async (file) => {
 }
 
 /**
- * Comprime y optimiza una imagen para uso web
- * @param {File} file - Archivo de imagen original
- * @returns {Promise<File>} - Archivo comprimido en formato WebP
+ * Convierte una página de PDF a un objeto Blob
+ * @param {File} file - Archivo PDF original
+ * @param {number} pageNumber - Número de página a convertir
+ * @param {number} scale - Escala de renderizado (1 = tamaño original)
+ * @returns {Promise<Blob>} - Blob con la imagen de la página
  */
-export const convertToWebp = async (file) => {
-  // Si es PDF, retornamos el archivo original
-  if (file.type === 'application/pdf') {
-    return file
-  }
-
-  let imageToProcess = file
-
-  // Si es TIFF, primero lo convertimos a un formato que browser-image-compression pueda manejar
-  if (
-    file.type === 'image/tiff' ||
-    file.name.toLowerCase().endsWith('.tiff') ||
-    file.name.toLowerCase().endsWith('.tif')
-  ) {
-    const blob = await convertTiffToBlob(file)
-    imageToProcess = new File([blob], file.name, { type: 'image/png' })
-  }
-
-  const options = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 2048,
-    useWebWorker: true,
-    fileType: 'image/webp',
-    initialQuality: 0.8,
-    alwaysKeepResolution: true
-  }
-
+const convertPdfPageToBlob = async (file, pageNumber, scale = 2) => {
   try {
-    const compressedFile = await imageCompression(imageToProcess, options)
+    // Crear una nueva copia del buffer para cada página
+    const arrayBuffer = await file.arrayBuffer()
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+    const page = await pdf.getPage(pageNumber)
+    const viewport = page.getViewport({ scale })
 
-    // Renombrar el archivo manteniendo el nombre original pero cambiando la extensión
-    const fileName = file.name.replace(/\.[^/.]+$/, '.webp')
-    return new File([compressedFile], fileName, {
-      type: 'image/webp',
-      lastModified: new Date().getTime()
+    // Crear canvas
+    const canvas = document.createElement('canvas')
+    canvas.width = viewport.width
+    canvas.height = viewport.height
+    const context = canvas.getContext('2d')
+
+    // Renderizar página
+    await page.render({
+      canvasContext: context,
+      viewport
+    }).promise
+
+    // Convertir a blob
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), 'image/png')
     })
   } catch (error) {
-    console.error('Error al comprimir la imagen:', error)
+    console.error('Error al convertir página PDF:', error)
     throw error
   }
+}
+
+/**
+ * Verifica si un archivo es de tipo TIFF
+ * @param {File} file - Archivo a verificar
+ * @returns {boolean} - true si es TIFF, false si no
+ */
+const isTiffFile = (file) => {
+  if (!file) return false
+  return (
+    file.type === 'image/tiff' ||
+    (file.name &&
+      (file.name.toLowerCase().endsWith('.tiff') ||
+        file.name.toLowerCase().endsWith('.tif')))
+  )
 }
 
 /**
@@ -156,15 +165,105 @@ export const convertToWebp = async (file) => {
  * @param {File} file - Archivo a previsualizar
  * @returns {Promise<string>} - URL de la vista previa
  */
-export const generatePreview = (file) => {
-  return new Promise((resolve, reject) => {
-    if (file.type === 'application/pdf') {
-      resolve(URL.createObjectURL(file))
-    } else {
-      const reader = new FileReader()
-      reader.onload = (e) => resolve(e.target.result)
-      reader.onerror = reject
-      reader.readAsDataURL(file)
+export const generatePreview = async (file) => {
+  try {
+    if (!file) {
+      throw new Error('Archivo no válido')
     }
-  })
+
+    if (file.type === 'application/pdf') {
+      return URL.createObjectURL(file)
+    }
+
+    if (isTiffFile(file)) {
+      const blob = await convertTiffToBlob(file)
+      return URL.createObjectURL(blob)
+    }
+
+    return URL.createObjectURL(file)
+  } catch (error) {
+    console.error('Error al generar vista previa:', error)
+    throw error
+  }
+}
+
+/**
+ * Convierte un archivo a WebP
+ * @param {File} file - Archivo original
+ * @returns {Promise<File[]>} - Array de archivos convertidos a WebP
+ */
+export const convertToWebp = async (file) => {
+  try {
+    if (!file) {
+      throw new Error('Archivo no válido')
+    }
+
+    if (file.type === 'application/pdf') {
+      // Obtener el número de páginas del PDF
+      const arrayBuffer = await file.arrayBuffer()
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+      const numPages = pdf.numPages
+      const convertedPages = []
+
+      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+        const pageBlob = await convertPdfPageToBlob(file, pageNum)
+        const pageFile = new File(
+          [pageBlob],
+          `${file.name.replace('.pdf', '')}_page${pageNum}.webp`,
+          {
+            type: 'image/webp'
+          }
+        )
+
+        // Comprimir la imagen de la página
+        const compressedFile = await imageCompression(pageFile, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          fileType: 'image/webp'
+        })
+
+        convertedPages.push(compressedFile)
+      }
+
+      return convertedPages
+    } else if (isTiffFile(file)) {
+      const blob = await convertTiffToBlob(file)
+      const pngFile = new File(
+        [blob],
+        file.name.replace(/\.(tiff|tif)$/i, '.webp'),
+        {
+          type: 'image/webp'
+        }
+      )
+
+      const compressedFile = await imageCompression(pngFile, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: 'image/webp'
+      })
+
+      return [compressedFile]
+    } else {
+      // Comprimir y convertir a WebP
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: 'image/webp'
+      })
+
+      // Asegurar que el archivo tenga extensión .webp
+      const newFileName = file.name.replace(/\.[^/.]+$/, '.webp')
+      const webpFile = new File([compressedFile], newFileName, {
+        type: 'image/webp'
+      })
+
+      return [webpFile]
+    }
+  } catch (error) {
+    console.error('Error en convertToWebp:', error)
+    throw error
+  }
 }
