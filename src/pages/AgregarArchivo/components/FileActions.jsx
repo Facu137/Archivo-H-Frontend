@@ -14,12 +14,7 @@ const FileActions = ({
       <Button
         variant="primary"
         onClick={onConvert}
-        disabled={
-          loading.upload ||
-          loading.convert ||
-          originalFilesCount === 0 ||
-          originalFilesCount === convertedFilesCount
-        }
+        disabled={loading.upload || loading.convert || originalFilesCount === 0}
       >
         {loading.convert ? (
           <>

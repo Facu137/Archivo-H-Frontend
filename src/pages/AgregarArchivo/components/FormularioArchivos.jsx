@@ -37,8 +37,14 @@ const FormularioArchivos = ({ onFilesChange }) => {
       previews.converted.forEach((preview) => {
         if (preview?.startsWith('blob:')) URL.revokeObjectURL(preview)
       })
+      // Limpiar URLs del lightbox
+      if (lightbox.images) {
+        lightbox.images.forEach((image) => {
+          if (image?.src?.startsWith('blob:')) URL.revokeObjectURL(image.src)
+        })
+      }
     }
-  }, [previews])
+  }, [previews, lightbox.images])
 
   const getDimensions = (file) => {
     return new Promise((resolve) => {
@@ -145,20 +151,23 @@ const FormularioArchivos = ({ onFilesChange }) => {
         })
       )
 
-      const successfulConversions = newConverted.filter(Boolean)
+      // Aplanar el array de arrays de archivos convertidos
+      const allConvertedFiles = newConverted
+        .filter(Boolean)
+        .reduce((acc, curr) => acc.concat(curr), [])
 
-      if (successfulConversions.length === 0) {
+      if (allConvertedFiles.length === 0) {
         throw new Error('No se pudo convertir ningún archivo')
       }
 
       const newPreviews = await Promise.all(
-        successfulConversions.map((file) => generatePreview(file))
+        allConvertedFiles.map((file) => generatePreview(file))
       )
       const newDimensions = await Promise.all(
-        successfulConversions.map(getDimensions)
+        allConvertedFiles.map(getDimensions)
       )
 
-      setConvertedFiles((prev) => [...prev, ...successfulConversions])
+      setConvertedFiles((prev) => [...prev, ...allConvertedFiles])
       setPreviews((prev) => ({
         ...prev,
         converted: [...prev.converted, ...newPreviews]
@@ -168,10 +177,10 @@ const FormularioArchivos = ({ onFilesChange }) => {
         converted: [...prev.converted, ...newDimensions]
       }))
 
-      onFilesChange([...convertedFiles, ...successfulConversions])
+      onFilesChange([...convertedFiles, ...allConvertedFiles])
     } catch (err) {
-      setError('Error al convertir los archivos: ' + err.message)
       console.error('Error al convertir archivos:', err)
+      setError(err.message)
     } finally {
       setLoading((prev) => ({ ...prev, convert: false }))
     }
@@ -180,6 +189,10 @@ const FormularioArchivos = ({ onFilesChange }) => {
   const removeFile = (index, type) => {
     try {
       if (type === 'original') {
+        // Revocar URL de vista previa antes de eliminar
+        const previewUrl = previews.original[index]
+        if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl)
+
         setOriginalFiles((prev) => prev.filter((_, i) => i !== index))
         setPreviews((prev) => ({
           ...prev,
@@ -189,6 +202,12 @@ const FormularioArchivos = ({ onFilesChange }) => {
           ...prev,
           original: prev.original.filter((_, i) => i !== index)
         }))
+        // Cerrar el lightbox si está abierto
+        setLightbox((prev) => ({ ...prev, open: false }))
+      } else {
+        // Revocar URL de vista previa antes de eliminar
+        const previewUrl = previews.converted[index]
+        if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl)
 
         setConvertedFiles((prev) => prev.filter((_, i) => i !== index))
         setPreviews((prev) => ({
@@ -199,16 +218,8 @@ const FormularioArchivos = ({ onFilesChange }) => {
           ...prev,
           converted: prev.converted.filter((_, i) => i !== index)
         }))
-      } else {
-        setConvertedFiles((prev) => prev.filter((_, i) => i !== index))
-        setPreviews((prev) => ({
-          ...prev,
-          converted: prev.converted.filter((_, i) => i !== index)
-        }))
-        setDimensions((prev) => ({
-          ...prev,
-          converted: prev.converted.filter((_, i) => i !== index)
-        }))
+        // Cerrar el lightbox si está abierto
+        setLightbox((prev) => ({ ...prev, open: false }))
       }
     } catch (err) {
       setError('Error al eliminar el archivo: ' + err.message)
@@ -219,13 +230,25 @@ const FormularioArchivos = ({ onFilesChange }) => {
   const removeAllFiles = (type) => {
     try {
       if (type === 'original') {
+        // Revocar URLs de vista previa antes de eliminar
+        previews.original.forEach((preview) => {
+          if (preview?.startsWith('blob:')) URL.revokeObjectURL(preview)
+        })
         setOriginalFiles([])
         setPreviews((prev) => ({ ...prev, original: [] }))
         setDimensions((prev) => ({ ...prev, original: [] }))
+        // Cerrar el lightbox si está abierto
+        setLightbox((prev) => ({ ...prev, open: false }))
       } else {
+        // Revocar URLs de vista previa antes de eliminar
+        previews.converted.forEach((preview) => {
+          if (preview?.startsWith('blob:')) URL.revokeObjectURL(preview)
+        })
         setConvertedFiles([])
         setPreviews((prev) => ({ ...prev, converted: [] }))
         setDimensions((prev) => ({ ...prev, converted: [] }))
+        // Cerrar el lightbox si está abierto
+        setLightbox((prev) => ({ ...prev, open: false }))
       }
     } catch (err) {
       setError('Error al eliminar los archivos: ' + err.message)
@@ -233,12 +256,43 @@ const FormularioArchivos = ({ onFilesChange }) => {
     }
   }
 
-  const openLightbox = (index, images) => {
-    setLightbox({
-      open: true,
-      index,
-      images: images.map((url) => ({ src: url }))
-    })
+  const openLightbox = async (index, images, type = 'original') => {
+    try {
+      // Desactivar el lightbox mientras se procesan las imágenes
+      setLightbox((prev) => ({ ...prev, open: false }))
+
+      // Obtener los archivos correspondientes
+      const files = type === 'original' ? originalFiles : convertedFiles
+
+      // Procesar las imágenes
+      const lightboxImages = await Promise.all(
+        files.map(async (file) => {
+          try {
+            // Crear una nueva URL de blob directamente desde el archivo
+            const newUrl = URL.createObjectURL(file)
+            return { src: newUrl }
+          } catch (error) {
+            console.error('Error al procesar imagen para lightbox:', error)
+            return null
+          }
+        })
+      )
+
+      // Filtrar imágenes nulas y actualizar el lightbox
+      const validImages = lightboxImages.filter(Boolean)
+      if (validImages.length === 0) {
+        throw new Error('No se pudieron cargar las imágenes')
+      }
+
+      setLightbox({
+        open: true,
+        index: Math.min(index, validImages.length - 1),
+        images: validImages
+      })
+    } catch (error) {
+      console.error('Error al abrir lightbox:', error)
+      setError('Error al mostrar las imágenes: ' + error.message)
+    }
   }
 
   return (
@@ -253,38 +307,46 @@ const FormularioArchivos = ({ onFilesChange }) => {
         </div>
       )}
 
-      {originalFiles.length > 0 && (
+      {(originalFiles.length > 0 || convertedFiles.length > 0) && (
         <>
-          <FilePreviewGrid
-            files={originalFiles}
-            previewUrls={previews.original}
-            dimensions={dimensions.original}
-            title="Archivos Originales"
-            type="original"
-            loading={loading.upload}
-            onRemove={removeFile}
-            onPreviewClick={openLightbox}
-          />
+          {originalFiles.length > 0 && (
+            <>
+              <FilePreviewGrid
+                files={originalFiles}
+                previewUrls={previews.original}
+                dimensions={dimensions.original}
+                title="Archivos Originales"
+                type="original"
+                loading={loading.upload}
+                onRemove={removeFile}
+                onPreviewClick={openLightbox}
+              />
 
-          <FileActions
-            loading={loading}
-            originalFilesCount={originalFiles.length}
-            convertedFilesCount={convertedFiles.length}
-            onConvert={handleConvert}
-            onRemoveAll={removeAllFiles}
-          />
+              <FileActions
+                loading={loading}
+                originalFilesCount={originalFiles.length}
+                convertedFilesCount={convertedFiles.length}
+                onConvert={handleConvert}
+                onRemoveAll={removeAllFiles}
+              />
+            </>
+          )}
 
           {convertedFiles.length > 0 && (
-            <FilePreviewGrid
-              files={convertedFiles}
-              previewUrls={previews.converted}
-              dimensions={dimensions.converted}
-              title="Archivos Convertidos"
-              type="converted"
-              loading={loading.convert}
-              onRemove={removeFile}
-              onPreviewClick={openLightbox}
-            />
+            <>
+              <FilePreviewGrid
+                files={convertedFiles}
+                previewUrls={previews.converted}
+                dimensions={dimensions.converted}
+                title={`Archivos Convertidos (${convertedFiles.length} ${
+                  convertedFiles.length === 1 ? 'archivo' : 'archivos'
+                })`}
+                type="converted"
+                loading={loading.convert}
+                onRemove={removeFile}
+                onPreviewClick={openLightbox}
+              />
+            </>
           )}
         </>
       )}
