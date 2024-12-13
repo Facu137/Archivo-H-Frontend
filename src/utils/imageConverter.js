@@ -246,6 +246,7 @@ export const convertToWebp = async (file) => {
 
       return [compressedFile]
     } else {
+      // Comprimir y convertir a WebP
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 1,
         maxWidthOrHeight: 1920,
@@ -253,7 +254,13 @@ export const convertToWebp = async (file) => {
         fileType: 'image/webp'
       })
 
-      return [compressedFile]
+      // Asegurar que el archivo tenga extensión .webp
+      const newFileName = file.name.replace(/\.[^/.]+$/, '.webp')
+      const webpFile = new File([compressedFile], newFileName, {
+        type: 'image/webp'
+      })
+
+      return [webpFile]
     }
   } catch (error) {
     console.error('Error en convertToWebp:', error)
