@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from '../../context/ThemeContext'
+import Lightbox from 'yet-another-react-lightbox'
+import 'yet-another-react-lightbox/styles.css'
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
+import 'yet-another-react-lightbox/plugins/thumbnails.css'
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import libro from '../../assets/libro.avif'
 import libro2 from '../../assets/libro2.avif'
 import img1728590488906 from '../../assets/1728590488906.avif'
@@ -24,7 +30,7 @@ import img129 from '../../assets/img129.avif'
 import img134 from '../../assets/img134.avif'
 import img149 from '../../assets/img149.avif'
 import img154 from '../../assets/img154.avif'
-import ImageModal from './ImageModal'
+import entrada from '../../assets/entrada.avif'
 
 const timelineData = [
   {
@@ -91,14 +97,27 @@ const timelineData = [
     year: '2021',
     title: 'Nueva Sede',
     text: 'Es necesario que todos asumamos el compromiso de proteger y conservar los fondos documentales, que son patrimonio de los pueblos, y asegurar los mismos para las generaciones futuras. En julio de 2021, inauguramos nuestra nueva cede y definitiva, en Calle Mitre 127, donde fuera la casa del Patriarca del Folklore Argentino, Don Andrés A. Chazarreta, la cual logramos recuperar y donde hoy funcionan las Salas Museos Cahzarreta y el Archivo Histórico de la Provincia.',
-    images: []
+    images: [entrada]
   }
 ]
 
 const Institucional = () => {
   const { isDarkMode } = useTheme()
   const observerRef = useRef(null)
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  // Crear un array plano con todas las imágenes y sus títulos
+  const allImages = timelineData.reduce((acc, item) => {
+    const images = item.images.map((src) => ({
+      src,
+      title: item.title,
+      description: `${item.year} - ${item.title}`,
+      width: 2500, // Añadir dimensiones aproximadas para ayudar al zoom
+      height: 1406
+    }))
+    return [...acc, ...images]
+  }, [])
 
   useEffect(() => {
     // Scroll suave al inicio cuando se monta el componente
@@ -134,8 +153,14 @@ const Institucional = () => {
     }
   }, [])
 
-  const handleImageClick = (image, title) => {
-    setSelectedImage({ image, title })
+  const handleImageClick = (itemIndex, imageIndex) => {
+    // Calcular el índice global de la imagen
+    const globalIndex =
+      timelineData
+        .slice(0, itemIndex)
+        .reduce((acc, item) => acc + item.images.length, 0) + imageIndex
+    setLightboxIndex(globalIndex)
+    setLightboxOpen(true)
   }
 
   return (
@@ -229,7 +254,7 @@ const Institucional = () => {
                           >
                             <div className="image-carousel">
                               <img
-                                src={img} // Cambiamos para cargar la imagen directamente
+                                src={img}
                                 alt={`${item.title} - Imagen ${imgIndex + 1}`}
                                 className="img-fluid rounded shadow-sm"
                                 style={{
@@ -239,14 +264,14 @@ const Institucional = () => {
                                   cursor: 'pointer',
                                   backgroundColor: isDarkMode
                                     ? '#2b3035'
-                                    : '#e9ecef' // Añadimos color de fondo mientras carga
+                                    : '#e9ecef'
                                 }}
                                 onClick={() =>
-                                  handleImageClick(img, item.title)
+                                  handleImageClick(index, imgIndex)
                                 }
                                 onError={(e) => {
                                   console.error(`Error loading image: ${img}`)
-                                  e.target.style.display = 'none' // Ocultar imagen si hay error
+                                  e.target.style.display = 'none'
                                 }}
                               />
                             </div>
@@ -261,14 +286,54 @@ const Institucional = () => {
           ))}
         </div>
       </div>
-      {selectedImage && (
-        <ImageModal
-          image={selectedImage.image}
-          title={selectedImage.title}
-          isOpen={!!selectedImage}
-          onClose={() => setSelectedImage(null)}
-        />
-      )}
+
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        index={lightboxIndex}
+        slides={allImages}
+        plugins={[Thumbnails, Zoom, Fullscreen]}
+        thumbnails={{
+          position: 'bottom',
+          width: 70,
+          height: 50,
+          border: 1,
+          borderRadius: 0,
+          padding: 0,
+          gap: 16,
+          showToggle: true
+        }}
+        zoom={{
+          maxZoomPixelRatio: 4,
+          scrollToZoom: true,
+          pinchToZoom: true,
+          enableZoom: true,
+          zoomInMultiplier: 2,
+          zoomOutMultiplier: 0.5,
+          doubleTapDelay: 300,
+          doubleClickDelay: 300,
+          doubleClickMaxStops: 2,
+          keyboardMoveDistance: 50,
+          wheelZoomDistanceFactor: 100,
+          pinchZoomDistanceFactor: 100
+        }}
+        carousel={{
+          finite: false,
+          preload: 3,
+          imageFit: 'contain'
+        }}
+        on={{
+          view: ({ index }) => {
+            setLightboxIndex(index)
+          }
+        }}
+        animation={{ fade: 300 }}
+        styles={{
+          container: { backgroundColor: 'rgba(0, 0, 0, .9)' },
+          zoomInButton: { opacity: 1 },
+          zoomOutButton: { opacity: 1 }
+        }}
+      />
     </div>
   )
 }
