@@ -2,6 +2,7 @@
 
 Este proyecto es la interfaz de usuario para el sistema de Archivo Histórico de Santiago del Estero, diseñado para gestionar y preservar documentos históricos de manera digital.
 
+
 ## Características Principales
 
 - Gestión de documentos históricos
@@ -79,3 +80,4 @@ git checkout -b feature/nueva-funcionalidad
 ## Licencia
 
 Este proyecto está bajo la Licencia [Especificar licencia]
+
