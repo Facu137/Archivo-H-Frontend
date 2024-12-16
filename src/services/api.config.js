@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { authService } from './auth.service'
 
-const BASE_URL = import.meta.env.BACKEND_URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
+
+if (!BASE_URL) {
+  console.error('VITE_BACKEND_URL no está definida en el archivo .env')
+}
 
 const api = axios.create({
   baseURL: BASE_URL,
