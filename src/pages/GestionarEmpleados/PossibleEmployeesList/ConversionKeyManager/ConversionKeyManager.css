@@ -1,0 +1,8 @@
+/* src/pages/GestionarEmpleados/PossibleEmployeesList/ConversionKeyManager/ConversionKeyManager.css */
+.img-fluid {
+  width: auto;
+}
+
+.save-button:not(:disabled) {
+  cursor: pointer;
+}

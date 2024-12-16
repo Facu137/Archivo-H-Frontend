@@ -1,0 +1,43 @@
+/* src/components/Footer/Footer.css */
+/* Estilos para el hover del logo */
+.footer .brand-hover {
+  position: relative;
+  overflow: hidden;
+  color: inherit;
+  transition: transform 0.2s ease-in-out;
+}
+
+.footer .brand-hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.footer .brand-hover:hover {
+  transform: translateY(-1px);
+}
+
+.footer .brand-hover:hover::after {
+  transform: scaleX(1);
+}
+
+.footer-logo {
+  transition: transform 0.2s ease;
+}
+
+.footer .brand-hover:hover .footer-logo {
+  transform: scale(1.05);
+}
+
+/* Estilos para el mapa */
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+}

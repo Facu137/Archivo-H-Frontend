@@ -1,0 +1,56 @@
+/* src/pages/GestionarEmpleados/GestionarEmpleados.css */
+.gestion-main-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0 auto;
+    /* Centra horizontalmente */
+    max-width: 1200px;
+    /* Ajusta el ancho máximo según sea necesario */
+    width: 100%;
+    /* Asegura que ocupe el 100% del ancho disponible */
+}
+
+/* Estilos para las secciones de gestión */
+.gestion-section-container {
+    background-color: #ddd;
+    /* Fondo blanco en modo claro */
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: all 0.3s ease;
+    /* Asegura que las tarjetas ocupen el 100% del ancho del contenedor principal */
+}
+
+.gestion-section-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gestion-section-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--heading-color);
+    /* Color del título */
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .gestion-section-container {
+    background-color: #444;
+    /* Fondo oscuro en modo oscuro */
+    color: #fff;
+}
+
+.employees-section-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+

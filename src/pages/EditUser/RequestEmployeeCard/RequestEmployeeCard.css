@@ -1,0 +1,8 @@
+/* src/components/RequestEmployeeCard/RequestEmployeeCard.css */
+  
+  /* Ajuste de la imagen para mantener proporción */
+  .img-fluid {
+    object-fit: cover;
+    max-height: 300px;
+    width: 100%;
+  }

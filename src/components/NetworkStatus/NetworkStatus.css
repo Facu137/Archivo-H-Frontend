@@ -1,0 +1,19 @@
+/* src/components/NetworkStatus.css */
+
+.network-status-container {
+  pointer-events: none;
+}
+
+.network-status-container .alert {
+  transition: all 0.3s ease;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.network-status-container .alert.bg-dark {
+  background-color: rgba(33, 37, 41, 0.95) !important;
+  border-color: rgba(255, 192, 203, 0.5) !important;
+}
+
+.text-pink {
+  color: #ff69b4 !important;
+}

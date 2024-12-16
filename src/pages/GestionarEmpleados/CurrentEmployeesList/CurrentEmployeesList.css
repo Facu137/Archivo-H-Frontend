@@ -1,0 +1,67 @@
+/* src/pages/GestionarEmpleados/CurrentEmployeesList/CurrentEmployeesList.css */
+.cards-container {
+    display: flex;
+    gap: 20px;
+}
+
+.card-config {
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.card-config:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.description-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.manage-employees-image {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.card-config h3{
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.card-config p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #666;
+}
+
+.description-card ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+/* Adaptación al modo oscuro */
+.dark-mode .card-config {
+    background-color: #222;
+    color: #fff;
+}
+
+.dark-mode .card-config p,
+.dark-mode .card-config li {
+    color: #ccc;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .cards-container {
+        flex-direction: column;
+    }
+}
