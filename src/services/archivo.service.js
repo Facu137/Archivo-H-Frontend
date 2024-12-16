@@ -22,7 +22,7 @@ export const archivoService = {
       }
     })
   },
-  eliminarArchivo: (id) => api.delete(`/api/archivos/${id}`),
+  eliminarArchivo: (id) => api.delete(`/api/deleted/documents/${id}`),
   restaurarArchivo: (id) => api.put(`/api/archivos/${id}/restore`),
 
   // Archivos eliminados
