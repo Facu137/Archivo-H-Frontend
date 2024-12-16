@@ -129,6 +129,14 @@ const FormularioArchivos = ({ onFilesChange }) => {
       setError(null)
 
       const unconvertedFiles = originalFiles.filter((originalFile) => {
+        // Si es un PDF, verificar si ya existe algún archivo convertido que comience con el nombre del PDF
+        if (originalFile.type === 'application/pdf') {
+          const pdfBaseName = originalFile.name.replace(/\.pdf$/i, '')
+          return !convertedFiles.some((convertedFile) =>
+            convertedFile.name.startsWith(pdfBaseName + '_pag')
+          )
+        }
+        // Para otros tipos de archivos, mantener la verificación original
         return !convertedFiles.some(
           (convertedFile) =>
             convertedFile.name ===
@@ -264,9 +272,15 @@ const FormularioArchivos = ({ onFilesChange }) => {
       // Obtener los archivos correspondientes
       const files = type === 'original' ? originalFiles : convertedFiles
 
+      // Filtrar solo los archivos que pueden ser mostrados en el Lightbox
+      const supportedFiles = files.filter((file) => {
+        const fileType = file.type.toLowerCase()
+        return fileType.startsWith('image/') && !fileType.includes('tiff')
+      })
+
       // Procesar las imágenes
       const lightboxImages = await Promise.all(
-        files.map(async (file) => {
+        supportedFiles.map(async (file) => {
           try {
             // Crear una nueva URL de blob directamente desde el archivo
             const newUrl = URL.createObjectURL(file)
@@ -301,12 +315,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
 
       <FileUploader loading={loading} onFileChange={handleFileChange} />
 
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
-
       {(originalFiles.length > 0 || convertedFiles.length > 0) && (
         <>
           {originalFiles.length > 0 && (
@@ -320,14 +328,6 @@ const FormularioArchivos = ({ onFilesChange }) => {
                 loading={loading.upload}
                 onRemove={removeFile}
                 onPreviewClick={openLightbox}
-              />
-
-              <FileActions
-                loading={loading}
-                originalFilesCount={originalFiles.length}
-                convertedFilesCount={convertedFiles.length}
-                onConvert={handleConvert}
-                onRemoveAll={removeAllFiles}
               />
             </>
           )}
@@ -348,6 +348,18 @@ const FormularioArchivos = ({ onFilesChange }) => {
               />
             </>
           )}
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          <FileActions
+            loading={loading}
+            originalFilesCount={originalFiles.length}
+            convertedFilesCount={convertedFiles.length}
+            onConvert={handleConvert}
+            onRemoveAll={removeAllFiles}
+          />
         </>
       )}
 
