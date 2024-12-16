@@ -1,5 +1,5 @@
 import React from 'react'
-import './ResultcardEliminados.css' // Usa el mismo archivo CSS que ResultCard
+import './ResultCardEliminados.css'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { FaTrash, FaFileImage, FaFilePdf, FaUndo } from 'react-icons/fa'
