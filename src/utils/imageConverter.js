@@ -209,7 +209,7 @@ export const convertToWebp = async (file) => {
         const pageBlob = await convertPdfPageToBlob(file, pageNum)
         const pageFile = new File(
           [pageBlob],
-          `${file.name.replace('.pdf', '')}_page${pageNum}.webp`,
+          `${file.name.replace('.pdf', '')}_pag${pageNum}.webp`,
           {
             type: 'image/webp'
           }
@@ -218,7 +218,7 @@ export const convertToWebp = async (file) => {
         // Comprimir la imagen de la página
         const compressedFile = await imageCompression(pageFile, {
           maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
+          maxWidthOrHeight: 3000,
           useWebWorker: true,
           fileType: 'image/webp'
         })
@@ -239,7 +239,7 @@ export const convertToWebp = async (file) => {
 
       const compressedFile = await imageCompression(pngFile, {
         maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
+        maxWidthOrHeight: 3000,
         useWebWorker: true,
         fileType: 'image/webp'
       })
@@ -249,7 +249,7 @@ export const convertToWebp = async (file) => {
       // Comprimir y convertir a WebP
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
+        maxWidthOrHeight: 3000,
         useWebWorker: true,
         fileType: 'image/webp'
       })
