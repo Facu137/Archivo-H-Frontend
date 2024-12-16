@@ -79,5 +79,5 @@ git checkout -b feature/nueva-funcionalidad
 
 ## Licencia
 
-Este proyecto está bajo la Licencia [Especificar licencia]
+Este proyecto está bajo la Licencia MIT
 

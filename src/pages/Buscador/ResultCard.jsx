@@ -2,7 +2,13 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { FaEdit, FaTrash, FaFileImage, FaFilePdf } from 'react-icons/fa'
+import {
+  FaEdit,
+  FaTrash,
+  FaFileImage,
+  FaFilePdf,
+  FaExternalLinkAlt
+} from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import { Card, Row, Col, Button } from 'react-bootstrap'
 import { useTheme } from '../../context/ThemeContext'
@@ -34,12 +40,14 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
   const { user } = useAuth()
   const { isDarkMode } = useTheme()
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.stopPropagation() // Prevent card click
     const fileUrl = imagen_url
       ? `http://localhost:3000/uploads/${imagen_url}`
       : ''
     const fileType = fileUrl.split('.').pop().toLowerCase()
-    navigate(`/visor?file=${encodeURIComponent(fileUrl)}&type=${fileType}`)
+    const visorUrl = `/visor?file=${encodeURIComponent(fileUrl)}&type=${fileType}`
+    window.open(visorUrl, '_blank')
   }
 
   const handleEdit = (e) => {
@@ -64,7 +72,6 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
     }
   }
 
-  // Construcción de la fecha
   let fecha = ''
   if (anio) {
     fecha += anio
@@ -85,8 +92,6 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
   return (
     <Card
       className={`mb-3 ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-light'}`}
-      style={{ cursor: imagen_url ? 'pointer' : 'default' }}
-      onClick={imagen_url ? handleClick : undefined}
     >
       <Card.Body>
         <Row>
@@ -99,82 +104,85 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
                 <p className="mb-2">
                   <strong>Fecha:</strong> {fecha}
                 </p>
-                <p className="mb-2">
-                  <strong>Carátula/Asunto/Extracto:</strong>{' '}
-                  {caratula_asunto_extracto}
-                </p>
+                {expediente_numero && (
+                  <p className="mb-2">
+                    <strong>Expediente N°:</strong> {expediente_numero}
+                  </p>
+                )}
+                {legajo_numero && (
+                  <p className="mb-2">
+                    <strong>Legajo N°:</strong> {legajo_numero}
+                  </p>
+                )}
               </Col>
               <Col xs={12} sm={6} md={4}>
-                <p className="mb-2">
-                  <strong>Tema:</strong> {tema}
-                </p>
-                <p className="mb-2">
-                  <strong>Folios:</strong> {folios}
-                </p>
-                <p className="mb-2">
-                  <strong>Departamento:</strong> {departamento_nombre}
-                </p>
+                {caratula_asunto_extracto && (
+                  <p className="mb-2">
+                    <strong>Carátula/Asunto:</strong> {caratula_asunto_extracto}
+                  </p>
+                )}
+                {tema && (
+                  <p className="mb-2">
+                    <strong>Tema:</strong> {tema}
+                  </p>
+                )}
+                {folios && (
+                  <p className="mb-2">
+                    <strong>Folios:</strong> {folios}
+                  </p>
+                )}
               </Col>
               <Col xs={12} sm={6} md={4}>
-                <p className="mb-2">
-                  <strong>Persona:</strong> {persona_nombre} ({persona_tipo} -{' '}
-                  {persona_rol})
-                </p>
-                <p className="mb-2">
-                  <strong>Legajo:</strong> {legajo_numero}
-                </p>
-                <p className="mb-2">
-                  <strong>Expediente:</strong> {expediente_numero}
-                </p>
+                {persona_nombre && (
+                  <p className="mb-2">
+                    <strong>Persona:</strong> {persona_nombre}
+                  </p>
+                )}
+                {persona_rol && (
+                  <p className="mb-2">
+                    <strong>Rol:</strong> {persona_rol}
+                  </p>
+                )}
+                {persona_tipo && (
+                  <p className="mb-2">
+                    <strong>Tipo:</strong> {persona_tipo}
+                  </p>
+                )}
+                {departamento_nombre && (
+                  <p className="mb-2">
+                    <strong>Departamento:</strong> {departamento_nombre}
+                  </p>
+                )}
               </Col>
-              {(mensura_lugar || mensura_propiedad) && (
-                <Col xs={12}>
-                  <p className="mb-2">
-                    <strong>Mensura:</strong> {mensura_lugar} -{' '}
-                    {mensura_propiedad}
-                  </p>
-                </Col>
-              )}
-              {(notarial_registro || notarial_protocolo) && (
-                <Col xs={12}>
-                  <p className="mb-2">
-                    <strong>Notarial:</strong> Registro {notarial_registro} -
-                    Protocolo {notarial_protocolo}
-                  </p>
-                </Col>
-              )}
             </Row>
           </Col>
           {thumbnailIcon && (
             <Col
               xs={12}
               md={2}
-              className="d-flex align-items-center justify-content-center mt-3 mt-md-0"
+              className="mt-3 mt-md-0 d-flex justify-content-center align-items-start"
             >
-              <div className="text-center">
+              <Button
+                variant={isDarkMode ? 'outline-light' : 'outline-dark'}
+                className="w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+                style={{ minHeight: '100px' }}
+                onClick={handleClick}
+              >
                 {thumbnailIcon}
-                <div className="mt-2 small">Click para ver</div>
-              </div>
+                <div className="mt-2 text-center">
+                  <small>Click para ver</small>
+                  <FaExternalLinkAlt size={12} className="ms-1" />
+                </div>
+              </Button>
             </Col>
           )}
         </Row>
-
         {isAdminOrEmployee && (
-          <div className="mt-3 d-flex gap-2 justify-content-end">
-            <Button
-              variant={isDarkMode ? 'outline-light' : 'outline-primary'}
-              size="sm"
-              onClick={handleEdit}
-              title="Editar"
-            >
+          <div className="mt-3 d-flex justify-content-end gap-2">
+            <Button variant="outline-primary" size="sm" onClick={handleEdit}>
               <FaEdit /> Editar
             </Button>
-            <Button
-              variant={isDarkMode ? 'outline-danger' : 'danger'}
-              size="sm"
-              onClick={handleDelete}
-              title="Eliminar"
-            >
+            <Button variant="outline-danger" size="sm" onClick={handleDelete}>
               <FaTrash /> Eliminar
             </Button>
           </div>
@@ -191,21 +199,20 @@ ResultCard.propTypes = {
     anio: PropTypes.number,
     mes: PropTypes.number,
     dia: PropTypes.number,
-    caratula_asunto_extracto: PropTypes.string.isRequired,
+    caratula_asunto_extracto: PropTypes.string,
     tema: PropTypes.string,
-    folios: PropTypes.number.isRequired,
-    persona_rol: PropTypes.string.isRequired,
-    persona_nombre: PropTypes.string.isRequired,
-    persona_tipo: PropTypes.string.isRequired,
-    departamento_nombre: PropTypes.string.isRequired,
+    folios: PropTypes.number,
+    persona_rol: PropTypes.string,
+    persona_nombre: PropTypes.string,
+    persona_tipo: PropTypes.string,
+    departamento_nombre: PropTypes.string,
     imagen_url: PropTypes.string,
     legajo_numero: PropTypes.string,
     expediente_numero: PropTypes.string,
     mensura_lugar: PropTypes.string,
     mensura_propiedad: PropTypes.string,
     notarial_registro: PropTypes.string,
-    notarial_protocolo: PropTypes.string,
-    isFavorite: PropTypes.bool
+    notarial_protocolo: PropTypes.string
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
