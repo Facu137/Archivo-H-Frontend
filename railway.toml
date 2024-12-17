@@ -1,10 +1,13 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "npm run build"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "npm run start"
+runtime = "V2"
+numReplicas = 1
 healthcheckPath = "/"
-healthcheckTimeout = 100
+sleepApplication = false
+multiRegionConfig = {"us-west1":{"numReplicas":1}}
 restartPolicyType = "ON_FAILURE"
+healthcheckTimeout = 100
 restartPolicyMaxRetries = 3
