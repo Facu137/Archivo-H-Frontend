@@ -22,6 +22,9 @@ RUN npm run build
 # Production stage - using smaller nginx image
 FROM nginx:1.24-alpine AS production
 
+# Set default port
+ENV PORT=80
+
 # Remove default nginx config
 RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/nginx.conf
 
@@ -36,7 +39,7 @@ RUN mkdir -p /var/cache/nginx && \
     chown -R nginx:nginx /var/cache/nginx && \
     chmod -R 755 /var/cache/nginx
 
-EXPOSE 80
+EXPOSE ${PORT}
 
 # Use shell form to expand environment variables
-CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
