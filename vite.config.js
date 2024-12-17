@@ -1,6 +1,6 @@
 // vite.config.js
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,20 +11,7 @@ export default defineConfig({
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            if (
-              id.includes('react') ||
-              id.includes('react-dom') ||
-              id.includes('react-router-dom')
-            ) {
-              return 'vendor-react'
-            }
-            if (id.includes('zod') || id.includes('axios')) {
-              return 'vendor-utils'
-            }
             return 'vendor'
-          }
-          if (id.includes('/components/') || id.includes('/pages/')) {
-            return 'components'
           }
         }
       }
@@ -34,6 +21,13 @@ export default defineConfig({
     alias: {
       '@': '/src'
     }
+  },
+  optimizeDeps: {
+    include: [
+      '@fortawesome/fontawesome-svg-core',
+      '@fortawesome/free-solid-svg-icons',
+      '@fortawesome/react-fontawesome'
+    ]
   },
   server: {
     host: true,
