@@ -25,8 +25,8 @@ FROM nginx:1.24-alpine AS production
 # Remove default nginx config
 RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/nginx.conf
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy nginx template
+COPY nginx.conf /etc/nginx/nginx.conf.template
 
 # Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -38,4 +38,5 @@ RUN mkdir -p /var/cache/nginx && \
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Use shell form to expand environment variables
+CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
