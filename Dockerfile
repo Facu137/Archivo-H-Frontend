@@ -10,8 +10,7 @@ COPY .npmrc ./
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y npm && \
-    npm install --omit=optional && \
-    npm install @rollup/rollup-linux-x64-gnu --no-save
+    npm install --omit=optional
 
 # Copy source code
 COPY . .
