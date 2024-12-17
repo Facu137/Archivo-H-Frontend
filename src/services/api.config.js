@@ -7,7 +7,7 @@ if (!BASE_URL) {
   console.error('VITE_BACKEND_URL no está definida en el archivo .env')
 }
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
