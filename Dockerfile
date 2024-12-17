@@ -3,6 +3,9 @@ FROM node:18-slim AS builder
 
 WORKDIR /app
 
+# Install npm explicitly
+RUN apt-get update && apt-get install -y npm
+
 # Copy package files
 COPY package*.json ./
 

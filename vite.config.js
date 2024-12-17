@@ -6,10 +6,13 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   build: {
+    chunkSizeWarningLimit: 3000, // Aumentamos el límite a 3000kb
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom']
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          utils: ['zod', 'axios'],
+          components: ['./src/components/**/*.jsx', './src/pages/**/*.jsx']
         }
       }
     }
@@ -20,13 +23,7 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: process.env.VITE_BACKEND_URL,
-        changeOrigin: true,
-        secure: false
-      }
-    }
+    host: true,
+    port: 5173
   }
 })
