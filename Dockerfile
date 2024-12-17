@@ -19,13 +19,19 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Production stage
-FROM nginx:1.24-alpine
+# Production stage - using smaller nginx image
+FROM nginx:1.24-alpine AS production
 
 # Copy only the built files and nginx configuration
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Add a healthcheck
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD wget -q --spider http://localhost:80/ || exit 1
+
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Explicitly set the entrypoint and cmd
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]
