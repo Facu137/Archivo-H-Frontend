@@ -7,7 +7,9 @@ runtime = "V2"
 numReplicas = 1
 healthcheckPath = "/"
 sleepApplication = false
-multiRegionConfig = {"us-west1":{"numReplicas":1}}
 restartPolicyType = "ON_FAILURE"
 healthcheckTimeout = 100
 restartPolicyMaxRetries = 3
+
+[deploy.regions.us-west1]
+numReplicas = 1
