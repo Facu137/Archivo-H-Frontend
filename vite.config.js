@@ -6,13 +6,26 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   build: {
-    chunkSizeWarningLimit: 3000, // Aumentamos el límite a 3000kb
+    chunkSizeWarningLimit: 3000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          utils: ['zod', 'axios'],
-          components: ['./src/components/**/*.jsx', './src/pages/**/*.jsx']
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (
+              id.includes('react') ||
+              id.includes('react-dom') ||
+              id.includes('react-router-dom')
+            ) {
+              return 'vendor-react'
+            }
+            if (id.includes('zod') || id.includes('axios')) {
+              return 'vendor-utils'
+            }
+            return 'vendor'
+          }
+          if (id.includes('/components/') || id.includes('/pages/')) {
+            return 'components'
+          }
         }
       }
     }
