@@ -1,13 +1,14 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:18-slim AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with specific platform
-RUN npm install --platform=linux --arch=x64 --no-optional
+# Install dependencies with specific flags
+RUN npm install --no-optional && \
+    npm install @rollup/rollup-linux-x64-gnu --no-save
 
 # Copy source code
 COPY . .
@@ -16,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+FROM nginx:stable-slim
 
 # Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
