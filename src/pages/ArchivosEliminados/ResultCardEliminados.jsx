@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext'
 import { FaTrash, FaFileImage, FaFilePdf, FaUndo } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import Swal from 'sweetalert2'
-import { api } from '../../services/api.config'
+import api from '../../services/api.config'
 
 const ResultCardEliminados = ({ result, onDeletePermanently, onRestore }) => {
   const {

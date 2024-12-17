@@ -6,7 +6,7 @@ import { fileSchema } from '../../schemas/fileSchema'
 import { mensuraSchema } from '../../schemas/mensuraSchema'
 import { notarialSchema } from '../../schemas/notarialSchema'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import api from '../../api' // Import the api instance
+import api from '../../services/api.config' // Import the api instance
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState('Mensura')
