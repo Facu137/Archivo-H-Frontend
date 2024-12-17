@@ -2,18 +2,17 @@
 import React, { useState, useEffect } from 'react'
 import './GestionArchivo.css'
 import * as zod from 'zod'
-import { useAuth } from '../../context/AuthContext'
 import { fileSchema } from '../../schemas/fileSchema'
 import { mensuraSchema } from '../../schemas/mensuraSchema'
 import { notarialSchema } from '../../schemas/notarialSchema'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import api from '../../api' // Import the api instance
 
 export const GestionArchivo = () => {
   const [fileType, setFileType] = useState('Mensura')
   const [formFields, setFormFields] = useState([])
   const [fileUploads, setFileUploads] = useState([])
   const [errors, setErrors] = useState({})
-  const { token } = useAuth()
   const [documentId, setDocumentId] = useState(null)
   const [selectedTable, setSelectedTable] = useState('documentos')
 
@@ -195,14 +194,7 @@ export const GestionArchivo = () => {
         tipoDocumento: fileType
       }
 
-      const response = await fetch(`http://localhost:3000/api/${documentId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(requestBody)
-      })
+      const response = await api.put(`/${documentId}`, requestBody) // Use the api instance
 
       if (response.ok) {
         console.log('Documento modificado correctamente')

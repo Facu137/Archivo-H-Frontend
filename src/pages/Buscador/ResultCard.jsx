@@ -1,6 +1,5 @@
 // src/pages/Buscador/ResultCard.jsx
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import {
   FaEdit,
@@ -36,14 +35,13 @@ const ResultCard = ({ result, onEdit, onDelete }) => {
     notarial_protocolo
   } = result
 
-  const navigate = useNavigate()
   const { user } = useAuth()
   const { isDarkMode } = useTheme()
 
   const handleClick = (e) => {
     e.stopPropagation() // Prevent card click
     const fileUrl = imagen_url
-      ? `http://localhost:3000/uploads/${imagen_url}`
+      ? `${import.meta.env.VITE_BACKEND_URL}/uploads/${imagen_url}`
       : ''
     const fileType = fileUrl.split('.').pop().toLowerCase()
     const visorUrl = `/visor?file=${encodeURIComponent(fileUrl)}&type=${fileType}`
