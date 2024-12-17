@@ -9,7 +9,7 @@ COPY .npmrc ./
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y npm python3 make g++ && \
+    apt-get install -y python3 make g++ && \
     npm install --include=optional && \
     npm rebuild @rollup/rollup-linux-x64-gnu
 
@@ -26,11 +26,6 @@ FROM nginx:1.24-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Create required nginx directories
-RUN mkdir -p /run/nginx
-
-# Expose port 80
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
