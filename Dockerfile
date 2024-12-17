@@ -22,12 +22,20 @@ RUN npm run build
 # Production stage - using smaller nginx image
 FROM nginx:1.24-alpine AS production
 
-# Copy only the built files and nginx configuration
+# Remove default nginx config
+RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/nginx.conf
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Create cache directories
+RUN mkdir -p /var/cache/nginx && \
+    chown -R nginx:nginx /var/cache/nginx && \
+    chmod -R 755 /var/cache/nginx
 
 EXPOSE 80
 
-# Explicitly set the entrypoint and cmd
-ENTRYPOINT ["nginx"]
-CMD ["-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
