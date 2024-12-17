@@ -3,14 +3,14 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# Install npm explicitly
-RUN apt-get update && apt-get install -y npm
-
-# Copy package files
+# Copy package files first
 COPY package*.json ./
+COPY .npmrc ./
 
-# Install dependencies with specific flags
-RUN npm install --no-optional && \
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y npm && \
+    npm install --omit=optional && \
     npm install @rollup/rollup-linux-x64-gnu --no-save
 
 # Copy source code
@@ -22,13 +22,11 @@ RUN npm run build
 # Production stage
 FROM nginx:1.24-alpine
 
-# Copy built assets from builder stage
+# Copy only the built files and nginx configuration
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy nginx configuration
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-# Create nginx pid directory
+# Create required nginx directories
 RUN mkdir -p /run/nginx
 
 # Expose port 80
