@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext'
 import { FaTrash, FaFileImage, FaFilePdf, FaUndo } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import Swal from 'sweetalert2'
-import axios from 'axios' // Importa axios
+import { api } from '../../services/api.config'
 
 const ResultCardEliminados = ({ result, onDeletePermanently, onRestore }) => {
   const {
@@ -65,17 +65,14 @@ const ResultCardEliminados = ({ result, onDeletePermanently, onRestore }) => {
 
       if (passwordProvided) {
         try {
-          await axios.delete(
-            `http://localhost:3000/api/deleted/documents/${documento_id}/permanente`,
-            {
-              data: {
-                contraseniaAdmin: adminPassword
-              },
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
+          await api.delete(`/deleted/documents/${documento_id}/permanente`, {
+            data: {
+              contraseniaAdmin: adminPassword
+            },
+            headers: {
+              Authorization: `Bearer ${token}`
             }
-          )
+          })
           onDeletePermanently(documento_id)
           Swal.fire({
             title: 'Eliminado',
@@ -115,8 +112,8 @@ const ResultCardEliminados = ({ result, onDeletePermanently, onRestore }) => {
     if (confirmRestore.isConfirmed) {
       try {
         // Realiza la petición PUT al backend para restaurar el archivo
-        const response = await axios.put(
-          `http://localhost:3000/api/deleted/documents/${documento_id}/restore`,
+        const response = await api.put(
+          `/deleted/documents/${documento_id}/restore`,
           {},
           {
             headers: {
