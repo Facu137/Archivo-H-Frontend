@@ -7,13 +7,17 @@ if (!BASE_URL) {
   console.error('VITE_BACKEND_URL no está definida en el archivo .env')
 }
 
+// Asegurarse de que la URL base use HTTPS en producción
+const secureBaseURL = BASE_URL.startsWith('https://') 
+  ? BASE_URL 
+  : BASE_URL.replace('http://', 'https://')
+
 export const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: secureBaseURL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Access-Control-Allow-Origin': '*'
+    'Accept': 'application/json'
   }
 })
 
