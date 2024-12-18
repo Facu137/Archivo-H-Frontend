@@ -6,10 +6,8 @@ import react from '@vitejs/plugin-react'
 const PROD_BACKEND_URL = 'https://archivo-h-backend-production.up.railway.app'
 
 export default defineConfig(({ command, mode }) => {
-  // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), '')
   
-  // Determinar la URL del backend basado en el entorno
   const backendUrl = mode === 'production' 
     ? PROD_BACKEND_URL 
     : env.VITE_BACKEND_URL
@@ -17,7 +15,6 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Inyectar la URL del backend en el código
       'import.meta.env.VITE_BACKEND_URL': JSON.stringify(backendUrl)
     },
     server: {
@@ -27,7 +24,19 @@ export default defineConfig(({ command, mode }) => {
         '/auth': {
           target: backendUrl,
           changeOrigin: true,
-          secure: false
+          secure: false,
+          ws: true,
+          configure: (proxy, _options) => {
+            proxy.on('error', (err, _req, _res) => {
+              console.log('proxy error', err);
+            });
+            proxy.on('proxyReq', (proxyReq, req, _res) => {
+              console.log('Sending Request to the Target:', req.method, req.url);
+            });
+            proxy.on('proxyRes', (proxyRes, req, _res) => {
+              console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+            });
+          }
         }
       }
     },

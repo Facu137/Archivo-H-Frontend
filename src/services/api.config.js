@@ -12,7 +12,8 @@ export const api = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
-    Accept: 'application/json'
+    'Accept': 'application/json',
+    'Access-Control-Allow-Origin': '*'
   }
 })
 
@@ -80,6 +81,14 @@ api.interceptors.response.use(
       config: error.config,
       message: error.message
     })
+
+    if (error.response) {
+      console.error('Response error:', error.response.data);
+    } else if (error.request) {
+      console.error('Request error:', error.request);
+    } else {
+      console.error('Error:', error.message);
+    }
 
     return Promise.reject(error)
   }
